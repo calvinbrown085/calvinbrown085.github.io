@@ -1,5 +1,5 @@
 function greeter(person) {
-    return "Hello, " + person;
+    return "Say Hello, " + person;
 }
 
 let user = "Everyone!";
