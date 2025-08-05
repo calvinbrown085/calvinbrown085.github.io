@@ -3,28 +3,59 @@
   <head>
     <meta charset="UTF-8">
     <meta name="author">
-    <meta name="description" content="An Hello World! example">
+    <meta name="description" content="A personal portfolio site built with go-app.">
     <meta name="theme-color" content="#2d2c2c">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="mobile-web-app-capable" content="yes">
     <meta property="og:url" content="https:///calvinbrown085.github.io/hello">
     <meta property="og:title">
-    <meta property="og:description" content="An Hello World! example">
-    <meta property="og:type" content="website">
+    <meta property="og:description" content="A personal portfolio site built with go-app.">
+    <meta content="website" property="og:type">
     <meta property="og:image" content="https://">
     <title></title>
     <link rel="icon" href="https://raw.githubusercontent.com/maxence-charriere/go-app/master/docs/web/icon.svg">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/maxence-charriere/go-app/master/docs/web/icon.png">
     <link rel="manifest" href="/calvinbrown085.github.io/manifest.webmanifest">
     <link href="/calvinbrown085.github.io/app.css" type="text/css" rel="stylesheet">
+    <link href="https://cdn.tailwindcss.com" type="text/css" rel="stylesheet">
     <script defer src="/calvinbrown085.github.io/wasm_exec.js"></script>
-    <script defer src="/calvinbrown085.github.io/app.js"></script>
+    <script src="/calvinbrown085.github.io/app.js" defer></script>
   </head>
   <body>
-    <h1>Hello World!</h1>
+    <div class="bg-gray-900 text-gray-200 min-h-screen font-sans">
+      <div class="container mx-auto p-8 max-w-3xl">
+        <header class="text-center mb-12">
+          <h1 class="text-5xl md:text-6xl font-bold text-white mb-2">Calvin Brown</h1>
+          <p class="text-xl md:text-2xl text-cyan-400">Sr. Staff Software Engineer at Jack Henry</p>
+        </header>
+        <main class="space-y-12">
+          <section>
+            <p class="text-lg leading-relaxed">I&#39;m a passionate software engineer focused on building reliable, scalable, and observable distributed systems. With a strong background in Go and a keen interest in Rust, I enjoy creating robust infrastructure and tooling that empowers fellow developers.</p>
+          </section>
+          <section>
+            <h2 class="text-3xl font-bold text-white border-b-2 border-cyan-400 pb-2 mb-6">Featured Project</h2>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+              <h3 class="text-2xl font-semibold text-white mb-2">warp-prometheus</h3>
+              <p class="text-gray-400 mb-4">A Prometheus metrics exporter for the Warp web server framework in Rust, making it easy to add observability to high-performance web services.</p>
+              <a class="text-cyan-400 hover:text-cyan-300 font-semibold" href="https://github.com/calvinbrown085/warp-prometheus" target="_blank">View on GitHub →</a>
+            </div>
+          </section>
+          <section>
+            <h2 class="text-3xl font-bold text-white border-b-2 border-cyan-400 pb-2 mb-6">Find Me Online</h2>
+            <nav class="flex items-center space-x-6">
+              <a class="text-lg text-cyan-400 hover:text-cyan-300 font-semibold" href="https://www.linkedin.com/in/calvin-brown-6ab208aa/" target="_blank">LinkedIn</a>
+              <a class="text-lg text-cyan-400 hover:text-cyan-300 font-semibold" href="https://github.com/calvinbrown085" target="_blank">GitHub</a>
+            </nav>
+          </section>
+        </main>
+        <footer class="text-center mt-16 pt-8 border-t border-gray-700">
+          <p class="text-gray-500">Built with Go &amp; WebAssembly using go-app.</p>
+        </footer>
+      </div>
+    </div>
     <aside id="app-wasm-loader" class="goapp-app-info">
       <img id="app-wasm-loader-icon" class="goapp-logo goapp-spin" alt="wasm loader icon" src="https://raw.githubusercontent.com/maxence-charriere/go-app/master/docs/web/icon.png">
-      <p id="app-wasm-loader-label" class="goapp-label">0%</p>
+      <p class="goapp-label" id="app-wasm-loader-label">0%</p>
     </aside>
   </body>
 </html>
