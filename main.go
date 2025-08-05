@@ -27,6 +27,7 @@ func main() {
 	err := app.GenerateStaticWebsite(".", &app.Handler{
 		Name:        "Hello",
 		Description: "An Hello World! example",
+		Resources:   app.GitHubPages("calvinbrown085.github.io"),
 	})
 
 	if err != nil {

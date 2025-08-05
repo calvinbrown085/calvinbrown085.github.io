@@ -13,7 +13,7 @@ var goappOnAppInstallChange = function () {
   goappAppInstallChangedBeforeWasmLoaded = true;
 };
 
-const goappEnv = {"GOAPP_INTERNAL_URLS":"null","GOAPP_ROOT_PREFIX":"/","GOAPP_STATIC_RESOURCES_URL":"/web","GOAPP_VERSION":"723181f96b9d70a31f64458a9b2f7122c1eef716"};
+const goappEnv = {"GOAPP_INTERNAL_URLS":"null","GOAPP_ROOT_PREFIX":"/calvinbrown085.github.io","GOAPP_STATIC_RESOURCES_URL":"/calvinbrown085.github.io/web","GOAPP_VERSION":"fafd1adfa5d14dcdbd96a5a0aa5789156b432e67"};
 const goappLoadingLabel = "{progress}%";
 const goappWasmContentLength = "";
 const goappWasmContentLengthHeader = "";
@@ -33,7 +33,7 @@ async function goappInitServiceWorker() {
   if ("serviceWorker" in navigator) {
     try {
       const registration = await navigator.serviceWorker.register(
-        "/app-worker.js"
+        "/calvinbrown085.github.io/app-worker.js"
       );
       goappServiceWorkerRegistration = registration;
       goappSetupNotifyUpdate(registration);
@@ -217,7 +217,7 @@ async function goappInitWebAssembly() {
 
     const go = new Go();
     const wasm = await instantiateStreaming(
-      fetchWithProgress("/web/app.wasm", showProgress),
+      fetchWithProgress("/calvinbrown085.github.io/web/app.wasm", showProgress),
       go.importObject
     );
 
