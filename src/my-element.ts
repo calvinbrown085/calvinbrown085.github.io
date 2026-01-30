@@ -8,6 +8,7 @@ import './tic-tac-toe-game'
 import './checkers-game'
 import './connect-four-game'
 import './flappy-bird-game'
+import './guestbook' // blog-comments component
 
 interface GitHubRepo {
   name: string
@@ -443,6 +444,7 @@ export class MyElement extends LitElement {
           </div>
           <div .innerHTML=${post.content}></div>
         </article>
+        <blog-comments postId=${post.id}></blog-comments>
       </div>
     `
   }
