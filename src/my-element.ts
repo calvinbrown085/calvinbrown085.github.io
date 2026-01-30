@@ -16,6 +16,38 @@ export class MyElement extends LitElement {
   private selectedPost: BlogPost | null = null
   private blogPosts = blogPosts
 
+  connectedCallback() {
+    super.connectedCallback()
+    // Check for post ID in URL hash on load
+    this._checkUrlHash()
+    // Listen for hash changes (browser back/forward)
+    window.addEventListener('hashchange', this._handleHashChange)
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback()
+    window.removeEventListener('hashchange', this._handleHashChange)
+  }
+
+  private _handleHashChange = () => {
+    this._checkUrlHash()
+  }
+
+  private _checkUrlHash() {
+    const hash = window.location.hash.slice(1) // Remove the #
+    if (hash) {
+      const post = this.blogPosts.find(p => p.id === hash)
+      if (post) {
+        this.selectedPost = post
+        this.requestUpdate()
+        // Wait for render, then scroll to blog section
+        this.updateComplete.then(() => {
+          this.shadowRoot?.querySelector('.blog')?.scrollIntoView({ behavior: 'smooth' })
+        })
+      }
+    }
+  }
+
   private repos: GitHubRepo[] = [
     {
       name: 'warp-prometheus',
@@ -171,6 +203,8 @@ export class MyElement extends LitElement {
 
   private _openPost(post: BlogPost) {
     this.selectedPost = post
+    // Update URL hash for direct linking
+    window.history.pushState(null, '', `#${post.id}`)
     this.requestUpdate()
     // Scroll to top of blog section
     this.shadowRoot?.querySelector('.blog')?.scrollIntoView({ behavior: 'smooth' })
@@ -178,6 +212,8 @@ export class MyElement extends LitElement {
 
   private _closePost() {
     this.selectedPost = null
+    // Clear the URL hash
+    window.history.pushState(null, '', window.location.pathname)
     this.requestUpdate()
   }
 

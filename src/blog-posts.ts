@@ -247,65 +247,68 @@ export const blogPosts: BlogPost[] = [
     tags: ['Go', 'Logging', 'Structured Logging'],
     content: `
       <h3>Structured Logging in Go</h3>
-      <p>Structured logging is a way to log your logs in a structured format that can be easily parsed and searched.</p>
+      <p>Structured logging is a way to format your logs so they can be easily parsed and searched. Instead of free-form text, you log key-value pairs that tools can index and query.</p>
     
       <h4>1. Using the log package</h4>
-      <p>The log package in Go is a simple way to log messages to the console.</p>
+      <p>The standard log package in Go provides a simple way to log messages to the console:</p>
       <pre><code>log.Println("Hello, World!")</code></pre>
-      Let's try it! <a href="https://go.dev/play/p/VvndytwieVX" target="_blank" rel="noopener noreferrer">https://go.dev/play/p/VvndytwieVX</a>
+      <p>Let's try it! <a href="https://go.dev/play/p/VvndytwieVX" target="_blank" rel="noopener noreferrer">Run in Go Playground</a></p>
       
-      You should see the following output:
+      <p>You should see the following output:</p>
       <pre><code>2026/01/30 12:00:00 Hello, World!</code></pre>
 
-      This doesn't give us much information about the log message. We can do better!
-
+      <p>This doesn't give us much information about the log message. We can do better!</p>
 
       <h4>2. Using the slog package</h4>
-      <p>The slog (stands for structured logging) package in Go is a simple way to log messages to the console.</p>
-      <pre><code>slog.Println("Hello, World!")</code></pre>
-      Let's try it! <a href="https://go.dev/play/p/2dxy_54OSXi" target="_blank" rel="noopener noreferrer">https://go.dev/play/p/VvndytwieVX</a>
+      <p>The slog package (short for "structured logging"), introduced in Go 1.21, provides a more powerful logging API:</p>
+      <pre><code>slog.Info("hello, world")</code></pre>
+      <p>Let's try it! <a href="https://go.dev/play/p/2dxy_54OSXi" target="_blank" rel="noopener noreferrer">Run in Go Playground</a></p>
       
-      You should see the following output:
-      <pre><code>2009/11/10 23:00:00 Hello, World!
-2009/11/10 23:00:00 INFO hello, world</code></pre>
+      <p>You should see output like:</p>
+      <pre><code>2009/11/10 23:00:00 INFO hello, world</code></pre>
 
-      This doesn't look very different from above. Let's try a different example!
+      <p>This doesn't look very different from above. Let's try a more interesting example!</p>
 
-      Let's say we have a userId that we want to log in each message. We can create a logger with a userId attribute.
+      <h4>3. Adding Context with Attributes</h4>
+      <p>Let's say we have a userId that we want to include in each log message. We can create a logger with a userId attribute:</p>
 
       <pre><code>logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
-        AddSource: true,
-        Level:     slog.LevelInfo,
-      })).With("userId", "fb8edcbf-8527-4151-8f06-1538f8fb13c3")
+    AddSource: true,
+    Level:     slog.LevelInfo,
+})).With("userId", "fb8edcbf-8527-4151-8f06-1538f8fb13c3")
+
 logger.Info("hello, world")</code></pre>
-      Let's try it! <a href="https://go.dev/play/p/Zx7W8OR2QVK" target="_blank" rel="noopener noreferrer">https://go.dev/play/p/VvndytwieVX</a>
+      <p>Let's try it! <a href="https://go.dev/play/p/Zx7W8OR2QVK" target="_blank" rel="noopener noreferrer">Run in Go Playground</a></p>
       
-      You should see the following output:
-      <pre><code>2009/11/10 23:00:00 Hello, World!
-2009/11/10 23:00:00 INFO hello, world
-time=2009-11-10T23:00:00.000Z level=INFO source=/tmp/sandbox3759996683/prog.go:20 msg="hello, world" userId=fb8edcbf-8527-4151-8f06-1538f8fb13c3</code></pre>
+      <p>You should see output like:</p>
+      <pre><code>time=2009-11-10T23:00:00.000Z level=INFO source=/tmp/sandbox/prog.go:20 msg="hello, world" userId=fb8edcbf-8527-4151-8f06-1538f8fb13c3</code></pre>
 
-      Great! Now we have the userId in each message without having to add it manually each time.
+      <p>Now we have the userId in each message without having to add it manually each time!</p>
 
-      A lot of times log ingestion tools with take in JSON formatted logs. We can use the slog package to format our logs as JSON.
+      <h4>4. JSON Output for Log Ingestion</h4>
+      <p>Many log ingestion tools expect JSON formatted logs. We can switch to the JSONHandler to output structured JSON:</p>
 
       <pre><code>logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
-        AddSource: true,
-        Level:     slog.LevelInfo,
-      })).With("userId", "fb8edcbf-8527-4151-8f06-1538f8fb13c3")
+    AddSource: true,
+    Level:     slog.LevelInfo,
+})).With("userId", "fb8edcbf-8527-4151-8f06-1538f8fb13c3")
+
 logger.Info("hello, world")</code></pre>
-      Let's try it! <a href="https://go.dev/play/p/fFpA-5PnqhM" target="_blank" rel="noopener noreferrer">https://go.dev/play/p/VvndytwieVX</a>
+      <p>Let's try it! <a href="https://go.dev/play/p/fFpA-5PnqhM" target="_blank" rel="noopener noreferrer">Run in Go Playground</a></p>
       
-      You should see the following output:
+      <p>You should see output like:</p>
+      <pre><code>{"time":"2009-11-10T23:00:00Z","level":"INFO","source":{"function":"main.main","file":"/tmp/sandbox/prog.go","line":20},"msg":"hello, world","userId":"fb8edcbf-8527-4151-8f06-1538f8fb13c3"}</code></pre>
 
-      <pre><code>2009/11/10 23:00:00 Hello, World!
-2009/11/10 23:00:00 INFO hello, world
-time=2009-11-10T23:00:00.000Z level=INFO source=/tmp/sandbox917016642/prog.go:20 msg="hello, world" userId=fb8edcbf-8527-4151-8f06-1538f8fb13c3
-{"time":"2009-11-10T23:00:00Z","level":"INFO","source":{"function":"main.main","file":"/tmp/sandbox917016642/prog.go","line":26},"msg":"hello, world","userId":"fb8edcbf-8527-4151-8f06-1538f8fb13c3"}
-</code></pre>
+      <p>With JSON logs, you can search by the <code>userId</code> key in your log ingestion tool and index it for quick lookups!</p>
 
-      You should be able to search by the key userId in your log ingestion tool and index that for quick log lookups!
-      `
+      <h4>Key Takeaways</h4>
+      <ul>
+        <li>Use <code>slog</code> instead of <code>log</code> for structured logging</li>
+        <li>Add context with <code>.With()</code> to include common fields</li>
+        <li>Use <code>TextHandler</code> for human-readable output during development</li>
+        <li>Use <code>JSONHandler</code> for production log ingestion systems</li>
+      </ul>
+    `
 
       
   }
