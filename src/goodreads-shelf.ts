@@ -43,9 +43,15 @@ export class GoodreadsShelf extends LitElement {
         const authorMatch = item.description?.match(/author:\s*([^<]+)/i)
         const author = authorMatch ? authorMatch[1].trim() : 'Unknown Author'
 
-        // Extract cover image from description
+        // Extract cover image from description and get higher resolution
         const imgMatch = item.description?.match(/<img[^>]+src="([^"]+)"/)
-        const cover = imgMatch ? imgMatch[1] : ''
+        let cover = imgMatch ? imgMatch[1] : ''
+
+        // Replace small thumbnail size with larger size
+        // Goodreads URLs contain _SX50_ or _SY75_ etc - replace with larger size
+        if (cover) {
+          cover = cover.replace(/_S[XY]\d+_/g, '_SX300_')
+        }
 
         return {
           title: item.title || 'Unknown Title',
