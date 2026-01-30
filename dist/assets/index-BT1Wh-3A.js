@@ -1,6 +1,6 @@
-(function(){const e=document.createElement("link").relList;if(e&&e.supports&&e.supports("modulepreload"))return;for(const o of document.querySelectorAll('link[rel="modulepreload"]'))s(o);new MutationObserver(o=>{for(const i of o)if(i.type==="childList")for(const a of i.addedNodes)a.tagName==="LINK"&&a.rel==="modulepreload"&&s(a)}).observe(document,{childList:!0,subtree:!0});function r(o){const i={};return o.integrity&&(i.integrity=o.integrity),o.referrerPolicy&&(i.referrerPolicy=o.referrerPolicy),o.crossOrigin==="use-credentials"?i.credentials="include":o.crossOrigin==="anonymous"?i.credentials="omit":i.credentials="same-origin",i}function s(o){if(o.ep)return;o.ep=!0;const i=r(o);fetch(o.href,i)}})();const K=globalThis,ae=K.ShadowRoot&&(K.ShadyCSS===void 0||K.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,ne=Symbol(),pe=new WeakMap;let $e=class{constructor(e,r,s){if(this._$cssResult$=!0,s!==ne)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=e,this.t=r}get styleSheet(){let e=this.o;const r=this.t;if(ae&&e===void 0){const s=r!==void 0&&r.length===1;s&&(e=pe.get(r)),e===void 0&&((this.o=e=new CSSStyleSheet).replaceSync(this.cssText),s&&pe.set(r,e))}return e}toString(){return this.cssText}};const Ee=t=>new $e(typeof t=="string"?t:t+"",void 0,ne),G=(t,...e)=>{const r=t.length===1?t[0]:e.reduce((s,o,i)=>s+(a=>{if(a._$cssResult$===!0)return a.cssText;if(typeof a=="number")return a;throw Error("Value passed to 'css' function must be a 'css' function result: "+a+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(o)+t[i+1],t[0]);return new $e(r,t,ne)},Me=(t,e)=>{if(ae)t.adoptedStyleSheets=e.map(r=>r instanceof CSSStyleSheet?r:r.styleSheet);else for(const r of e){const s=document.createElement("style"),o=K.litNonce;o!==void 0&&s.setAttribute("nonce",o),s.textContent=r.cssText,t.appendChild(s)}},ue=ae?t=>t:t=>t instanceof CSSStyleSheet?(e=>{let r="";for(const s of e.cssRules)r+=s.cssText;return Ee(r)})(t):t;const{is:De,defineProperty:Te,getOwnPropertyDescriptor:Ie,getOwnPropertyNames:ze,getOwnPropertySymbols:Oe,getPrototypeOf:Le}=Object,re=globalThis,ge=re.trustedTypes,Ge=ge?ge.emptyScript:"",Ue=re.reactiveElementPolyfillSupport,V=(t,e)=>t,ee={toAttribute(t,e){switch(e){case Boolean:t=t?Ge:null;break;case Object:case Array:t=t==null?t:JSON.stringify(t)}return t},fromAttribute(t,e){let r=t;switch(e){case Boolean:r=t!==null;break;case Number:r=t===null?null:Number(t);break;case Object:case Array:try{r=JSON.parse(t)}catch{r=null}}return r}},le=(t,e)=>!De(t,e),fe={attribute:!0,type:String,converter:ee,reflect:!1,useDefault:!1,hasChanged:le};Symbol.metadata??=Symbol("metadata"),re.litPropertyMetadata??=new WeakMap;let R=class extends HTMLElement{static addInitializer(e){this._$Ei(),(this.l??=[]).push(e)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(e,r=fe){if(r.state&&(r.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(e)&&((r=Object.create(r)).wrapped=!0),this.elementProperties.set(e,r),!r.noAccessor){const s=Symbol(),o=this.getPropertyDescriptor(e,s,r);o!==void 0&&Te(this.prototype,e,o)}}static getPropertyDescriptor(e,r,s){const{get:o,set:i}=Ie(this.prototype,e)??{get(){return this[r]},set(a){this[r]=a}};return{get:o,set(a){const c=o?.call(this);i?.call(this,a),this.requestUpdate(e,c,s)},configurable:!0,enumerable:!0}}static getPropertyOptions(e){return this.elementProperties.get(e)??fe}static _$Ei(){if(this.hasOwnProperty(V("elementProperties")))return;const e=Le(this);e.finalize(),e.l!==void 0&&(this.l=[...e.l]),this.elementProperties=new Map(e.elementProperties)}static finalize(){if(this.hasOwnProperty(V("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(V("properties"))){const r=this.properties,s=[...ze(r),...Oe(r)];for(const o of s)this.createProperty(o,r[o])}const e=this[Symbol.metadata];if(e!==null){const r=litPropertyMetadata.get(e);if(r!==void 0)for(const[s,o]of r)this.elementProperties.set(s,o)}this._$Eh=new Map;for(const[r,s]of this.elementProperties){const o=this._$Eu(r,s);o!==void 0&&this._$Eh.set(o,r)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(e){const r=[];if(Array.isArray(e)){const s=new Set(e.flat(1/0).reverse());for(const o of s)r.unshift(ue(o))}else e!==void 0&&r.push(ue(e));return r}static _$Eu(e,r){const s=r.attribute;return s===!1?void 0:typeof s=="string"?s:typeof e=="string"?e.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(e=>this.enableUpdating=e),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(e=>e(this))}addController(e){(this._$EO??=new Set).add(e),this.renderRoot!==void 0&&this.isConnected&&e.hostConnected?.()}removeController(e){this._$EO?.delete(e)}_$E_(){const e=new Map,r=this.constructor.elementProperties;for(const s of r.keys())this.hasOwnProperty(s)&&(e.set(s,this[s]),delete this[s]);e.size>0&&(this._$Ep=e)}createRenderRoot(){const e=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return Me(e,this.constructor.elementStyles),e}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(e=>e.hostConnected?.())}enableUpdating(e){}disconnectedCallback(){this._$EO?.forEach(e=>e.hostDisconnected?.())}attributeChangedCallback(e,r,s){this._$AK(e,s)}_$ET(e,r){const s=this.constructor.elementProperties.get(e),o=this.constructor._$Eu(e,s);if(o!==void 0&&s.reflect===!0){const i=(s.converter?.toAttribute!==void 0?s.converter:ee).toAttribute(r,s.type);this._$Em=e,i==null?this.removeAttribute(o):this.setAttribute(o,i),this._$Em=null}}_$AK(e,r){const s=this.constructor,o=s._$Eh.get(e);if(o!==void 0&&this._$Em!==o){const i=s.getPropertyOptions(o),a=typeof i.converter=="function"?{fromAttribute:i.converter}:i.converter?.fromAttribute!==void 0?i.converter:ee;this._$Em=o;const c=a.fromAttribute(r,i.type);this[o]=c??this._$Ej?.get(o)??c,this._$Em=null}}requestUpdate(e,r,s,o=!1,i){if(e!==void 0){const a=this.constructor;if(o===!1&&(i=this[e]),s??=a.getPropertyOptions(e),!((s.hasChanged??le)(i,r)||s.useDefault&&s.reflect&&i===this._$Ej?.get(e)&&!this.hasAttribute(a._$Eu(e,s))))return;this.C(e,r,s)}this.isUpdatePending===!1&&(this._$ES=this._$EP())}C(e,r,{useDefault:s,reflect:o,wrapped:i},a){s&&!(this._$Ej??=new Map).has(e)&&(this._$Ej.set(e,a??r??this[e]),i!==!0||a!==void 0)||(this._$AL.has(e)||(this.hasUpdated||s||(r=void 0),this._$AL.set(e,r)),o===!0&&this._$Em!==e&&(this._$Eq??=new Set).add(e))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(r){Promise.reject(r)}const e=this.scheduleUpdate();return e!=null&&await e,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[o,i]of this._$Ep)this[o]=i;this._$Ep=void 0}const s=this.constructor.elementProperties;if(s.size>0)for(const[o,i]of s){const{wrapped:a}=i,c=this[o];a!==!0||this._$AL.has(o)||c===void 0||this.C(o,void 0,i,c)}}let e=!1;const r=this._$AL;try{e=this.shouldUpdate(r),e?(this.willUpdate(r),this._$EO?.forEach(s=>s.hostUpdate?.()),this.update(r)):this._$EM()}catch(s){throw e=!1,this._$EM(),s}e&&this._$AE(r)}willUpdate(e){}_$AE(e){this._$EO?.forEach(r=>r.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(e)),this.updated(e)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(e){return!0}update(e){this._$Eq&&=this._$Eq.forEach(r=>this._$ET(r,this[r])),this._$EM()}updated(e){}firstUpdated(e){}};R.elementStyles=[],R.shadowRootOptions={mode:"open"},R[V("elementProperties")]=new Map,R[V("finalized")]=new Map,Ue?.({ReactiveElement:R}),(re.reactiveElementVersions??=[]).push("2.1.2");const ce=globalThis,me=t=>t,te=ce.trustedTypes,be=te?te.createPolicy("lit-html",{createHTML:t=>t}):void 0,Se="$lit$",C=`lit$${Math.random().toFixed(9).slice(2)}$`,Ae="?"+C,He=`<${Ae}>`,L=document,F=()=>L.createComment(""),Y=t=>t===null||typeof t!="object"&&typeof t!="function",de=Array.isArray,Re=t=>de(t)||typeof t?.[Symbol.iterator]=="function",oe=`[ 	
-\f\r]`,N=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,ve=/-->/g,xe=/>/g,I=RegExp(`>|${oe}(?:([^\\s"'>=/]+)(${oe}*=${oe}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`,"g"),ye=/'/g,we=/"/g,Pe=/^(?:script|style|textarea|title)$/i,Be=t=>(e,...r)=>({_$litType$:t,strings:e,values:r}),l=Be(1),j=Symbol.for("lit-noChange"),g=Symbol.for("lit-nothing"),_e=new WeakMap,z=L.createTreeWalker(L,129);function Ce(t,e){if(!de(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return be!==void 0?be.createHTML(e):e}const je=(t,e)=>{const r=t.length-1,s=[];let o,i=e===2?"<svg>":e===3?"<math>":"",a=N;for(let c=0;c<r;c++){const n=t[c];let d,h,u=-1,f=0;for(;f<n.length&&(a.lastIndex=f,h=a.exec(n),h!==null);)f=a.lastIndex,a===N?h[1]==="!--"?a=ve:h[1]!==void 0?a=xe:h[2]!==void 0?(Pe.test(h[2])&&(o=RegExp("</"+h[2],"g")),a=I):h[3]!==void 0&&(a=I):a===I?h[0]===">"?(a=o??N,u=-1):h[1]===void 0?u=-2:(u=a.lastIndex-h[2].length,d=h[1],a=h[3]===void 0?I:h[3]==='"'?we:ye):a===we||a===ye?a=I:a===ve||a===xe?a=N:(a=I,o=void 0);const m=a===I&&t[c+1].startsWith("/>")?" ":"";i+=a===N?n+He:u>=0?(s.push(d),n.slice(0,u)+Se+n.slice(u)+C+m):n+C+(u===-2?c:m)}return[Ce(t,i+(t[r]||"<?>")+(e===2?"</svg>":e===3?"</math>":"")),s]};class q{constructor({strings:e,_$litType$:r},s){let o;this.parts=[];let i=0,a=0;const c=e.length-1,n=this.parts,[d,h]=je(e,r);if(this.el=q.createElement(d,s),z.currentNode=this.el.content,r===2||r===3){const u=this.el.content.firstChild;u.replaceWith(...u.childNodes)}for(;(o=z.nextNode())!==null&&n.length<c;){if(o.nodeType===1){if(o.hasAttributes())for(const u of o.getAttributeNames())if(u.endsWith(Se)){const f=h[a++],m=o.getAttribute(u).split(C),T=/([.?@])?(.*)/.exec(f);n.push({type:1,index:i,name:T[2],strings:m,ctor:T[1]==="."?Ne:T[1]==="?"?Ve:T[1]==="@"?Fe:se}),o.removeAttribute(u)}else u.startsWith(C)&&(n.push({type:6,index:i}),o.removeAttribute(u));if(Pe.test(o.tagName)){const u=o.textContent.split(C),f=u.length-1;if(f>0){o.textContent=te?te.emptyScript:"";for(let m=0;m<f;m++)o.append(u[m],F()),z.nextNode(),n.push({type:2,index:++i});o.append(u[f],F())}}}else if(o.nodeType===8)if(o.data===Ae)n.push({type:2,index:i});else{let u=-1;for(;(u=o.data.indexOf(C,u+1))!==-1;)n.push({type:7,index:i}),u+=C.length-1}i++}}static createElement(e,r){const s=L.createElement("template");return s.innerHTML=e,s}}function W(t,e,r=t,s){if(e===j)return e;let o=s!==void 0?r._$Co?.[s]:r._$Cl;const i=Y(e)?void 0:e._$litDirective$;return o?.constructor!==i&&(o?._$AO?.(!1),i===void 0?o=void 0:(o=new i(t),o._$AT(t,r,s)),s!==void 0?(r._$Co??=[])[s]=o:r._$Cl=o),o!==void 0&&(e=W(t,o._$AS(t,e.values),o,s)),e}class We{constructor(e,r){this._$AV=[],this._$AN=void 0,this._$AD=e,this._$AM=r}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(e){const{el:{content:r},parts:s}=this._$AD,o=(e?.creationScope??L).importNode(r,!0);z.currentNode=o;let i=z.nextNode(),a=0,c=0,n=s[0];for(;n!==void 0;){if(a===n.index){let d;n.type===2?d=new J(i,i.nextSibling,this,e):n.type===1?d=new n.ctor(i,n.name,n.strings,this,e):n.type===6&&(d=new Ye(i,this,e)),this._$AV.push(d),n=s[++c]}a!==n?.index&&(i=z.nextNode(),a++)}return z.currentNode=L,o}p(e){let r=0;for(const s of this._$AV)s!==void 0&&(s.strings!==void 0?(s._$AI(e,s,r),r+=s.strings.length-2):s._$AI(e[r])),r++}}class J{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(e,r,s,o){this.type=2,this._$AH=g,this._$AN=void 0,this._$AA=e,this._$AB=r,this._$AM=s,this.options=o,this._$Cv=o?.isConnected??!0}get parentNode(){let e=this._$AA.parentNode;const r=this._$AM;return r!==void 0&&e?.nodeType===11&&(e=r.parentNode),e}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(e,r=this){e=W(this,e,r),Y(e)?e===g||e==null||e===""?(this._$AH!==g&&this._$AR(),this._$AH=g):e!==this._$AH&&e!==j&&this._(e):e._$litType$!==void 0?this.$(e):e.nodeType!==void 0?this.T(e):Re(e)?this.k(e):this._(e)}O(e){return this._$AA.parentNode.insertBefore(e,this._$AB)}T(e){this._$AH!==e&&(this._$AR(),this._$AH=this.O(e))}_(e){this._$AH!==g&&Y(this._$AH)?this._$AA.nextSibling.data=e:this.T(L.createTextNode(e)),this._$AH=e}$(e){const{values:r,_$litType$:s}=e,o=typeof s=="number"?this._$AC(e):(s.el===void 0&&(s.el=q.createElement(Ce(s.h,s.h[0]),this.options)),s);if(this._$AH?._$AD===o)this._$AH.p(r);else{const i=new We(o,this),a=i.u(this.options);i.p(r),this.T(a),this._$AH=i}}_$AC(e){let r=_e.get(e.strings);return r===void 0&&_e.set(e.strings,r=new q(e)),r}k(e){de(this._$AH)||(this._$AH=[],this._$AR());const r=this._$AH;let s,o=0;for(const i of e)o===r.length?r.push(s=new J(this.O(F()),this.O(F()),this,this.options)):s=r[o],s._$AI(i),o++;o<r.length&&(this._$AR(s&&s._$AB.nextSibling,o),r.length=o)}_$AR(e=this._$AA.nextSibling,r){for(this._$AP?.(!1,!0,r);e!==this._$AB;){const s=me(e).nextSibling;me(e).remove(),e=s}}setConnected(e){this._$AM===void 0&&(this._$Cv=e,this._$AP?.(e))}}class se{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(e,r,s,o,i){this.type=1,this._$AH=g,this._$AN=void 0,this.element=e,this.name=r,this._$AM=o,this.options=i,s.length>2||s[0]!==""||s[1]!==""?(this._$AH=Array(s.length-1).fill(new String),this.strings=s):this._$AH=g}_$AI(e,r=this,s,o){const i=this.strings;let a=!1;if(i===void 0)e=W(this,e,r,0),a=!Y(e)||e!==this._$AH&&e!==j,a&&(this._$AH=e);else{const c=e;let n,d;for(e=i[0],n=0;n<i.length-1;n++)d=W(this,c[s+n],r,n),d===j&&(d=this._$AH[n]),a||=!Y(d)||d!==this._$AH[n],d===g?e=g:e!==g&&(e+=(d??"")+i[n+1]),this._$AH[n]=d}a&&!o&&this.j(e)}j(e){e===g?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,e??"")}}class Ne extends se{constructor(){super(...arguments),this.type=3}j(e){this.element[this.name]=e===g?void 0:e}}class Ve extends se{constructor(){super(...arguments),this.type=4}j(e){this.element.toggleAttribute(this.name,!!e&&e!==g)}}class Fe extends se{constructor(e,r,s,o,i){super(e,r,s,o,i),this.type=5}_$AI(e,r=this){if((e=W(this,e,r,0)??g)===j)return;const s=this._$AH,o=e===g&&s!==g||e.capture!==s.capture||e.once!==s.once||e.passive!==s.passive,i=e!==g&&(s===g||o);o&&this.element.removeEventListener(this.name,this,s),i&&this.element.addEventListener(this.name,this,e),this._$AH=e}handleEvent(e){typeof this._$AH=="function"?this._$AH.call(this.options?.host??this.element,e):this._$AH.handleEvent(e)}}class Ye{constructor(e,r,s){this.element=e,this.type=6,this._$AN=void 0,this._$AM=r,this.options=s}get _$AU(){return this._$AM._$AU}_$AI(e){W(this,e)}}const qe=ce.litHtmlPolyfillSupport;qe?.(q,J),(ce.litHtmlVersions??=[]).push("3.3.2");const Je=(t,e,r)=>{const s=r?.renderBefore??e;let o=s._$litPart$;if(o===void 0){const i=r?.renderBefore??null;s._$litPart$=o=new J(e.insertBefore(F(),i),i,void 0,r??{})}return o._$AI(t),o};const he=globalThis;class b extends R{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const e=super.createRenderRoot();return this.renderOptions.renderBefore??=e.firstChild,e}update(e){const r=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(e),this._$Do=Je(r,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return j}}b._$litElement$=!0,b.finalized=!0,he.litElementHydrateSupport?.({LitElement:b});const Ze=he.litElementPolyfillSupport;Ze?.({LitElement:b});(he.litElementVersions??=[]).push("4.2.2");const U=t=>(e,r)=>{r!==void 0?r.addInitializer(()=>{customElements.define(t,e)}):customElements.define(t,e)};const Ke={attribute:!0,type:String,converter:ee,reflect:!1,hasChanged:le},Xe=(t=Ke,e,r)=>{const{kind:s,metadata:o}=r;let i=globalThis.litPropertyMetadata.get(o);if(i===void 0&&globalThis.litPropertyMetadata.set(o,i=new Map),s==="setter"&&((t=Object.create(t)).wrapped=!0),i.set(r.name,t),s==="accessor"){const{name:a}=r;return{set(c){const n=e.get.call(this);e.set.call(this,c),this.requestUpdate(a,n,t,!0,c)},init(c){return c!==void 0&&this.C(a,void 0,t,c),c}}}if(s==="setter"){const{name:a}=r;return function(c){const n=this[a];e.call(this,c),this.requestUpdate(a,n,t,!0,c)}}throw Error("Unsupported decorator location: "+s)};function Qe(t){return(e,r)=>typeof r=="object"?Xe(t,e,r):((s,o,i)=>{const a=o.hasOwnProperty(i);return o.constructor.createProperty(i,s),a?Object.getOwnPropertyDescriptor(o,i):void 0})(t,e,r)}function p(t){return Qe({...t,state:!0,attribute:!1})}const et="/assets/calvin-headshot-DvgFd22I.jpg",tt=[{id:"structured-logging-in-go",title:"Structured Logging in Go",summary:"How to use structured logging in Go to make your logs more readable and searchable.",date:"2026-01-30",tags:["Go","Logging","Structured Logging"],content:`
+(function(){const e=document.createElement("link").relList;if(e&&e.supports&&e.supports("modulepreload"))return;for(const s of document.querySelectorAll('link[rel="modulepreload"]'))r(s);new MutationObserver(s=>{for(const i of s)if(i.type==="childList")for(const a of i.addedNodes)a.tagName==="LINK"&&a.rel==="modulepreload"&&r(a)}).observe(document,{childList:!0,subtree:!0});function o(s){const i={};return s.integrity&&(i.integrity=s.integrity),s.referrerPolicy&&(i.referrerPolicy=s.referrerPolicy),s.crossOrigin==="use-credentials"?i.credentials="include":s.crossOrigin==="anonymous"?i.credentials="omit":i.credentials="same-origin",i}function r(s){if(s.ep)return;s.ep=!0;const i=o(s);fetch(s.href,i)}})();const Q=globalThis,ce=Q.ShadowRoot&&(Q.ShadyCSS===void 0||Q.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,de=Symbol(),fe=new WeakMap;let Pe=class{constructor(e,o,r){if(this._$cssResult$=!0,r!==de)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=e,this.t=o}get styleSheet(){let e=this.o;const o=this.t;if(ce&&e===void 0){const r=o!==void 0&&o.length===1;r&&(e=fe.get(o)),e===void 0&&((this.o=e=new CSSStyleSheet).replaceSync(this.cssText),r&&fe.set(o,e))}return e}toString(){return this.cssText}};const De=t=>new Pe(typeof t=="string"?t:t+"",void 0,de),M=(t,...e)=>{const o=t.length===1?t[0]:e.reduce((r,s,i)=>r+(a=>{if(a._$cssResult$===!0)return a.cssText;if(typeof a=="number")return a;throw Error("Value passed to 'css' function must be a 'css' function result: "+a+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(s)+t[i+1],t[0]);return new Pe(o,t,de)},Ie=(t,e)=>{if(ce)t.adoptedStyleSheets=e.map(o=>o instanceof CSSStyleSheet?o:o.styleSheet);else for(const o of e){const r=document.createElement("style"),s=Q.litNonce;s!==void 0&&r.setAttribute("nonce",s),r.textContent=o.cssText,t.appendChild(r)}},me=ce?t=>t:t=>t instanceof CSSStyleSheet?(e=>{let o="";for(const r of e.cssRules)o+=r.cssText;return De(o)})(t):t;const{is:ze,defineProperty:Oe,getOwnPropertyDescriptor:Le,getOwnPropertyNames:Ge,getOwnPropertySymbols:Ue,getPrototypeOf:Re}=Object,se=globalThis,be=se.trustedTypes,He=be?be.emptyScript:"",Be=se.reactiveElementPolyfillSupport,F=(t,e)=>t,oe={toAttribute(t,e){switch(e){case Boolean:t=t?He:null;break;case Object:case Array:t=t==null?t:JSON.stringify(t)}return t},fromAttribute(t,e){let o=t;switch(e){case Boolean:o=t!==null;break;case Number:o=t===null?null:Number(t);break;case Object:case Array:try{o=JSON.parse(t)}catch{o=null}}return o}},he=(t,e)=>!ze(t,e),ve={attribute:!0,type:String,converter:oe,reflect:!1,useDefault:!1,hasChanged:he};Symbol.metadata??=Symbol("metadata"),se.litPropertyMetadata??=new WeakMap;let j=class extends HTMLElement{static addInitializer(e){this._$Ei(),(this.l??=[]).push(e)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(e,o=ve){if(o.state&&(o.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(e)&&((o=Object.create(o)).wrapped=!0),this.elementProperties.set(e,o),!o.noAccessor){const r=Symbol(),s=this.getPropertyDescriptor(e,r,o);s!==void 0&&Oe(this.prototype,e,s)}}static getPropertyDescriptor(e,o,r){const{get:s,set:i}=Le(this.prototype,e)??{get(){return this[o]},set(a){this[o]=a}};return{get:s,set(a){const c=s?.call(this);i?.call(this,a),this.requestUpdate(e,c,r)},configurable:!0,enumerable:!0}}static getPropertyOptions(e){return this.elementProperties.get(e)??ve}static _$Ei(){if(this.hasOwnProperty(F("elementProperties")))return;const e=Re(this);e.finalize(),e.l!==void 0&&(this.l=[...e.l]),this.elementProperties=new Map(e.elementProperties)}static finalize(){if(this.hasOwnProperty(F("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(F("properties"))){const o=this.properties,r=[...Ge(o),...Ue(o)];for(const s of r)this.createProperty(s,o[s])}const e=this[Symbol.metadata];if(e!==null){const o=litPropertyMetadata.get(e);if(o!==void 0)for(const[r,s]of o)this.elementProperties.set(r,s)}this._$Eh=new Map;for(const[o,r]of this.elementProperties){const s=this._$Eu(o,r);s!==void 0&&this._$Eh.set(s,o)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(e){const o=[];if(Array.isArray(e)){const r=new Set(e.flat(1/0).reverse());for(const s of r)o.unshift(me(s))}else e!==void 0&&o.push(me(e));return o}static _$Eu(e,o){const r=o.attribute;return r===!1?void 0:typeof r=="string"?r:typeof e=="string"?e.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(e=>this.enableUpdating=e),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(e=>e(this))}addController(e){(this._$EO??=new Set).add(e),this.renderRoot!==void 0&&this.isConnected&&e.hostConnected?.()}removeController(e){this._$EO?.delete(e)}_$E_(){const e=new Map,o=this.constructor.elementProperties;for(const r of o.keys())this.hasOwnProperty(r)&&(e.set(r,this[r]),delete this[r]);e.size>0&&(this._$Ep=e)}createRenderRoot(){const e=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return Ie(e,this.constructor.elementStyles),e}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(e=>e.hostConnected?.())}enableUpdating(e){}disconnectedCallback(){this._$EO?.forEach(e=>e.hostDisconnected?.())}attributeChangedCallback(e,o,r){this._$AK(e,r)}_$ET(e,o){const r=this.constructor.elementProperties.get(e),s=this.constructor._$Eu(e,r);if(s!==void 0&&r.reflect===!0){const i=(r.converter?.toAttribute!==void 0?r.converter:oe).toAttribute(o,r.type);this._$Em=e,i==null?this.removeAttribute(s):this.setAttribute(s,i),this._$Em=null}}_$AK(e,o){const r=this.constructor,s=r._$Eh.get(e);if(s!==void 0&&this._$Em!==s){const i=r.getPropertyOptions(s),a=typeof i.converter=="function"?{fromAttribute:i.converter}:i.converter?.fromAttribute!==void 0?i.converter:oe;this._$Em=s;const c=a.fromAttribute(o,i.type);this[s]=c??this._$Ej?.get(s)??c,this._$Em=null}}requestUpdate(e,o,r,s=!1,i){if(e!==void 0){const a=this.constructor;if(s===!1&&(i=this[e]),r??=a.getPropertyOptions(e),!((r.hasChanged??he)(i,o)||r.useDefault&&r.reflect&&i===this._$Ej?.get(e)&&!this.hasAttribute(a._$Eu(e,r))))return;this.C(e,o,r)}this.isUpdatePending===!1&&(this._$ES=this._$EP())}C(e,o,{useDefault:r,reflect:s,wrapped:i},a){r&&!(this._$Ej??=new Map).has(e)&&(this._$Ej.set(e,a??o??this[e]),i!==!0||a!==void 0)||(this._$AL.has(e)||(this.hasUpdated||r||(o=void 0),this._$AL.set(e,o)),s===!0&&this._$Em!==e&&(this._$Eq??=new Set).add(e))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(o){Promise.reject(o)}const e=this.scheduleUpdate();return e!=null&&await e,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[s,i]of this._$Ep)this[s]=i;this._$Ep=void 0}const r=this.constructor.elementProperties;if(r.size>0)for(const[s,i]of r){const{wrapped:a}=i,c=this[s];a!==!0||this._$AL.has(s)||c===void 0||this.C(s,void 0,i,c)}}let e=!1;const o=this._$AL;try{e=this.shouldUpdate(o),e?(this.willUpdate(o),this._$EO?.forEach(r=>r.hostUpdate?.()),this.update(o)):this._$EM()}catch(r){throw e=!1,this._$EM(),r}e&&this._$AE(o)}willUpdate(e){}_$AE(e){this._$EO?.forEach(o=>o.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(e)),this.updated(e)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(e){return!0}update(e){this._$Eq&&=this._$Eq.forEach(o=>this._$ET(o,this[o])),this._$EM()}updated(e){}firstUpdated(e){}};j.elementStyles=[],j.shadowRootOptions={mode:"open"},j[F("elementProperties")]=new Map,j[F("finalized")]=new Map,Be?.({ReactiveElement:j}),(se.reactiveElementVersions??=[]).push("2.1.2");const pe=globalThis,xe=t=>t,re=pe.trustedTypes,ye=re?re.createPolicy("lit-html",{createHTML:t=>t}):void 0,Ce="$lit$",E=`lit$${Math.random().toFixed(9).slice(2)}$`,Ee="?"+E,je=`<${Ee}>`,R=document,Y=()=>R.createComment(""),J=t=>t===null||typeof t!="object"&&typeof t!="function",ue=Array.isArray,Ne=t=>ue(t)||typeof t?.[Symbol.iterator]=="function",ne=`[ 	
+\f\r]`,V=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,we=/-->/g,_e=/>/g,L=RegExp(`>|${ne}(?:([^\\s"'>=/]+)(${ne}*=${ne}*(?:[^ 	
+\f\r"'\`<>=]|("|')|))|$)`,"g"),ke=/'/g,$e=/"/g,Me=/^(?:script|style|textarea|title)$/i,We=t=>(e,...o)=>({_$litType$:t,strings:e,values:o}),l=We(1),W=Symbol.for("lit-noChange"),g=Symbol.for("lit-nothing"),Se=new WeakMap,G=R.createTreeWalker(R,129);function Te(t,e){if(!ue(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return ye!==void 0?ye.createHTML(e):e}const qe=(t,e)=>{const o=t.length-1,r=[];let s,i=e===2?"<svg>":e===3?"<math>":"",a=V;for(let c=0;c<o;c++){const n=t[c];let d,h,u=-1,f=0;for(;f<n.length&&(a.lastIndex=f,h=a.exec(n),h!==null);)f=a.lastIndex,a===V?h[1]==="!--"?a=we:h[1]!==void 0?a=_e:h[2]!==void 0?(Me.test(h[2])&&(s=RegExp("</"+h[2],"g")),a=L):h[3]!==void 0&&(a=L):a===L?h[0]===">"?(a=s??V,u=-1):h[1]===void 0?u=-2:(u=a.lastIndex-h[2].length,d=h[1],a=h[3]===void 0?L:h[3]==='"'?$e:ke):a===$e||a===ke?a=L:a===we||a===_e?a=V:(a=L,s=void 0);const m=a===L&&t[c+1].startsWith("/>")?" ":"";i+=a===V?n+je:u>=0?(r.push(d),n.slice(0,u)+Ce+n.slice(u)+E+m):n+E+(u===-2?c:m)}return[Te(t,i+(t[o]||"<?>")+(e===2?"</svg>":e===3?"</math>":"")),r]};class Z{constructor({strings:e,_$litType$:o},r){let s;this.parts=[];let i=0,a=0;const c=e.length-1,n=this.parts,[d,h]=qe(e,o);if(this.el=Z.createElement(d,r),G.currentNode=this.el.content,o===2||o===3){const u=this.el.content.firstChild;u.replaceWith(...u.childNodes)}for(;(s=G.nextNode())!==null&&n.length<c;){if(s.nodeType===1){if(s.hasAttributes())for(const u of s.getAttributeNames())if(u.endsWith(Ce)){const f=h[a++],m=s.getAttribute(u).split(E),O=/([.?@])?(.*)/.exec(f);n.push({type:1,index:i,name:O[2],strings:m,ctor:O[1]==="."?Fe:O[1]==="?"?Ye:O[1]==="@"?Je:ie}),s.removeAttribute(u)}else u.startsWith(E)&&(n.push({type:6,index:i}),s.removeAttribute(u));if(Me.test(s.tagName)){const u=s.textContent.split(E),f=u.length-1;if(f>0){s.textContent=re?re.emptyScript:"";for(let m=0;m<f;m++)s.append(u[m],Y()),G.nextNode(),n.push({type:2,index:++i});s.append(u[f],Y())}}}else if(s.nodeType===8)if(s.data===Ee)n.push({type:2,index:i});else{let u=-1;for(;(u=s.data.indexOf(E,u+1))!==-1;)n.push({type:7,index:i}),u+=E.length-1}i++}}static createElement(e,o){const r=R.createElement("template");return r.innerHTML=e,r}}function q(t,e,o=t,r){if(e===W)return e;let s=r!==void 0?o._$Co?.[r]:o._$Cl;const i=J(e)?void 0:e._$litDirective$;return s?.constructor!==i&&(s?._$AO?.(!1),i===void 0?s=void 0:(s=new i(t),s._$AT(t,o,r)),r!==void 0?(o._$Co??=[])[r]=s:o._$Cl=s),s!==void 0&&(e=q(t,s._$AS(t,e.values),s,r)),e}class Ve{constructor(e,o){this._$AV=[],this._$AN=void 0,this._$AD=e,this._$AM=o}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(e){const{el:{content:o},parts:r}=this._$AD,s=(e?.creationScope??R).importNode(o,!0);G.currentNode=s;let i=G.nextNode(),a=0,c=0,n=r[0];for(;n!==void 0;){if(a===n.index){let d;n.type===2?d=new K(i,i.nextSibling,this,e):n.type===1?d=new n.ctor(i,n.name,n.strings,this,e):n.type===6&&(d=new Ze(i,this,e)),this._$AV.push(d),n=r[++c]}a!==n?.index&&(i=G.nextNode(),a++)}return G.currentNode=R,s}p(e){let o=0;for(const r of this._$AV)r!==void 0&&(r.strings!==void 0?(r._$AI(e,r,o),o+=r.strings.length-2):r._$AI(e[o])),o++}}class K{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(e,o,r,s){this.type=2,this._$AH=g,this._$AN=void 0,this._$AA=e,this._$AB=o,this._$AM=r,this.options=s,this._$Cv=s?.isConnected??!0}get parentNode(){let e=this._$AA.parentNode;const o=this._$AM;return o!==void 0&&e?.nodeType===11&&(e=o.parentNode),e}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(e,o=this){e=q(this,e,o),J(e)?e===g||e==null||e===""?(this._$AH!==g&&this._$AR(),this._$AH=g):e!==this._$AH&&e!==W&&this._(e):e._$litType$!==void 0?this.$(e):e.nodeType!==void 0?this.T(e):Ne(e)?this.k(e):this._(e)}O(e){return this._$AA.parentNode.insertBefore(e,this._$AB)}T(e){this._$AH!==e&&(this._$AR(),this._$AH=this.O(e))}_(e){this._$AH!==g&&J(this._$AH)?this._$AA.nextSibling.data=e:this.T(R.createTextNode(e)),this._$AH=e}$(e){const{values:o,_$litType$:r}=e,s=typeof r=="number"?this._$AC(e):(r.el===void 0&&(r.el=Z.createElement(Te(r.h,r.h[0]),this.options)),r);if(this._$AH?._$AD===s)this._$AH.p(o);else{const i=new Ve(s,this),a=i.u(this.options);i.p(o),this.T(a),this._$AH=i}}_$AC(e){let o=Se.get(e.strings);return o===void 0&&Se.set(e.strings,o=new Z(e)),o}k(e){ue(this._$AH)||(this._$AH=[],this._$AR());const o=this._$AH;let r,s=0;for(const i of e)s===o.length?o.push(r=new K(this.O(Y()),this.O(Y()),this,this.options)):r=o[s],r._$AI(i),s++;s<o.length&&(this._$AR(r&&r._$AB.nextSibling,s),o.length=s)}_$AR(e=this._$AA.nextSibling,o){for(this._$AP?.(!1,!0,o);e!==this._$AB;){const r=xe(e).nextSibling;xe(e).remove(),e=r}}setConnected(e){this._$AM===void 0&&(this._$Cv=e,this._$AP?.(e))}}class ie{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(e,o,r,s,i){this.type=1,this._$AH=g,this._$AN=void 0,this.element=e,this.name=o,this._$AM=s,this.options=i,r.length>2||r[0]!==""||r[1]!==""?(this._$AH=Array(r.length-1).fill(new String),this.strings=r):this._$AH=g}_$AI(e,o=this,r,s){const i=this.strings;let a=!1;if(i===void 0)e=q(this,e,o,0),a=!J(e)||e!==this._$AH&&e!==W,a&&(this._$AH=e);else{const c=e;let n,d;for(e=i[0],n=0;n<i.length-1;n++)d=q(this,c[r+n],o,n),d===W&&(d=this._$AH[n]),a||=!J(d)||d!==this._$AH[n],d===g?e=g:e!==g&&(e+=(d??"")+i[n+1]),this._$AH[n]=d}a&&!s&&this.j(e)}j(e){e===g?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,e??"")}}class Fe extends ie{constructor(){super(...arguments),this.type=3}j(e){this.element[this.name]=e===g?void 0:e}}class Ye extends ie{constructor(){super(...arguments),this.type=4}j(e){this.element.toggleAttribute(this.name,!!e&&e!==g)}}class Je extends ie{constructor(e,o,r,s,i){super(e,o,r,s,i),this.type=5}_$AI(e,o=this){if((e=q(this,e,o,0)??g)===W)return;const r=this._$AH,s=e===g&&r!==g||e.capture!==r.capture||e.once!==r.once||e.passive!==r.passive,i=e!==g&&(r===g||s);s&&this.element.removeEventListener(this.name,this,r),i&&this.element.addEventListener(this.name,this,e),this._$AH=e}handleEvent(e){typeof this._$AH=="function"?this._$AH.call(this.options?.host??this.element,e):this._$AH.handleEvent(e)}}class Ze{constructor(e,o,r){this.element=e,this.type=6,this._$AN=void 0,this._$AM=o,this.options=r}get _$AU(){return this._$AM._$AU}_$AI(e){q(this,e)}}const Ke=pe.litHtmlPolyfillSupport;Ke?.(Z,K),(pe.litHtmlVersions??=[]).push("3.3.2");const Xe=(t,e,o)=>{const r=o?.renderBefore??e;let s=r._$litPart$;if(s===void 0){const i=o?.renderBefore??null;r._$litPart$=s=new K(e.insertBefore(Y(),i),i,void 0,o??{})}return s._$AI(t),s};const ge=globalThis;class b extends j{constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const e=super.createRenderRoot();return this.renderOptions.renderBefore??=e.firstChild,e}update(e){const o=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(e),this._$Do=Xe(o,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return W}}b._$litElement$=!0,b.finalized=!0,ge.litElementHydrateSupport?.({LitElement:b});const Qe=ge.litElementPolyfillSupport;Qe?.({LitElement:b});(ge.litElementVersions??=[]).push("4.2.2");const T=t=>(e,o)=>{o!==void 0?o.addInitializer(()=>{customElements.define(t,e)}):customElements.define(t,e)};const et={attribute:!0,type:String,converter:oe,reflect:!1,hasChanged:he},tt=(t=et,e,o)=>{const{kind:r,metadata:s}=o;let i=globalThis.litPropertyMetadata.get(s);if(i===void 0&&globalThis.litPropertyMetadata.set(s,i=new Map),r==="setter"&&((t=Object.create(t)).wrapped=!0),i.set(o.name,t),r==="accessor"){const{name:a}=o;return{set(c){const n=e.get.call(this);e.set.call(this,c),this.requestUpdate(a,n,t,!0,c)},init(c){return c!==void 0&&this.C(a,void 0,t,c),c}}}if(r==="setter"){const{name:a}=o;return function(c){const n=this[a];e.call(this,c),this.requestUpdate(a,n,t,!0,c)}}throw Error("Unsupported decorator location: "+r)};function ae(t){return(e,o)=>typeof o=="object"?tt(t,e,o):((r,s,i)=>{const a=s.hasOwnProperty(i);return s.constructor.createProperty(i,r),a?Object.getOwnPropertyDescriptor(s,i):void 0})(t,e,o)}function p(t){return ae({...t,state:!0,attribute:!1})}const ot="/assets/calvin-headshot-DvgFd22I.jpg",rt=[{id:"structured-logging-in-go",title:"Structured Logging in Go",summary:"How to use structured logging in Go to make your logs more readable and searchable.",date:"2026-01-30",tags:["Go","Logging","Structured Logging"],content:`
       <h3>Structured Logging in Go</h3>
       <p>Structured logging is a way to format your logs so they can be easily parsed and searched. Instead of free-form text, you log key-value pairs that tools can index and query.</p>
     
@@ -63,7 +63,7 @@ logger.Info("hello, world")</code></pre>
         <li>Use <code>TextHandler</code> for human-readable output during development</li>
         <li>Use <code>JSONHandler</code> for production log ingestion systems</li>
       </ul>
-    `}];var rt=Object.defineProperty,st=Object.getOwnPropertyDescriptor,E=(t,e,r,s)=>{for(var o=s>1?void 0:s?st(e,r):e,i=t.length-1,a;i>=0;i--)(a=t[i])&&(o=(s?a(e,r,o):a(o))||o);return s&&o&&rt(e,r,o),o};let w=class extends b{constructor(){super(...arguments),this.GRID_SIZE=20,this.CELL_SIZE=20,this.GAME_SPEED=100,this.snake=[],this.food={x:0,y:0},this.direction="right",this.nextDirection="right",this.score=0,this.highScore=0,this.gameState="idle",this.gameLoop=null}connectedCallback(){super.connectedCallback();const t=localStorage.getItem("snake-high-score");t&&(this.highScore=parseInt(t,10)),this._handleKeydown=this._handleKeydown.bind(this),window.addEventListener("keydown",this._handleKeydown)}disconnectedCallback(){super.disconnectedCallback(),window.removeEventListener("keydown",this._handleKeydown),this._stopGame()}_initGame(){const t=Math.floor(this.GRID_SIZE/2);this.snake=[{x:t,y:t},{x:t-1,y:t},{x:t-2,y:t}],this.direction="right",this.nextDirection="right",this.score=0,this._spawnFood()}_spawnFood(){let t;do t={x:Math.floor(Math.random()*this.GRID_SIZE),y:Math.floor(Math.random()*this.GRID_SIZE)};while(this.snake.some(e=>e.x===t.x&&e.y===t.y));this.food=t}_startGame(){(this.gameState==="idle"||this.gameState==="gameover")&&this._initGame(),this.gameState="playing",this.gameLoop=window.setInterval(()=>this._tick(),this.GAME_SPEED)}_pauseGame(){this.gameState="paused",this._stopGame()}_stopGame(){this.gameLoop&&(clearInterval(this.gameLoop),this.gameLoop=null)}_tick(){this.direction=this.nextDirection;const t=this.snake[0];let e;switch(this.direction){case"up":e={x:t.x,y:t.y-1};break;case"down":e={x:t.x,y:t.y+1};break;case"left":e={x:t.x-1,y:t.y};break;case"right":e={x:t.x+1,y:t.y};break}if(e.x<0||e.x>=this.GRID_SIZE||e.y<0||e.y>=this.GRID_SIZE){this._gameOver();return}if(this.snake.some(s=>s.x===e.x&&s.y===e.y)){this._gameOver();return}const r=[e,...this.snake];e.x===this.food.x&&e.y===this.food.y?(this.score+=10,this._spawnFood()):r.pop(),this.snake=r}_gameOver(){this._stopGame(),this.gameState="gameover",this.score>this.highScore&&(this.highScore=this.score,localStorage.setItem("snake-high-score",this.highScore.toString()))}_handleKeydown(t){if(this.gameState!=="playing"&&this.gameState!=="paused"){(t.key===" "||t.key==="Enter")&&(t.preventDefault(),this._startGame());return}switch(t.key){case"ArrowUp":case"w":case"W":t.preventDefault(),this.direction!=="down"&&(this.nextDirection="up");break;case"ArrowDown":case"s":case"S":t.preventDefault(),this.direction!=="up"&&(this.nextDirection="down");break;case"ArrowLeft":case"a":case"A":t.preventDefault(),this.direction!=="right"&&(this.nextDirection="left");break;case"ArrowRight":case"d":case"D":t.preventDefault(),this.direction!=="left"&&(this.nextDirection="right");break;case" ":t.preventDefault(),this.gameState==="playing"?this._pauseGame():this.gameState==="paused"&&this._startGame();break;case"Escape":t.preventDefault(),this.gameState==="playing"&&this._pauseGame();break}}render(){const t=this.GRID_SIZE*this.CELL_SIZE;return l`
+    `}];var st=Object.defineProperty,it=Object.getOwnPropertyDescriptor,D=(t,e,o,r)=>{for(var s=r>1?void 0:r?it(e,o):e,i=t.length-1,a;i>=0;i--)(a=t[i])&&(s=(r?a(e,o,s):a(s))||s);return r&&s&&st(e,o,s),s};let w=class extends b{constructor(){super(...arguments),this.GRID_SIZE=20,this.CELL_SIZE=20,this.GAME_SPEED=100,this.snake=[],this.food={x:0,y:0},this.direction="right",this.nextDirection="right",this.score=0,this.highScore=0,this.gameState="idle",this.gameLoop=null}connectedCallback(){super.connectedCallback();const t=localStorage.getItem("snake-high-score");t&&(this.highScore=parseInt(t,10)),this._handleKeydown=this._handleKeydown.bind(this),window.addEventListener("keydown",this._handleKeydown)}disconnectedCallback(){super.disconnectedCallback(),window.removeEventListener("keydown",this._handleKeydown),this._stopGame()}_initGame(){const t=Math.floor(this.GRID_SIZE/2);this.snake=[{x:t,y:t},{x:t-1,y:t},{x:t-2,y:t}],this.direction="right",this.nextDirection="right",this.score=0,this._spawnFood()}_spawnFood(){let t;do t={x:Math.floor(Math.random()*this.GRID_SIZE),y:Math.floor(Math.random()*this.GRID_SIZE)};while(this.snake.some(e=>e.x===t.x&&e.y===t.y));this.food=t}_startGame(){(this.gameState==="idle"||this.gameState==="gameover")&&this._initGame(),this.gameState="playing",this.gameLoop=window.setInterval(()=>this._tick(),this.GAME_SPEED)}_pauseGame(){this.gameState="paused",this._stopGame()}_stopGame(){this.gameLoop&&(clearInterval(this.gameLoop),this.gameLoop=null)}_tick(){this.direction=this.nextDirection;const t=this.snake[0];let e;switch(this.direction){case"up":e={x:t.x,y:t.y-1};break;case"down":e={x:t.x,y:t.y+1};break;case"left":e={x:t.x-1,y:t.y};break;case"right":e={x:t.x+1,y:t.y};break}if(e.x<0||e.x>=this.GRID_SIZE||e.y<0||e.y>=this.GRID_SIZE){this._gameOver();return}if(this.snake.some(r=>r.x===e.x&&r.y===e.y)){this._gameOver();return}const o=[e,...this.snake];e.x===this.food.x&&e.y===this.food.y?(this.score+=10,this._spawnFood()):o.pop(),this.snake=o}_gameOver(){this._stopGame(),this.gameState="gameover",this.score>this.highScore&&(this.highScore=this.score,localStorage.setItem("snake-high-score",this.highScore.toString()))}_handleKeydown(t){if(this.gameState!=="playing"&&this.gameState!=="paused"){(t.key===" "||t.key==="Enter")&&(t.preventDefault(),this._startGame());return}switch(t.key){case"ArrowUp":case"w":case"W":t.preventDefault(),this.direction!=="down"&&(this.nextDirection="up");break;case"ArrowDown":case"s":case"S":t.preventDefault(),this.direction!=="up"&&(this.nextDirection="down");break;case"ArrowLeft":case"a":case"A":t.preventDefault(),this.direction!=="right"&&(this.nextDirection="left");break;case"ArrowRight":case"d":case"D":t.preventDefault(),this.direction!=="left"&&(this.nextDirection="right");break;case" ":t.preventDefault(),this.gameState==="playing"?this._pauseGame():this.gameState==="paused"&&this._startGame();break;case"Escape":t.preventDefault(),this.gameState==="playing"&&this._pauseGame();break}}render(){const t=this.GRID_SIZE*this.CELL_SIZE;return l`
       <div class="game-container">
         <div class="header">
           <div class="score">Score: ${this.score}</div>
@@ -73,9 +73,9 @@ logger.Info("hello, world")</code></pre>
         <div class="game-area" style="width: ${t}px; height: ${t}px;">
           <!-- Grid -->
           <div class="grid">
-            ${this.snake.map((e,r)=>l`
+            ${this.snake.map((e,o)=>l`
               <div 
-                class="snake-segment ${r===0?"head":""}"
+                class="snake-segment ${o===0?"head":""}"
                 style="left: ${e.x*this.CELL_SIZE}px; top: ${e.y*this.CELL_SIZE}px; width: ${this.CELL_SIZE-2}px; height: ${this.CELL_SIZE-2}px;"
               ></div>
             `)}
@@ -119,7 +119,7 @@ logger.Info("hello, world")</code></pre>
           <span>Pause: Space / Esc</span>
         </div>
       </div>
-    `}};w.styles=G`
+    `}};w.styles=M`
     :host {
       display: block;
     }
@@ -283,7 +283,7 @@ logger.Info("hello, world")</code></pre>
         text-align: center;
       }
     }
-  `;E([p()],w.prototype,"snake",2);E([p()],w.prototype,"food",2);E([p()],w.prototype,"direction",2);E([p()],w.prototype,"nextDirection",2);E([p()],w.prototype,"score",2);E([p()],w.prototype,"highScore",2);E([p()],w.prototype,"gameState",2);w=E([U("snake-game")],w);var ot=Object.defineProperty,it=Object.getOwnPropertyDescriptor,A=(t,e,r,s)=>{for(var o=s>1?void 0:s?it(e,r):e,i=t.length-1,a;i>=0;i--)(a=t[i])&&(o=(s?a(e,r,o):a(o))||o);return s&&o&&ot(e,r,o),o};const ke=["hearts","diamonds","clubs","spades"],at={1:"A",2:"2",3:"3",4:"4",5:"5",6:"6",7:"7",8:"8",9:"9",10:"10",11:"J",12:"Q",13:"K"};let v=class extends b{constructor(){super(...arguments),this.stock=[],this.waste=[],this.foundations=[[],[],[],[]],this.tableau=[[],[],[],[],[],[],[]],this.dragState=null,this.mousePos={x:0,y:0},this.moves=0,this.gameWon=!1,this.boundMouseMove=this._handleMouseMove.bind(this),this.boundMouseUp=this._handleMouseUp.bind(this)}connectedCallback(){super.connectedCallback(),this._newGame()}_handleMouseMove(t){this.dragState&&(this.mousePos={x:t.clientX,y:t.clientY},this.requestUpdate())}_handleMouseUp(t){this.dragState&&(this._handleDrop(t),document.removeEventListener("mousemove",this.boundMouseMove),document.removeEventListener("mouseup",this.boundMouseUp))}_createDeck(){const t=[];for(const e of ke)for(let r=1;r<=13;r++)t.push({suit:e,rank:r,faceUp:!1});return t}_shuffle(t){const e=[...t];for(let r=e.length-1;r>0;r--){const s=Math.floor(Math.random()*(r+1));[e[r],e[s]]=[e[s],e[r]]}return e}_newGame(){const t=this._shuffle(this._createDeck());this.tableau=[[],[],[],[],[],[],[]];let e=0;for(let r=0;r<7;r++)for(let s=0;s<=r;s++){const o=t[e++];o.faceUp=s===r,this.tableau[r].push(o)}this.stock=t.slice(e).map(r=>({...r,faceUp:!1})),this.waste=[],this.foundations=[[],[],[],[]],this.moves=0,this.gameWon=!1,this.requestUpdate()}_getColor(t){return t==="hearts"||t==="diamonds"?"red":"black"}_getSuitSymbol(t){switch(t){case"hearts":return"♥";case"diamonds":return"♦";case"clubs":return"♣";case"spades":return"♠"}}_drawFromStock(){if(this.stock.length===0)this.stock=this.waste.map(t=>({...t,faceUp:!1})).reverse(),this.waste=[];else{const t=this.stock.pop();t.faceUp=!0,this.waste.push(t),this.moves++}this.requestUpdate()}_canPlaceOnTableau(t,e){if(e.length===0)return t.rank===13;const r=e[e.length-1];return r.faceUp?this._getColor(t.suit)!==this._getColor(r.suit)&&t.rank===r.rank-1:!1}_canPlaceOnFoundation(t,e){if(e.length===0)return t.rank===1;const r=e[e.length-1];return t.suit===r.suit&&t.rank===r.rank+1}_startDrag(t,e,r,s,o){t.preventDefault();const i=t.target.getBoundingClientRect();this.dragState={cards:e,sourceType:r,sourceIndex:s,offsetX:t.clientX-i.left,offsetY:t.clientY-i.top,startCardIndex:o},this.mousePos={x:t.clientX,y:t.clientY},document.addEventListener("mousemove",this.boundMouseMove),document.addEventListener("mouseup",this.boundMouseUp),this.requestUpdate()}_handleTableauCardMouseDown(t,e,r){const s=this.tableau[e],o=s[r];if(!o.faceUp){r===s.length-1&&(o.faceUp=!0,this.requestUpdate());return}const i=s.slice(r);i.every(a=>a.faceUp)&&this._startDrag(t,i,"tableau",e,r)}_handleWasteMouseDown(t){if(this.waste.length===0)return;const e=this.waste[this.waste.length-1];this._startDrag(t,[e],"waste",0)}_handleFoundationMouseDown(t,e){const r=this.foundations[e];if(r.length>0){const s=r[r.length-1];this._startDrag(t,[s],"foundation",e)}}_handleDrop(t){if(!this.dragState)return;const e=this.shadowRoot?.elementsFromPoint(t.clientX,t.clientY)||[];for(const r of e){const s=r.closest(".tableau-pile");if(s){const i=parseInt(s.getAttribute("data-col")||"-1");if(i>=0){this._tryDropOnTableau(i);break}}const o=r.closest(".foundation");if(o){const i=parseInt(o.getAttribute("data-index")||"-1");if(i>=0){this._tryDropOnFoundation(i);break}}}this.dragState=null,this.requestUpdate()}_tryDropOnTableau(t){if(!this.dragState)return!1;const{cards:e,sourceType:r,sourceIndex:s}=this.dragState,o=e[0],i=this.tableau[t];return this._canPlaceOnTableau(o,i)?(this._removeFromSource(r,s,e.length),this.tableau[t]=[...i,...e],this.moves++,this._checkWin(),!0):!1}_tryDropOnFoundation(t){if(!this.dragState||this.dragState.cards.length!==1)return!1;const{cards:e,sourceType:r,sourceIndex:s}=this.dragState,o=e[0],i=this.foundations[t];return this._canPlaceOnFoundation(o,i)?(this._removeFromSource(r,s,1),this.foundations[t]=[...i,o],this.moves++,this._checkWin(),!0):!1}_removeFromSource(t,e,r){if(t==="tableau"){this.tableau[e]=this.tableau[e].slice(0,-r);const s=this.tableau[e];s.length>0&&!s[s.length-1].faceUp&&(s[s.length-1].faceUp=!0)}else t==="waste"?this.waste=this.waste.slice(0,-1):t==="foundation"&&(this.foundations[e]=this.foundations[e].slice(0,-1))}_tryAutoMove(t,e,r){for(let s=0;s<4;s++)if(this._canPlaceOnFoundation(t,this.foundations[s]))return this._removeFromSource(e,r,1),this.foundations[s]=[...this.foundations[s],t],this.moves++,this._checkWin(),this.requestUpdate(),!0;return!1}_handleDoubleClick(t,e,r){this._tryAutoMove(t,e,r)}_checkWin(){this.foundations.reduce((e,r)=>e+r.length,0)===52&&(this.gameWon=!0)}render(){return l`
+  `;D([p()],w.prototype,"snake",2);D([p()],w.prototype,"food",2);D([p()],w.prototype,"direction",2);D([p()],w.prototype,"nextDirection",2);D([p()],w.prototype,"score",2);D([p()],w.prototype,"highScore",2);D([p()],w.prototype,"gameState",2);w=D([T("snake-game")],w);var at=Object.defineProperty,nt=Object.getOwnPropertyDescriptor,P=(t,e,o,r)=>{for(var s=r>1?void 0:r?nt(e,o):e,i=t.length-1,a;i>=0;i--)(a=t[i])&&(s=(r?a(e,o,s):a(s))||s);return r&&s&&at(e,o,s),s};const Ae=["hearts","diamonds","clubs","spades"],lt={1:"A",2:"2",3:"3",4:"4",5:"5",6:"6",7:"7",8:"8",9:"9",10:"10",11:"J",12:"Q",13:"K"};let v=class extends b{constructor(){super(...arguments),this.stock=[],this.waste=[],this.foundations=[[],[],[],[]],this.tableau=[[],[],[],[],[],[],[]],this.dragState=null,this.mousePos={x:0,y:0},this.moves=0,this.gameWon=!1,this.boundMouseMove=this._handleMouseMove.bind(this),this.boundMouseUp=this._handleMouseUp.bind(this)}connectedCallback(){super.connectedCallback(),this._newGame()}_handleMouseMove(t){this.dragState&&(this.mousePos={x:t.clientX,y:t.clientY},this.requestUpdate())}_handleMouseUp(t){this.dragState&&(this._handleDrop(t),document.removeEventListener("mousemove",this.boundMouseMove),document.removeEventListener("mouseup",this.boundMouseUp))}_createDeck(){const t=[];for(const e of Ae)for(let o=1;o<=13;o++)t.push({suit:e,rank:o,faceUp:!1});return t}_shuffle(t){const e=[...t];for(let o=e.length-1;o>0;o--){const r=Math.floor(Math.random()*(o+1));[e[o],e[r]]=[e[r],e[o]]}return e}_newGame(){const t=this._shuffle(this._createDeck());this.tableau=[[],[],[],[],[],[],[]];let e=0;for(let o=0;o<7;o++)for(let r=0;r<=o;r++){const s=t[e++];s.faceUp=r===o,this.tableau[o].push(s)}this.stock=t.slice(e).map(o=>({...o,faceUp:!1})),this.waste=[],this.foundations=[[],[],[],[]],this.moves=0,this.gameWon=!1,this.requestUpdate()}_getColor(t){return t==="hearts"||t==="diamonds"?"red":"black"}_getSuitSymbol(t){switch(t){case"hearts":return"♥";case"diamonds":return"♦";case"clubs":return"♣";case"spades":return"♠"}}_drawFromStock(){if(this.stock.length===0)this.stock=this.waste.map(t=>({...t,faceUp:!1})).reverse(),this.waste=[];else{const t=this.stock.pop();t.faceUp=!0,this.waste.push(t),this.moves++}this.requestUpdate()}_canPlaceOnTableau(t,e){if(e.length===0)return t.rank===13;const o=e[e.length-1];return o.faceUp?this._getColor(t.suit)!==this._getColor(o.suit)&&t.rank===o.rank-1:!1}_canPlaceOnFoundation(t,e){if(e.length===0)return t.rank===1;const o=e[e.length-1];return t.suit===o.suit&&t.rank===o.rank+1}_startDrag(t,e,o,r,s){t.preventDefault();const i=t.target.getBoundingClientRect();this.dragState={cards:e,sourceType:o,sourceIndex:r,offsetX:t.clientX-i.left,offsetY:t.clientY-i.top,startCardIndex:s},this.mousePos={x:t.clientX,y:t.clientY},document.addEventListener("mousemove",this.boundMouseMove),document.addEventListener("mouseup",this.boundMouseUp),this.requestUpdate()}_handleTableauCardMouseDown(t,e,o){const r=this.tableau[e],s=r[o];if(!s.faceUp){o===r.length-1&&(s.faceUp=!0,this.requestUpdate());return}const i=r.slice(o);i.every(a=>a.faceUp)&&this._startDrag(t,i,"tableau",e,o)}_handleWasteMouseDown(t){if(this.waste.length===0)return;const e=this.waste[this.waste.length-1];this._startDrag(t,[e],"waste",0)}_handleFoundationMouseDown(t,e){const o=this.foundations[e];if(o.length>0){const r=o[o.length-1];this._startDrag(t,[r],"foundation",e)}}_handleDrop(t){if(!this.dragState)return;const e=this.shadowRoot?.elementsFromPoint(t.clientX,t.clientY)||[];for(const o of e){const r=o.closest(".tableau-pile");if(r){const i=parseInt(r.getAttribute("data-col")||"-1");if(i>=0){this._tryDropOnTableau(i);break}}const s=o.closest(".foundation");if(s){const i=parseInt(s.getAttribute("data-index")||"-1");if(i>=0){this._tryDropOnFoundation(i);break}}}this.dragState=null,this.requestUpdate()}_tryDropOnTableau(t){if(!this.dragState)return!1;const{cards:e,sourceType:o,sourceIndex:r}=this.dragState,s=e[0],i=this.tableau[t];return this._canPlaceOnTableau(s,i)?(this._removeFromSource(o,r,e.length),this.tableau[t]=[...i,...e],this.moves++,this._checkWin(),!0):!1}_tryDropOnFoundation(t){if(!this.dragState||this.dragState.cards.length!==1)return!1;const{cards:e,sourceType:o,sourceIndex:r}=this.dragState,s=e[0],i=this.foundations[t];return this._canPlaceOnFoundation(s,i)?(this._removeFromSource(o,r,1),this.foundations[t]=[...i,s],this.moves++,this._checkWin(),!0):!1}_removeFromSource(t,e,o){if(t==="tableau"){this.tableau[e]=this.tableau[e].slice(0,-o);const r=this.tableau[e];r.length>0&&!r[r.length-1].faceUp&&(r[r.length-1].faceUp=!0)}else t==="waste"?this.waste=this.waste.slice(0,-1):t==="foundation"&&(this.foundations[e]=this.foundations[e].slice(0,-1))}_tryAutoMove(t,e,o){for(let r=0;r<4;r++)if(this._canPlaceOnFoundation(t,this.foundations[r]))return this._removeFromSource(e,o,1),this.foundations[r]=[...this.foundations[r],t],this.moves++,this._checkWin(),this.requestUpdate(),!0;return!1}_handleDoubleClick(t,e,o){this._tryAutoMove(t,e,o)}_checkWin(){this.foundations.reduce((e,o)=>e+o.length,0)===52&&(this.gameWon=!0)}render(){return l`
       <div class="solitaire">
         <div class="header">
           <div class="stats">
@@ -310,9 +310,9 @@ logger.Info("hello, world")</code></pre>
                 <div 
                   class="foundation pile" 
                   data-index="${e}"
-                  @mousedown=${r=>t.length>0?this._handleFoundationMouseDown(r,e):null}
+                  @mousedown=${o=>t.length>0?this._handleFoundationMouseDown(o,e):null}
                 >
-                  ${t.length>0?this._renderCard(t[t.length-1],this.dragState?.sourceType==="foundation"&&this.dragState?.sourceIndex===e):l`<div class="card empty">${this._getSuitSymbol(ke[e])}</div>`}
+                  ${t.length>0?this._renderCard(t[t.length-1],this.dragState?.sourceType==="foundation"&&this.dragState?.sourceIndex===e):l`<div class="card empty">${this._getSuitSymbol(Ae[e])}</div>`}
                 </div>
               `)}
             </div>
@@ -322,14 +322,14 @@ logger.Info("hello, world")</code></pre>
           <div class="tableau">
             ${this.tableau.map((t,e)=>l`
               <div class="tableau-pile" data-col="${e}">
-                ${t.length===0?l`<div class="card empty"></div>`:t.map((r,s)=>{const o=this.dragState?.sourceType==="tableau"&&this.dragState?.sourceIndex===e&&this.dragState?.startCardIndex!==void 0&&s>=this.dragState.startCardIndex;return l`
+                ${t.length===0?l`<div class="card empty"></div>`:t.map((o,r)=>{const s=this.dragState?.sourceType==="tableau"&&this.dragState?.sourceIndex===e&&this.dragState?.startCardIndex!==void 0&&r>=this.dragState.startCardIndex;return l`
                         <div 
-                          class="card-wrapper ${o?"dragging":""}"
-                          style="top: ${s*25}px"
-                          @mousedown=${i=>this._handleTableauCardMouseDown(i,e,s)}
-                          @dblclick=${()=>r.faceUp&&s===t.length-1?this._handleDoubleClick(r,"tableau",e):null}
+                          class="card-wrapper ${s?"dragging":""}"
+                          style="top: ${r*25}px"
+                          @mousedown=${i=>this._handleTableauCardMouseDown(i,e,r)}
+                          @dblclick=${()=>o.faceUp&&r===t.length-1?this._handleDoubleClick(o,"tableau",e):null}
                         >
-                          ${this._renderCard(r,o)}
+                          ${this._renderCard(o,s)}
                         </div>
                       `})}
               </div>
@@ -361,21 +361,21 @@ logger.Info("hello, world")</code></pre>
           </div>
         `:""}
       </div>
-    `}_renderCard(t,e=!1){if(!t.faceUp)return l`<div class="card back"></div>`;const r=this._getColor(t.suit),s=this._getSuitSymbol(t.suit),o=at[t.rank];return l`
-      <div class="card face ${r} ${e?"selected":""}">
+    `}_renderCard(t,e=!1){if(!t.faceUp)return l`<div class="card back"></div>`;const o=this._getColor(t.suit),r=this._getSuitSymbol(t.suit),s=lt[t.rank];return l`
+      <div class="card face ${o} ${e?"selected":""}">
         <div class="card-corner top-left">
-          <span class="rank">${o}</span>
-          <span class="suit">${s}</span>
+          <span class="rank">${s}</span>
+          <span class="suit">${r}</span>
         </div>
         <div class="card-center">
-          <span class="suit large">${s}</span>
+          <span class="suit large">${r}</span>
         </div>
         <div class="card-corner bottom-right">
-          <span class="rank">${o}</span>
-          <span class="suit">${s}</span>
+          <span class="rank">${s}</span>
+          <span class="suit">${r}</span>
         </div>
       </div>
-    `}};v.styles=G`
+    `}};v.styles=M`
     :host {
       display: block;
     }
@@ -675,7 +675,7 @@ logger.Info("hello, world")</code></pre>
         gap: 0.35rem;
       }
     }
-  `;A([p()],v.prototype,"stock",2);A([p()],v.prototype,"waste",2);A([p()],v.prototype,"foundations",2);A([p()],v.prototype,"tableau",2);A([p()],v.prototype,"dragState",2);A([p()],v.prototype,"mousePos",2);A([p()],v.prototype,"moves",2);A([p()],v.prototype,"gameWon",2);v=A([U("solitaire-game")],v);var nt=Object.defineProperty,lt=Object.getOwnPropertyDescriptor,M=(t,e,r,s)=>{for(var o=s>1?void 0:s?lt(e,r):e,i=t.length-1,a;i>=0;i--)(a=t[i])&&(o=(s?a(e,r,o):a(o))||o);return s&&o&&nt(e,r,o),o};let _=class extends b{constructor(){super(...arguments),this.board=Array(9).fill(null),this.gameState="idle",this.playerScore=0,this.aiScore=0,this.draws=0,this.isPlayerTurn=!0,this.winningLine=[],this.PLAYER="X",this.AI="O"}connectedCallback(){super.connectedCallback(),this._loadScores()}_loadScores(){const t=localStorage.getItem("tictactoe-scores");if(t){const e=JSON.parse(t);this.playerScore=e.player||0,this.aiScore=e.ai||0,this.draws=e.draws||0}}_saveScores(){localStorage.setItem("tictactoe-scores",JSON.stringify({player:this.playerScore,ai:this.aiScore,draws:this.draws}))}_startGame(){this.board=Array(9).fill(null),this.gameState="playing",this.isPlayerTurn=!0,this.winningLine=[]}_handleCellClick(t){this.gameState!=="playing"||!this.isPlayerTurn||this.board[t]||(this._makeMove(t,this.PLAYER),this.gameState==="playing"&&(this.isPlayerTurn=!1,setTimeout(()=>this._aiMove(),400)))}_makeMove(t,e){this.board=[...this.board],this.board[t]=e;const r=this._checkWinner(this.board);r?(this.winningLine=this._getWinningLine(this.board),r===this.PLAYER?(this.gameState="won",this.playerScore++):(this.gameState="lost",this.aiScore++),this._saveScores()):this._isBoardFull(this.board)&&(this.gameState="draw",this.draws++,this._saveScores())}_aiMove(){if(this.gameState!=="playing")return;const t=this._minimax(this.board,this.AI,0,-1/0,1/0);this._makeMove(t.index,this.AI),this.isPlayerTurn=!0}_minimax(t,e,r,s,o){const i=this._checkWinner(t);if(i===this.AI)return{score:10-r};if(i===this.PLAYER)return{score:r-10};if(this._isBoardFull(t))return{score:0};const a=[],c=this._getAvailableMoves(t);for(const n of c){const d=[...t];d[n]=e;const h=this._minimax(d,e===this.AI?this.PLAYER:this.AI,r+1,s,o);if(a.push({score:h.score,index:n}),e===this.AI?s=Math.max(s,h.score):o=Math.min(o,h.score),o<=s)break}return e===this.AI?a.reduce((d,h)=>d.score>h.score?d:h):a.reduce((d,h)=>d.score<h.score?d:h)}_getAvailableMoves(t){return t.map((e,r)=>e===null?r:-1).filter(e=>e!==-1)}_checkWinner(t){const e=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];for(const[r,s,o]of e)if(t[r]&&t[r]===t[s]&&t[r]===t[o])return t[r];return null}_getWinningLine(t){const e=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];for(const r of e){const[s,o,i]=r;if(t[s]&&t[s]===t[o]&&t[s]===t[i])return r}return[]}_isBoardFull(t){return t.every(e=>e!==null)}_resetScores(){this.playerScore=0,this.aiScore=0,this.draws=0,this._saveScores()}render(){return l`
+  `;P([p()],v.prototype,"stock",2);P([p()],v.prototype,"waste",2);P([p()],v.prototype,"foundations",2);P([p()],v.prototype,"tableau",2);P([p()],v.prototype,"dragState",2);P([p()],v.prototype,"mousePos",2);P([p()],v.prototype,"moves",2);P([p()],v.prototype,"gameWon",2);v=P([T("solitaire-game")],v);var ct=Object.defineProperty,dt=Object.getOwnPropertyDescriptor,I=(t,e,o,r)=>{for(var s=r>1?void 0:r?dt(e,o):e,i=t.length-1,a;i>=0;i--)(a=t[i])&&(s=(r?a(e,o,s):a(s))||s);return r&&s&&ct(e,o,s),s};let _=class extends b{constructor(){super(...arguments),this.board=Array(9).fill(null),this.gameState="idle",this.playerScore=0,this.aiScore=0,this.draws=0,this.isPlayerTurn=!0,this.winningLine=[],this.PLAYER="X",this.AI="O"}connectedCallback(){super.connectedCallback(),this._loadScores()}_loadScores(){const t=localStorage.getItem("tictactoe-scores");if(t){const e=JSON.parse(t);this.playerScore=e.player||0,this.aiScore=e.ai||0,this.draws=e.draws||0}}_saveScores(){localStorage.setItem("tictactoe-scores",JSON.stringify({player:this.playerScore,ai:this.aiScore,draws:this.draws}))}_startGame(){this.board=Array(9).fill(null),this.gameState="playing",this.isPlayerTurn=!0,this.winningLine=[]}_handleCellClick(t){this.gameState!=="playing"||!this.isPlayerTurn||this.board[t]||(this._makeMove(t,this.PLAYER),this.gameState==="playing"&&(this.isPlayerTurn=!1,setTimeout(()=>this._aiMove(),400)))}_makeMove(t,e){this.board=[...this.board],this.board[t]=e;const o=this._checkWinner(this.board);o?(this.winningLine=this._getWinningLine(this.board),o===this.PLAYER?(this.gameState="won",this.playerScore++):(this.gameState="lost",this.aiScore++),this._saveScores()):this._isBoardFull(this.board)&&(this.gameState="draw",this.draws++,this._saveScores())}_aiMove(){if(this.gameState!=="playing")return;const t=this._minimax(this.board,this.AI,0,-1/0,1/0);this._makeMove(t.index,this.AI),this.isPlayerTurn=!0}_minimax(t,e,o,r,s){const i=this._checkWinner(t);if(i===this.AI)return{score:10-o};if(i===this.PLAYER)return{score:o-10};if(this._isBoardFull(t))return{score:0};const a=[],c=this._getAvailableMoves(t);for(const n of c){const d=[...t];d[n]=e;const h=this._minimax(d,e===this.AI?this.PLAYER:this.AI,o+1,r,s);if(a.push({score:h.score,index:n}),e===this.AI?r=Math.max(r,h.score):s=Math.min(s,h.score),s<=r)break}return e===this.AI?a.reduce((d,h)=>d.score>h.score?d:h):a.reduce((d,h)=>d.score<h.score?d:h)}_getAvailableMoves(t){return t.map((e,o)=>e===null?o:-1).filter(e=>e!==-1)}_checkWinner(t){const e=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];for(const[o,r,s]of e)if(t[o]&&t[o]===t[r]&&t[o]===t[s])return t[o];return null}_getWinningLine(t){const e=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];for(const o of e){const[r,s,i]=o;if(t[r]&&t[r]===t[s]&&t[r]===t[i])return o}return[]}_isBoardFull(t){return t.every(e=>e!==null)}_resetScores(){this.playerScore=0,this.aiScore=0,this.draws=0,this._saveScores()}render(){return l`
       <div class="game-container">
         <div class="scoreboard">
           <div class="score player-score">
@@ -744,7 +744,7 @@ logger.Info("hello, world")</code></pre>
 
         <button class="reset-scores" @click=${this._resetScores}>Reset Scores</button>
       </div>
-    `}};_.styles=G`
+    `}};_.styles=M`
     :host {
       display: flex;
       justify-content: center;
@@ -1051,7 +1051,7 @@ logger.Info("hello, world")</code></pre>
         border-color: #999;
       }
     }
-  `;M([p()],_.prototype,"board",2);M([p()],_.prototype,"gameState",2);M([p()],_.prototype,"playerScore",2);M([p()],_.prototype,"aiScore",2);M([p()],_.prototype,"draws",2);M([p()],_.prototype,"isPlayerTurn",2);M([p()],_.prototype,"winningLine",2);_=M([U("tic-tac-toe-game")],_);var ct=Object.defineProperty,dt=Object.getOwnPropertyDescriptor,P=(t,e,r,s)=>{for(var o=s>1?void 0:s?dt(e,r):e,i=t.length-1,a;i>=0;i--)(a=t[i])&&(o=(s?a(e,r,o):a(o))||o);return s&&o&&ct(e,r,o),o};let x=class extends b{constructor(){super(...arguments),this.board=[],this.gameState="idle",this.selectedPiece=null,this.validMoves=[],this.isPlayerTurn=!0,this.playerScore=0,this.aiScore=0,this.mustJump=null,this.AI_DEPTH=4}connectedCallback(){super.connectedCallback(),this._loadScores()}_loadScores(){const t=localStorage.getItem("checkers-scores");if(t){const e=JSON.parse(t);this.playerScore=e.player||0,this.aiScore=e.ai||0}}_saveScores(){localStorage.setItem("checkers-scores",JSON.stringify({player:this.playerScore,ai:this.aiScore}))}_initBoard(){const t=Array(8).fill(null).map(()=>Array(8).fill(null));for(let e=0;e<3;e++)for(let r=0;r<8;r++)(e+r)%2===1&&(t[e][r]="black");for(let e=5;e<8;e++)for(let r=0;r<8;r++)(e+r)%2===1&&(t[e][r]="red");return t}_startGame(){this.board=this._initBoard(),this.gameState="playing",this.isPlayerTurn=!0,this.selectedPiece=null,this.validMoves=[],this.mustJump=null}_isPlayerPiece(t){return t==="red"||t==="red-king"}_isAIPiece(t){return t==="black"||t==="black-king"}_isKing(t){return t==="red-king"||t==="black-king"}_getValidMoves(t,e,r,s){const o=t[e][r];if(!o)return[];const i=[],a=this._isKing(o),c=[];(s||a)&&c.push(-1),(!s||a)&&c.push(1);for(const n of c)for(const d of[-1,1]){const h=e+n*2,u=r+d*2,f=e+n,m=r+d;if(this._isValidPosition(h,u)&&t[h][u]===null&&t[f][m]!==null){const T=t[f][m];(s?this._isAIPiece(T):this._isPlayerPiece(T))&&i.push({from:{row:e,col:r},to:{row:h,col:u},captures:[{row:f,col:m}]})}}if(i.length>0)return i;for(const n of c)for(const d of[-1,1]){const h=e+n,u=r+d;this._isValidPosition(h,u)&&t[h][u]===null&&i.push({from:{row:e,col:r},to:{row:h,col:u},captures:[]})}return i}_getAllMoves(t,e){const r=[],s=[];for(let o=0;o<8;o++)for(let i=0;i<8;i++){const a=t[o][i];if(a&&(e?this._isPlayerPiece(a):this._isAIPiece(a))){const c=this._getValidMoves(t,o,i,e);for(const n of c)n.captures.length>0?s.push(n):r.push(n)}}return s.length>0?s:r}_isValidPosition(t,e){return t>=0&&t<8&&e>=0&&e<8}_handleCellClick(t,e){if(this.gameState!=="playing"||!this.isPlayerTurn)return;const r=this.board[t][e];if(this.mustJump){if(t===this.mustJump.row&&e===this.mustJump.col)return;const s=this.validMoves.find(o=>o.to.row===t&&o.to.col===e);s&&this._executeMove(s);return}if(this._isPlayerPiece(r)){const o=this._getAllMoves(this.board,!0).some(a=>a.captures.length>0),i=this._getValidMoves(this.board,t,e,!0);if(o&&!i.some(a=>a.captures.length>0))return;this.selectedPiece={row:t,col:e},this.validMoves=o?i.filter(a=>a.captures.length>0):i;return}if(this.selectedPiece&&r===null){const s=this.validMoves.find(o=>o.to.row===t&&o.to.col===e);s&&this._executeMove(s)}}_executeMove(t){const e=this.board.map(s=>[...s]),r=e[t.from.row][t.from.col];e[t.from.row][t.from.col]=null,e[t.to.row][t.to.col]=r;for(const s of t.captures)e[s.row][s.col]=null;if(r==="red"&&t.to.row===0?e[t.to.row][t.to.col]="red-king":r==="black"&&t.to.row===7&&(e[t.to.row][t.to.col]="black-king"),this.board=e,t.captures.length>0){const s=this._getValidMoves(this.board,t.to.row,t.to.col,this.isPlayerTurn).filter(o=>o.captures.length>0);if(s.length>0){this.mustJump=t.to,this.selectedPiece=t.to,this.validMoves=s;return}}this.selectedPiece=null,this.validMoves=[],this.mustJump=null,!this._checkGameEnd()&&(this.isPlayerTurn=!this.isPlayerTurn,this.isPlayerTurn||setTimeout(()=>this._aiMove(),500))}_aiMove(){if(this.gameState!=="playing")return;const t=this._minimax(this.board,this.AI_DEPTH,-1/0,1/0,!0);t.move?this._executeAIMove(t.move):(this.gameState="won",this.playerScore++,this._saveScores())}_executeAIMove(t){const e=this.board.map(s=>[...s]),r=e[t.from.row][t.from.col];e[t.from.row][t.from.col]=null,e[t.to.row][t.to.col]=r;for(const s of t.captures)e[s.row][s.col]=null;if(r==="black"&&t.to.row===7&&(e[t.to.row][t.to.col]="black-king"),this.board=e,t.captures.length>0){const s=this._getValidMoves(this.board,t.to.row,t.to.col,!1).filter(o=>o.captures.length>0);if(s.length>0){setTimeout(()=>{const o=this._selectBestJump(s);this._executeAIMove(o)},300);return}}this._checkGameEnd()||(this.isPlayerTurn=!0)}_selectBestJump(t){return t[0]}_minimax(t,e,r,s,o){if(e===0)return{score:this._evaluateBoard(t),move:null};const i=this._getAllMoves(t,!o);if(i.length===0)return{score:o?-1e3:1e3,move:null};let a=null;if(o){let c=-1/0;for(const n of i){const d=this._applyMove(t,n),h=this._minimax(d,e-1,r,s,!1);if(h.score>c&&(c=h.score,a=n),r=Math.max(r,h.score),s<=r)break}return{score:c,move:a}}else{let c=1/0;for(const n of i){const d=this._applyMove(t,n),h=this._minimax(d,e-1,r,s,!0);if(h.score<c&&(c=h.score,a=n),s=Math.min(s,h.score),s<=r)break}return{score:c,move:a}}}_applyMove(t,e){const r=t.map(o=>[...o]),s=r[e.from.row][e.from.col];r[e.from.row][e.from.col]=null,r[e.to.row][e.to.col]=s;for(const o of e.captures)r[o.row][o.col]=null;return s==="red"&&e.to.row===0?r[e.to.row][e.to.col]="red-king":s==="black"&&e.to.row===7&&(r[e.to.row][e.to.col]="black-king"),r}_evaluateBoard(t){let e=0;for(let r=0;r<8;r++)for(let s=0;s<8;s++){const o=t[r][s];o==="black"?e+=10:o==="black-king"?e+=15:o==="red"?e-=10:o==="red-king"&&(e-=15),o==="black"?e+=r:o==="red"&&(e-=7-r)}return e}_checkGameEnd(){const t=this._countPieces(!0),e=this._countPieces(!1);if(t===0)return this.gameState="lost",this.aiScore++,this._saveScores(),!0;if(e===0)return this.gameState="won",this.playerScore++,this._saveScores(),!0;const r=this._getAllMoves(this.board,!0),s=this._getAllMoves(this.board,!1);return this.isPlayerTurn&&r.length===0?(this.gameState="lost",this.aiScore++,this._saveScores(),!0):!this.isPlayerTurn&&s.length===0?(this.gameState="won",this.playerScore++,this._saveScores(),!0):!1}_countPieces(t){let e=0;for(let r=0;r<8;r++)for(let s=0;s<8;s++){const o=this.board[r][s];(t?this._isPlayerPiece(o):this._isAIPiece(o))&&e++}return e}_resetScores(){this.playerScore=0,this.aiScore=0,this._saveScores()}_isValidMoveTarget(t,e){return this.validMoves.some(r=>r.to.row===t&&r.to.col===e)}render(){return l`
+  `;I([p()],_.prototype,"board",2);I([p()],_.prototype,"gameState",2);I([p()],_.prototype,"playerScore",2);I([p()],_.prototype,"aiScore",2);I([p()],_.prototype,"draws",2);I([p()],_.prototype,"isPlayerTurn",2);I([p()],_.prototype,"winningLine",2);_=I([T("tic-tac-toe-game")],_);var ht=Object.defineProperty,pt=Object.getOwnPropertyDescriptor,C=(t,e,o,r)=>{for(var s=r>1?void 0:r?pt(e,o):e,i=t.length-1,a;i>=0;i--)(a=t[i])&&(s=(r?a(e,o,s):a(s))||s);return r&&s&&ht(e,o,s),s};let x=class extends b{constructor(){super(...arguments),this.board=[],this.gameState="idle",this.selectedPiece=null,this.validMoves=[],this.isPlayerTurn=!0,this.playerScore=0,this.aiScore=0,this.mustJump=null,this.AI_DEPTH=4}connectedCallback(){super.connectedCallback(),this._loadScores()}_loadScores(){const t=localStorage.getItem("checkers-scores");if(t){const e=JSON.parse(t);this.playerScore=e.player||0,this.aiScore=e.ai||0}}_saveScores(){localStorage.setItem("checkers-scores",JSON.stringify({player:this.playerScore,ai:this.aiScore}))}_initBoard(){const t=Array(8).fill(null).map(()=>Array(8).fill(null));for(let e=0;e<3;e++)for(let o=0;o<8;o++)(e+o)%2===1&&(t[e][o]="black");for(let e=5;e<8;e++)for(let o=0;o<8;o++)(e+o)%2===1&&(t[e][o]="red");return t}_startGame(){this.board=this._initBoard(),this.gameState="playing",this.isPlayerTurn=!0,this.selectedPiece=null,this.validMoves=[],this.mustJump=null}_isPlayerPiece(t){return t==="red"||t==="red-king"}_isAIPiece(t){return t==="black"||t==="black-king"}_isKing(t){return t==="red-king"||t==="black-king"}_getValidMoves(t,e,o,r){const s=t[e][o];if(!s)return[];const i=[],a=this._isKing(s),c=[];(r||a)&&c.push(-1),(!r||a)&&c.push(1);for(const n of c)for(const d of[-1,1]){const h=e+n*2,u=o+d*2,f=e+n,m=o+d;if(this._isValidPosition(h,u)&&t[h][u]===null&&t[f][m]!==null){const O=t[f][m];(r?this._isAIPiece(O):this._isPlayerPiece(O))&&i.push({from:{row:e,col:o},to:{row:h,col:u},captures:[{row:f,col:m}]})}}if(i.length>0)return i;for(const n of c)for(const d of[-1,1]){const h=e+n,u=o+d;this._isValidPosition(h,u)&&t[h][u]===null&&i.push({from:{row:e,col:o},to:{row:h,col:u},captures:[]})}return i}_getAllMoves(t,e){const o=[],r=[];for(let s=0;s<8;s++)for(let i=0;i<8;i++){const a=t[s][i];if(a&&(e?this._isPlayerPiece(a):this._isAIPiece(a))){const c=this._getValidMoves(t,s,i,e);for(const n of c)n.captures.length>0?r.push(n):o.push(n)}}return r.length>0?r:o}_isValidPosition(t,e){return t>=0&&t<8&&e>=0&&e<8}_handleCellClick(t,e){if(this.gameState!=="playing"||!this.isPlayerTurn)return;const o=this.board[t][e];if(this.mustJump){if(t===this.mustJump.row&&e===this.mustJump.col)return;const r=this.validMoves.find(s=>s.to.row===t&&s.to.col===e);r&&this._executeMove(r);return}if(this._isPlayerPiece(o)){const s=this._getAllMoves(this.board,!0).some(a=>a.captures.length>0),i=this._getValidMoves(this.board,t,e,!0);if(s&&!i.some(a=>a.captures.length>0))return;this.selectedPiece={row:t,col:e},this.validMoves=s?i.filter(a=>a.captures.length>0):i;return}if(this.selectedPiece&&o===null){const r=this.validMoves.find(s=>s.to.row===t&&s.to.col===e);r&&this._executeMove(r)}}_executeMove(t){const e=this.board.map(r=>[...r]),o=e[t.from.row][t.from.col];e[t.from.row][t.from.col]=null,e[t.to.row][t.to.col]=o;for(const r of t.captures)e[r.row][r.col]=null;if(o==="red"&&t.to.row===0?e[t.to.row][t.to.col]="red-king":o==="black"&&t.to.row===7&&(e[t.to.row][t.to.col]="black-king"),this.board=e,t.captures.length>0){const r=this._getValidMoves(this.board,t.to.row,t.to.col,this.isPlayerTurn).filter(s=>s.captures.length>0);if(r.length>0){this.mustJump=t.to,this.selectedPiece=t.to,this.validMoves=r;return}}this.selectedPiece=null,this.validMoves=[],this.mustJump=null,!this._checkGameEnd()&&(this.isPlayerTurn=!this.isPlayerTurn,this.isPlayerTurn||setTimeout(()=>this._aiMove(),500))}_aiMove(){if(this.gameState!=="playing")return;const t=this._minimax(this.board,this.AI_DEPTH,-1/0,1/0,!0);t.move?this._executeAIMove(t.move):(this.gameState="won",this.playerScore++,this._saveScores())}_executeAIMove(t){const e=this.board.map(r=>[...r]),o=e[t.from.row][t.from.col];e[t.from.row][t.from.col]=null,e[t.to.row][t.to.col]=o;for(const r of t.captures)e[r.row][r.col]=null;if(o==="black"&&t.to.row===7&&(e[t.to.row][t.to.col]="black-king"),this.board=e,t.captures.length>0){const r=this._getValidMoves(this.board,t.to.row,t.to.col,!1).filter(s=>s.captures.length>0);if(r.length>0){setTimeout(()=>{const s=this._selectBestJump(r);this._executeAIMove(s)},300);return}}this._checkGameEnd()||(this.isPlayerTurn=!0)}_selectBestJump(t){return t[0]}_minimax(t,e,o,r,s){if(e===0)return{score:this._evaluateBoard(t),move:null};const i=this._getAllMoves(t,!s);if(i.length===0)return{score:s?-1e3:1e3,move:null};let a=null;if(s){let c=-1/0;for(const n of i){const d=this._applyMove(t,n),h=this._minimax(d,e-1,o,r,!1);if(h.score>c&&(c=h.score,a=n),o=Math.max(o,h.score),r<=o)break}return{score:c,move:a}}else{let c=1/0;for(const n of i){const d=this._applyMove(t,n),h=this._minimax(d,e-1,o,r,!0);if(h.score<c&&(c=h.score,a=n),r=Math.min(r,h.score),r<=o)break}return{score:c,move:a}}}_applyMove(t,e){const o=t.map(s=>[...s]),r=o[e.from.row][e.from.col];o[e.from.row][e.from.col]=null,o[e.to.row][e.to.col]=r;for(const s of e.captures)o[s.row][s.col]=null;return r==="red"&&e.to.row===0?o[e.to.row][e.to.col]="red-king":r==="black"&&e.to.row===7&&(o[e.to.row][e.to.col]="black-king"),o}_evaluateBoard(t){let e=0;for(let o=0;o<8;o++)for(let r=0;r<8;r++){const s=t[o][r];s==="black"?e+=10:s==="black-king"?e+=15:s==="red"?e-=10:s==="red-king"&&(e-=15),s==="black"?e+=o:s==="red"&&(e-=7-o)}return e}_checkGameEnd(){const t=this._countPieces(!0),e=this._countPieces(!1);if(t===0)return this.gameState="lost",this.aiScore++,this._saveScores(),!0;if(e===0)return this.gameState="won",this.playerScore++,this._saveScores(),!0;const o=this._getAllMoves(this.board,!0),r=this._getAllMoves(this.board,!1);return this.isPlayerTurn&&o.length===0?(this.gameState="lost",this.aiScore++,this._saveScores(),!0):!this.isPlayerTurn&&r.length===0?(this.gameState="won",this.playerScore++,this._saveScores(),!0):!1}_countPieces(t){let e=0;for(let o=0;o<8;o++)for(let r=0;r<8;r++){const s=this.board[o][r];(t?this._isPlayerPiece(s):this._isAIPiece(s))&&e++}return e}_resetScores(){this.playerScore=0,this.aiScore=0,this._saveScores()}_isValidMoveTarget(t,e){return this.validMoves.some(o=>o.to.row===t&&o.to.col===e)}render(){return l`
       <div class="game-container">
         <div class="scoreboard">
           <div class="score player-score">
@@ -1065,14 +1065,14 @@ logger.Info("hello, world")</code></pre>
         </div>
 
         <div class="board">
-          ${this.gameState!=="idle"?this.board.map((t,e)=>t.map((r,s)=>{const o=(e+s)%2===1,i=this.selectedPiece?.row===e&&this.selectedPiece?.col===s,a=this._isValidMoveTarget(e,s);return l`
+          ${this.gameState!=="idle"?this.board.map((t,e)=>t.map((o,r)=>{const s=(e+r)%2===1,i=this.selectedPiece?.row===e&&this.selectedPiece?.col===r,a=this._isValidMoveTarget(e,r);return l`
                 <div
-                  class="cell ${o?"dark":"light"} ${i?"selected":""} ${a?"valid-move":""}"
-                  @click=${()=>this._handleCellClick(e,s)}
+                  class="cell ${s?"dark":"light"} ${i?"selected":""} ${a?"valid-move":""}"
+                  @click=${()=>this._handleCellClick(e,r)}
                 >
-                  ${r?l`
-                    <div class="piece ${r} ${i?"selected":""}">
-                      ${this._isKing(r)?l`<span class="crown">♔</span>`:""}
+                  ${o?l`
+                    <div class="piece ${o} ${i?"selected":""}">
+                      ${this._isKing(o)?l`<span class="crown">♔</span>`:""}
                     </div>
                   `:""}
                 </div>
@@ -1117,7 +1117,7 @@ logger.Info("hello, world")</code></pre>
 
         <button class="reset-scores" @click=${this._resetScores}>Reset Scores</button>
       </div>
-    `}};x.styles=G`
+    `}};x.styles=M`
     :host {
       display: flex;
       justify-content: center;
@@ -1443,7 +1443,7 @@ logger.Info("hello, world")</code></pre>
         border-color: #999;
       }
     }
-  `;P([p()],x.prototype,"board",2);P([p()],x.prototype,"gameState",2);P([p()],x.prototype,"selectedPiece",2);P([p()],x.prototype,"validMoves",2);P([p()],x.prototype,"isPlayerTurn",2);P([p()],x.prototype,"playerScore",2);P([p()],x.prototype,"aiScore",2);P([p()],x.prototype,"mustJump",2);x=P([U("checkers-game")],x);var ht=Object.defineProperty,pt=Object.getOwnPropertyDescriptor,D=(t,e,r,s)=>{for(var o=s>1?void 0:s?pt(e,r):e,i=t.length-1,a;i>=0;i--)(a=t[i])&&(o=(s?a(e,r,o):a(o))||o);return s&&o&&ht(e,r,o),o};const y=6,$=7;let k=class extends b{constructor(){super(...arguments),this.board=[],this.gameState="idle",this.isPlayerTurn=!0,this.playerScore=0,this.aiScore=0,this.winningCells=[],this.hoverColumn=-1,this.AI_DEPTH=5}connectedCallback(){super.connectedCallback(),this._loadScores()}_loadScores(){const t=localStorage.getItem("connect-four-scores");if(t){const e=JSON.parse(t);this.playerScore=e.player||0,this.aiScore=e.ai||0}}_saveScores(){localStorage.setItem("connect-four-scores",JSON.stringify({player:this.playerScore,ai:this.aiScore}))}_initBoard(){return Array(y).fill(null).map(()=>Array($).fill(null))}_startGame(){this.board=this._initBoard(),this.gameState="playing",this.isPlayerTurn=!0,this.winningCells=[],this.hoverColumn=-1}_getLowestEmptyRow(t,e){for(let r=y-1;r>=0;r--)if(t[r][e]===null)return r;return-1}_handleColumnClick(t){this.gameState!=="playing"||!this.isPlayerTurn||this._getLowestEmptyRow(this.board,t)===-1||(this._makeMove(t,"red"),this.gameState==="playing"&&(this.isPlayerTurn=!1,setTimeout(()=>this._aiMove(),500)))}_makeMove(t,e){const r=this._getLowestEmptyRow(this.board,t);if(r===-1)return;const s=this.board.map(i=>[...i]);s[r][t]=e,this.board=s;const o=this._checkWinner(this.board,r,t);o?(this.winningCells=o,e==="red"?(this.gameState="won",this.playerScore++):(this.gameState="lost",this.aiScore++),this._saveScores()):this._isBoardFull(this.board)&&(this.gameState="draw")}_aiMove(){if(this.gameState!=="playing")return;const t=this._minimax(this.board,this.AI_DEPTH,-1/0,1/0,!0);t.col!==-1&&this._makeMove(t.col,"yellow"),this.isPlayerTurn=!0}_minimax(t,e,r,s,o){const i=this._findWinner(t);if(i==="yellow")return{score:1e3+e,col:-1};if(i==="red")return{score:-1e3-e,col:-1};if(this._isBoardFull(t))return{score:0,col:-1};if(e===0)return{score:this._evaluateBoard(t),col:-1};const a=this._getValidColumns(t);a.sort((n,d)=>Math.abs(3-n)-Math.abs(3-d));let c=a[0];if(o){let n=-1/0;for(const d of a){const h=this._simulateMove(t,d,"yellow"),u=this._minimax(h,e-1,r,s,!1);if(u.score>n&&(n=u.score,c=d),r=Math.max(r,u.score),s<=r)break}return{score:n,col:c}}else{let n=1/0;for(const d of a){const h=this._simulateMove(t,d,"red"),u=this._minimax(h,e-1,r,s,!0);if(u.score<n&&(n=u.score,c=d),s=Math.min(s,u.score),s<=r)break}return{score:n,col:c}}}_simulateMove(t,e,r){const s=t.map(i=>[...i]),o=this._getLowestEmptyRow(s,e);return o!==-1&&(s[o][e]=r),s}_getValidColumns(t){const e=[];for(let r=0;r<$;r++)t[0][r]===null&&e.push(r);return e}_evaluateBoard(t){let e=0;for(let r=0;r<y;r++)t[r][3]==="yellow"?e+=3:t[r][3]==="red"&&(e-=3);for(let r=0;r<y;r++)for(let s=0;s<$-3;s++)e+=this._evaluateWindow([t[r][s],t[r][s+1],t[r][s+2],t[r][s+3]]);for(let r=0;r<y-3;r++)for(let s=0;s<$;s++)e+=this._evaluateWindow([t[r][s],t[r+1][s],t[r+2][s],t[r+3][s]]);for(let r=3;r<y;r++)for(let s=0;s<$-3;s++)e+=this._evaluateWindow([t[r][s],t[r-1][s+1],t[r-2][s+2],t[r-3][s+3]]);for(let r=0;r<y-3;r++)for(let s=0;s<$-3;s++)e+=this._evaluateWindow([t[r][s],t[r+1][s+1],t[r+2][s+2],t[r+3][s+3]]);return e}_evaluateWindow(t){const e=t.filter(o=>o==="yellow").length,r=t.filter(o=>o==="red").length,s=t.filter(o=>o===null).length;return e===4?100:e===3&&s===1?5:e===2&&s===2?2:r===4?-100:r===3&&s===1?-5:r===2&&s===2?-2:0}_checkWinner(t,e,r){const s=t[e][r];if(!s)return null;const o=[[[0,1],[0,-1]],[[1,0],[-1,0]],[[1,1],[-1,-1]],[[1,-1],[-1,1]]];for(const[i,a]of o){const c=[[e,r]];let n=e+i[0],d=r+i[1];for(;n>=0&&n<y&&d>=0&&d<$&&t[n][d]===s;)c.push([n,d]),n+=i[0],d+=i[1];for(n=e+a[0],d=r+a[1];n>=0&&n<y&&d>=0&&d<$&&t[n][d]===s;)c.push([n,d]),n+=a[0],d+=a[1];if(c.length>=4)return c}return null}_findWinner(t){for(let e=0;e<y;e++)for(let r=0;r<$;r++)if(t[e][r]&&this._checkWinner(t,e,r))return t[e][r];return null}_isBoardFull(t){return t[0].every(e=>e!==null)}_isWinningCell(t,e){return this.winningCells.some(([r,s])=>r===t&&s===e)}_resetScores(){this.playerScore=0,this.aiScore=0,this._saveScores()}render(){return l`
+  `;C([p()],x.prototype,"board",2);C([p()],x.prototype,"gameState",2);C([p()],x.prototype,"selectedPiece",2);C([p()],x.prototype,"validMoves",2);C([p()],x.prototype,"isPlayerTurn",2);C([p()],x.prototype,"playerScore",2);C([p()],x.prototype,"aiScore",2);C([p()],x.prototype,"mustJump",2);x=C([T("checkers-game")],x);var ut=Object.defineProperty,gt=Object.getOwnPropertyDescriptor,z=(t,e,o,r)=>{for(var s=r>1?void 0:r?gt(e,o):e,i=t.length-1,a;i>=0;i--)(a=t[i])&&(s=(r?a(e,o,s):a(s))||s);return r&&s&&ut(e,o,s),s};const y=6,$=7;let k=class extends b{constructor(){super(...arguments),this.board=[],this.gameState="idle",this.isPlayerTurn=!0,this.playerScore=0,this.aiScore=0,this.winningCells=[],this.hoverColumn=-1,this.AI_DEPTH=5}connectedCallback(){super.connectedCallback(),this._loadScores()}_loadScores(){const t=localStorage.getItem("connect-four-scores");if(t){const e=JSON.parse(t);this.playerScore=e.player||0,this.aiScore=e.ai||0}}_saveScores(){localStorage.setItem("connect-four-scores",JSON.stringify({player:this.playerScore,ai:this.aiScore}))}_initBoard(){return Array(y).fill(null).map(()=>Array($).fill(null))}_startGame(){this.board=this._initBoard(),this.gameState="playing",this.isPlayerTurn=!0,this.winningCells=[],this.hoverColumn=-1}_getLowestEmptyRow(t,e){for(let o=y-1;o>=0;o--)if(t[o][e]===null)return o;return-1}_handleColumnClick(t){this.gameState!=="playing"||!this.isPlayerTurn||this._getLowestEmptyRow(this.board,t)===-1||(this._makeMove(t,"red"),this.gameState==="playing"&&(this.isPlayerTurn=!1,setTimeout(()=>this._aiMove(),500)))}_makeMove(t,e){const o=this._getLowestEmptyRow(this.board,t);if(o===-1)return;const r=this.board.map(i=>[...i]);r[o][t]=e,this.board=r;const s=this._checkWinner(this.board,o,t);s?(this.winningCells=s,e==="red"?(this.gameState="won",this.playerScore++):(this.gameState="lost",this.aiScore++),this._saveScores()):this._isBoardFull(this.board)&&(this.gameState="draw")}_aiMove(){if(this.gameState!=="playing")return;const t=this._minimax(this.board,this.AI_DEPTH,-1/0,1/0,!0);t.col!==-1&&this._makeMove(t.col,"yellow"),this.isPlayerTurn=!0}_minimax(t,e,o,r,s){const i=this._findWinner(t);if(i==="yellow")return{score:1e3+e,col:-1};if(i==="red")return{score:-1e3-e,col:-1};if(this._isBoardFull(t))return{score:0,col:-1};if(e===0)return{score:this._evaluateBoard(t),col:-1};const a=this._getValidColumns(t);a.sort((n,d)=>Math.abs(3-n)-Math.abs(3-d));let c=a[0];if(s){let n=-1/0;for(const d of a){const h=this._simulateMove(t,d,"yellow"),u=this._minimax(h,e-1,o,r,!1);if(u.score>n&&(n=u.score,c=d),o=Math.max(o,u.score),r<=o)break}return{score:n,col:c}}else{let n=1/0;for(const d of a){const h=this._simulateMove(t,d,"red"),u=this._minimax(h,e-1,o,r,!0);if(u.score<n&&(n=u.score,c=d),r=Math.min(r,u.score),r<=o)break}return{score:n,col:c}}}_simulateMove(t,e,o){const r=t.map(i=>[...i]),s=this._getLowestEmptyRow(r,e);return s!==-1&&(r[s][e]=o),r}_getValidColumns(t){const e=[];for(let o=0;o<$;o++)t[0][o]===null&&e.push(o);return e}_evaluateBoard(t){let e=0;for(let o=0;o<y;o++)t[o][3]==="yellow"?e+=3:t[o][3]==="red"&&(e-=3);for(let o=0;o<y;o++)for(let r=0;r<$-3;r++)e+=this._evaluateWindow([t[o][r],t[o][r+1],t[o][r+2],t[o][r+3]]);for(let o=0;o<y-3;o++)for(let r=0;r<$;r++)e+=this._evaluateWindow([t[o][r],t[o+1][r],t[o+2][r],t[o+3][r]]);for(let o=3;o<y;o++)for(let r=0;r<$-3;r++)e+=this._evaluateWindow([t[o][r],t[o-1][r+1],t[o-2][r+2],t[o-3][r+3]]);for(let o=0;o<y-3;o++)for(let r=0;r<$-3;r++)e+=this._evaluateWindow([t[o][r],t[o+1][r+1],t[o+2][r+2],t[o+3][r+3]]);return e}_evaluateWindow(t){const e=t.filter(s=>s==="yellow").length,o=t.filter(s=>s==="red").length,r=t.filter(s=>s===null).length;return e===4?100:e===3&&r===1?5:e===2&&r===2?2:o===4?-100:o===3&&r===1?-5:o===2&&r===2?-2:0}_checkWinner(t,e,o){const r=t[e][o];if(!r)return null;const s=[[[0,1],[0,-1]],[[1,0],[-1,0]],[[1,1],[-1,-1]],[[1,-1],[-1,1]]];for(const[i,a]of s){const c=[[e,o]];let n=e+i[0],d=o+i[1];for(;n>=0&&n<y&&d>=0&&d<$&&t[n][d]===r;)c.push([n,d]),n+=i[0],d+=i[1];for(n=e+a[0],d=o+a[1];n>=0&&n<y&&d>=0&&d<$&&t[n][d]===r;)c.push([n,d]),n+=a[0],d+=a[1];if(c.length>=4)return c}return null}_findWinner(t){for(let e=0;e<y;e++)for(let o=0;o<$;o++)if(t[e][o]&&this._checkWinner(t,e,o))return t[e][o];return null}_isBoardFull(t){return t[0].every(e=>e!==null)}_isWinningCell(t,e){return this.winningCells.some(([o,r])=>o===t&&r===e)}_resetScores(){this.playerScore=0,this.aiScore=0,this._saveScores()}render(){return l`
       <div class="game-container">
         <div class="scoreboard">
           <div class="score player-score">
@@ -1458,14 +1458,14 @@ logger.Info("hello, world")</code></pre>
 
         <div class="board-wrapper">
           <div class="board">
-            ${this.gameState!=="idle"?this.board.map((t,e)=>t.map((r,s)=>l`
+            ${this.gameState!=="idle"?this.board.map((t,e)=>t.map((o,r)=>l`
                 <div
-                  class="cell ${this._isWinningCell(e,s)?"winning":""}"
-                  @click=${()=>this._handleColumnClick(s)}
-                  @mouseenter=${()=>this.hoverColumn=s}
+                  class="cell ${this._isWinningCell(e,r)?"winning":""}"
+                  @click=${()=>this._handleColumnClick(r)}
+                  @mouseenter=${()=>this.hoverColumn=r}
                   @mouseleave=${()=>this.hoverColumn=-1}
                 >
-                  <div class="piece ${r||""} ${!r&&this.hoverColumn===s&&this.isPlayerTurn&&this.gameState==="playing"?"preview":""}"></div>
+                  <div class="piece ${o||""} ${!o&&this.hoverColumn===r&&this.isPlayerTurn&&this.gameState==="playing"?"preview":""}"></div>
                 </div>
               `)):""}
           </div>
@@ -1511,7 +1511,7 @@ logger.Info("hello, world")</code></pre>
 
         <button class="reset-scores" @click=${this._resetScores}>Reset Scores</button>
       </div>
-    `}};k.styles=G`
+    `}};k.styles=M`
     :host {
       display: flex;
       justify-content: center;
@@ -1810,7 +1810,7 @@ logger.Info("hello, world")</code></pre>
         border-color: #999;
       }
     }
-  `;D([p()],k.prototype,"board",2);D([p()],k.prototype,"gameState",2);D([p()],k.prototype,"isPlayerTurn",2);D([p()],k.prototype,"playerScore",2);D([p()],k.prototype,"aiScore",2);D([p()],k.prototype,"winningCells",2);D([p()],k.prototype,"hoverColumn",2);k=D([U("connect-four-game")],k);var ut=Object.defineProperty,gt=Object.getOwnPropertyDescriptor,H=(t,e,r,s)=>{for(var o=s>1?void 0:s?gt(e,r):e,i=t.length-1,a;i>=0;i--)(a=t[i])&&(o=(s?a(e,r,o):a(o))||o);return s&&o&&ut(e,r,o),o};const X=400,B=500,O=30,Q=60,Z=140,ft=.5,mt=-8,bt=3,vt=1800;let S=class extends b{constructor(){super(...arguments),this.gameState="idle",this.birdY=B/2,this.birdVelocity=0,this.pipes=[],this.score=0,this.highScore=0,this.gameLoop=null,this.pipeSpawner=null,this.lastTime=0,this._handleKeyDown=t=>{(t.code==="Space"||t.key===" ")&&(t.preventDefault(),this._handleInput())},this._handleClick=()=>{this._handleInput()},this._update=t=>{if(this.gameState!=="playing")return;const e=Math.min((t-this.lastTime)/16.67,2);this.lastTime=t,this.birdVelocity+=ft*e,this.birdY+=this.birdVelocity*e,this.pipes=this.pipes.map(r=>({...r,x:r.x-bt*e})).filter(r=>r.x>-Q);for(const r of this.pipes)!r.passed&&r.x+Q<X/2-O/2&&(r.passed=!0,this.score++);if(this._checkCollision()){this._gameOver();return}this.requestUpdate(),this.gameLoop=requestAnimationFrame(this._update)}}connectedCallback(){super.connectedCallback(),this._loadHighScore(),window.addEventListener("keydown",this._handleKeyDown)}disconnectedCallback(){super.disconnectedCallback(),this._stopGame(),window.removeEventListener("keydown",this._handleKeyDown)}_loadHighScore(){const t=localStorage.getItem("flappy-bird-highscore");t&&(this.highScore=parseInt(t,10))}_saveHighScore(){this.score>this.highScore&&(this.highScore=this.score,localStorage.setItem("flappy-bird-highscore",this.highScore.toString()))}_handleInput(){this.gameState==="idle"?this._startGame():this.gameState==="playing"?this._flap():this.gameState==="gameover"&&this._startGame()}_startGame(){this.birdY=B/2,this.birdVelocity=0,this.pipes=[],this.score=0,this.gameState="playing",this.lastTime=performance.now(),this._spawnPipe(),this.gameLoop=requestAnimationFrame(this._update),this.pipeSpawner=window.setInterval(()=>this._spawnPipe(),vt)}_stopGame(){this.gameLoop&&(cancelAnimationFrame(this.gameLoop),this.gameLoop=null),this.pipeSpawner&&(clearInterval(this.pipeSpawner),this.pipeSpawner=null)}_flap(){this.birdVelocity=mt}_spawnPipe(){const e=B-Z-80,r=Math.random()*(e-80)+80;this.pipes=[...this.pipes,{x:X,gapY:r,passed:!1}]}_checkCollision(){const t=X/2-O/2,e=t+O,r=this.birdY,s=this.birdY+O;if(r<0||s>B)return!0;for(const o of this.pipes){const i=o.x,a=o.x+Q;if(e>i&&t<a&&(r<o.gapY||s>o.gapY+Z))return!0}return!1}_gameOver(){this.gameState="gameover",this._stopGame(),this._saveHighScore()}_getBirdRotation(){return Math.min(Math.max(this.birdVelocity*3,-30),90)}render(){return l`
+  `;z([p()],k.prototype,"board",2);z([p()],k.prototype,"gameState",2);z([p()],k.prototype,"isPlayerTurn",2);z([p()],k.prototype,"playerScore",2);z([p()],k.prototype,"aiScore",2);z([p()],k.prototype,"winningCells",2);z([p()],k.prototype,"hoverColumn",2);k=z([T("connect-four-game")],k);var ft=Object.defineProperty,mt=Object.getOwnPropertyDescriptor,H=(t,e,o,r)=>{for(var s=r>1?void 0:r?mt(e,o):e,i=t.length-1,a;i>=0;i--)(a=t[i])&&(s=(r?a(e,o,s):a(s))||s);return r&&s&&ft(e,o,s),s};const ee=400,N=500,U=30,te=60,X=140,bt=.5,vt=-8,xt=3,yt=1800;let S=class extends b{constructor(){super(...arguments),this.gameState="idle",this.birdY=N/2,this.birdVelocity=0,this.pipes=[],this.score=0,this.highScore=0,this.gameLoop=null,this.pipeSpawner=null,this.lastTime=0,this._handleKeyDown=t=>{(t.code==="Space"||t.key===" ")&&(t.preventDefault(),this._handleInput())},this._handleClick=()=>{this._handleInput()},this._update=t=>{if(this.gameState!=="playing")return;const e=Math.min((t-this.lastTime)/16.67,2);this.lastTime=t,this.birdVelocity+=bt*e,this.birdY+=this.birdVelocity*e,this.pipes=this.pipes.map(o=>({...o,x:o.x-xt*e})).filter(o=>o.x>-te);for(const o of this.pipes)!o.passed&&o.x+te<ee/2-U/2&&(o.passed=!0,this.score++);if(this._checkCollision()){this._gameOver();return}this.requestUpdate(),this.gameLoop=requestAnimationFrame(this._update)}}connectedCallback(){super.connectedCallback(),this._loadHighScore(),window.addEventListener("keydown",this._handleKeyDown)}disconnectedCallback(){super.disconnectedCallback(),this._stopGame(),window.removeEventListener("keydown",this._handleKeyDown)}_loadHighScore(){const t=localStorage.getItem("flappy-bird-highscore");t&&(this.highScore=parseInt(t,10))}_saveHighScore(){this.score>this.highScore&&(this.highScore=this.score,localStorage.setItem("flappy-bird-highscore",this.highScore.toString()))}_handleInput(){this.gameState==="idle"?this._startGame():this.gameState==="playing"?this._flap():this.gameState==="gameover"&&this._startGame()}_startGame(){this.birdY=N/2,this.birdVelocity=0,this.pipes=[],this.score=0,this.gameState="playing",this.lastTime=performance.now(),this._spawnPipe(),this.gameLoop=requestAnimationFrame(this._update),this.pipeSpawner=window.setInterval(()=>this._spawnPipe(),yt)}_stopGame(){this.gameLoop&&(cancelAnimationFrame(this.gameLoop),this.gameLoop=null),this.pipeSpawner&&(clearInterval(this.pipeSpawner),this.pipeSpawner=null)}_flap(){this.birdVelocity=vt}_spawnPipe(){const e=N-X-80,o=Math.random()*(e-80)+80;this.pipes=[...this.pipes,{x:ee,gapY:o,passed:!1}]}_checkCollision(){const t=ee/2-U/2,e=t+U,o=this.birdY,r=this.birdY+U;if(o<0||r>N)return!0;for(const s of this.pipes){const i=s.x,a=s.x+te;if(e>i&&t<a&&(o<s.gapY||r>s.gapY+X))return!0}return!1}_gameOver(){this.gameState="gameover",this._stopGame(),this._saveHighScore()}_getBirdRotation(){return Math.min(Math.max(this.birdVelocity*3,-30),90)}render(){return l`
       <div class="game-container">
         <div class="scoreboard">
           <div class="score current-score">
@@ -1833,7 +1833,7 @@ logger.Info("hello, world")</code></pre>
           <!-- Pipes -->
           ${this.pipes.map(t=>l`
             <div class="pipe pipe-top" style="left: ${t.x}px; height: ${t.gapY}px;"></div>
-            <div class="pipe pipe-bottom" style="left: ${t.x}px; top: ${t.gapY+Z}px; height: ${B-t.gapY-Z}px;"></div>
+            <div class="pipe pipe-bottom" style="left: ${t.x}px; top: ${t.gapY+X}px; height: ${N-t.gapY-X}px;"></div>
           `)}
 
           <!-- Bird -->
@@ -1876,7 +1876,7 @@ logger.Info("hello, world")</code></pre>
           Click or press Space to flap
         </div>
       </div>
-    `}};S.styles=G`
+    `}};S.styles=M`
     :host {
       display: flex;
       justify-content: center;
@@ -1930,8 +1930,8 @@ logger.Info("hello, world")</code></pre>
     }
 
     .game-area {
-      width: ${X}px;
-      height: ${B}px;
+      width: ${ee}px;
+      height: ${N}px;
       position: relative;
       overflow: hidden;
       border-radius: 12px;
@@ -1976,7 +1976,7 @@ logger.Info("hello, world")</code></pre>
 
     .pipe {
       position: absolute;
-      width: ${Q}px;
+      width: ${te}px;
       background: linear-gradient(90deg, #228B22 0%, #32CD32 20%, #228B22 80%, #006400 100%);
       border: 3px solid #006400;
       box-sizing: border-box;
@@ -2019,9 +2019,9 @@ logger.Info("hello, world")</code></pre>
 
     .bird {
       position: absolute;
-      left: calc(50% - ${O/2}px);
-      width: ${O}px;
-      height: ${O}px;
+      left: calc(50% - ${U/2}px);
+      width: ${U}px;
+      height: ${U}px;
       transition: transform 0.1s ease-out;
       z-index: 10;
     }
@@ -2214,7 +2214,143 @@ logger.Info("hello, world")</code></pre>
         color: #888;
       }
     }
-  `;H([p()],S.prototype,"gameState",2);H([p()],S.prototype,"birdY",2);H([p()],S.prototype,"birdVelocity",2);H([p()],S.prototype,"pipes",2);H([p()],S.prototype,"score",2);H([p()],S.prototype,"highScore",2);S=H([U("flappy-bird-game")],S);var xt=Object.getOwnPropertyDescriptor,yt=(t,e,r,s)=>{for(var o=s>1?void 0:s?xt(e,r):e,i=t.length-1,a;i>=0;i--)(a=t[i])&&(o=a(o)||o);return o};let ie=class extends b{constructor(){super(...arguments),this.selectedPost=null,this.blogPosts=tt,this.currentView="home",this.games=[{id:"snake",name:"Snake",description:"Classic snake game. Eat food, grow longer, avoid walls!",icon:"🐍",color:"#00ADD8"},{id:"solitaire",name:"Solitaire",description:"Classic Klondike solitaire card game.",icon:"🃏",color:"#e74c3c"},{id:"tictactoe",name:"Tic Tac Toe",description:"Challenge an AI opponent!",icon:"⭕",color:"#9b59b6"},{id:"checkers",name:"Checkers",description:"Classic checkers against an AI opponent!",icon:"🔴",color:"#e67e22"},{id:"connectfour",name:"Connect Four",description:"Drop pieces and connect 4 to win!",icon:"🔵",color:"#3498db"},{id:"flappybird",name:"Flappy Bird",description:"Tap to flap and dodge the pipes!",icon:"🐤",color:"#f1c40f"}],this._handleHashChange=()=>{this._checkUrlHash()},this.repos=[{name:"warp-prometheus",url:"https://github.com/calvinbrown085/warp-prometheus",description:"Prometheus metrics extension for Rust's Warp library",language:"Rust",languageColor:"#dea584"},{name:"us-state-info-rs",url:"https://github.com/calvinbrown085/us-state-info-rs",description:"Rust library for getting information about the states of the United States",language:"Rust",languageColor:"#dea584"}]}connectedCallback(){super.connectedCallback(),this._checkUrlHash(),window.addEventListener("hashchange",this._handleHashChange)}disconnectedCallback(){super.disconnectedCallback(),window.removeEventListener("hashchange",this._handleHashChange)}_checkUrlHash(){const t=window.location.hash.slice(1);if(t==="games/snake"){this.currentView="game-snake",this.selectedPost=null,this.requestUpdate(),window.scrollTo({top:0,behavior:"smooth"});return}if(t==="games/solitaire"){this.currentView="game-solitaire",this.selectedPost=null,this.requestUpdate(),window.scrollTo({top:0,behavior:"smooth"});return}if(t==="games/tictactoe"){this.currentView="game-tictactoe",this.selectedPost=null,this.requestUpdate(),window.scrollTo({top:0,behavior:"smooth"});return}if(t==="games/checkers"){this.currentView="game-checkers",this.selectedPost=null,this.requestUpdate(),window.scrollTo({top:0,behavior:"smooth"});return}if(t==="games/connectfour"){this.currentView="game-connectfour",this.selectedPost=null,this.requestUpdate(),window.scrollTo({top:0,behavior:"smooth"});return}if(t==="games/flappybird"){this.currentView="game-flappybird",this.selectedPost=null,this.requestUpdate(),window.scrollTo({top:0,behavior:"smooth"});return}if(t==="games"){this.currentView="games",this.selectedPost=null,this.requestUpdate(),window.scrollTo({top:0,behavior:"smooth"});return}if(t){const e=this.blogPosts.find(r=>r.id===t);if(e){this.currentView="home",this.selectedPost=e,this.requestUpdate(),this.updateComplete.then(()=>{this.shadowRoot?.querySelector(".blog")?.scrollIntoView({behavior:"smooth"})});return}}this.currentView="home",this.selectedPost=null,this.requestUpdate()}_navigateTo(t){if(t==="home")window.history.pushState(null,"",window.location.pathname),this.currentView="home";else if(t==="games")window.history.pushState(null,"","#games"),this.currentView="games";else if(t.startsWith("game-")){const e=t.replace("game-","");window.history.pushState(null,"",`#games/${e}`),this.currentView=t}this.selectedPost=null,this.requestUpdate(),window.scrollTo({top:0,behavior:"smooth"})}render(){switch(this.currentView){case"games":return this._renderGamesHub();case"game-snake":return this._renderGamePage("snake");case"game-solitaire":return this._renderGamePage("solitaire");case"game-tictactoe":return this._renderGamePage("tictactoe");case"game-checkers":return this._renderGamePage("checkers");case"game-connectfour":return this._renderGamePage("connectfour");case"game-flappybird":return this._renderGamePage("flappybird");default:return this._renderHomePage()}}_renderGamesHub(){return l`
+  `;H([p()],S.prototype,"gameState",2);H([p()],S.prototype,"birdY",2);H([p()],S.prototype,"birdVelocity",2);H([p()],S.prototype,"pipes",2);H([p()],S.prototype,"score",2);H([p()],S.prototype,"highScore",2);S=H([T("flappy-bird-game")],S);var wt=Object.defineProperty,_t=Object.getOwnPropertyDescriptor,B=(t,e,o,r)=>{for(var s=r>1?void 0:r?_t(e,o):e,i=t.length-1,a;i>=0;i--)(a=t[i])&&(s=(r?a(e,o,s):a(s))||s);return r&&s&&wt(e,o,s),s};let A=class extends b{constructor(){super(...arguments),this.userId="172768160",this.shelf="currently-reading",this.limit=10,this.books=[],this.loading=!0,this.error=""}connectedCallback(){super.connectedCallback(),this._fetchBooks()}async _fetchBooks(){this.loading=!0,this.error="";try{const t=`https://www.goodreads.com/review/list_rss/${this.userId}?shelf=${this.shelf}`,e=`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(t)}`,r=await(await fetch(e)).json();if(r.status!=="ok")throw new Error("Failed to fetch Goodreads data");this.books=r.items.slice(0,this.limit).map(s=>{const i=s.description?.match(/author:\s*([^<]+)/i),a=i?i[1].trim():"Unknown Author",c=s.description?.match(/<img[^>]+src="([^"]+)"/),n=c?c[1]:"";return{title:s.title||"Unknown Title",author:a,cover:n,link:s.link||"#"}})}catch(t){console.error("Error fetching Goodreads:",t),this.error="Could not load books"}finally{this.loading=!1}}render(){return this.loading?l`<div class="loading">Loading books...</div>`:this.error?l`<div class="error">${this.error}</div>`:this.books.length===0?l`<div class="empty">No books found</div>`:l`
+      <div class="books-grid">
+        ${this.books.map(t=>l`
+          <a href=${t.link} target="_blank" rel="noopener noreferrer" class="book">
+            ${t.cover?l`
+              <img src=${t.cover} alt=${t.title} class="book-cover" loading="lazy" />
+            `:l`
+              <div class="book-cover placeholder">
+                <span>📖</span>
+              </div>
+            `}
+            <div class="book-info">
+              <span class="book-title">${t.title}</span>
+              <span class="book-author">${t.author}</span>
+            </div>
+          </a>
+        `)}
+      </div>
+      <a href="https://www.goodreads.com/user/show/${this.userId}" target="_blank" rel="noopener noreferrer" class="goodreads-link">
+        View on Goodreads →
+      </a>
+    `}};A.styles=M`
+    :host {
+      display: block;
+    }
+
+    .loading, .error, .empty {
+      padding: 1rem;
+      text-align: center;
+      color: #888;
+    }
+
+    .error {
+      color: #e74c3c;
+    }
+
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 1rem;
+    }
+
+    .book {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s ease;
+    }
+
+    .book:hover {
+      transform: translateY(-4px);
+    }
+
+    .book-cover {
+      width: 100%;
+      aspect-ratio: 2/3;
+      object-fit: cover;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .book-cover.placeholder {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+    }
+
+    .book-info {
+      margin-top: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .book-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #fff;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .book-author {
+      font-size: 0.75rem;
+      color: #888;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .goodreads-link {
+      display: inline-block;
+      margin-top: 1rem;
+      color: #667eea;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .goodreads-link:hover {
+      text-decoration: underline;
+    }
+
+    @media (prefers-color-scheme: light) {
+      .book-title {
+        color: #333;
+      }
+
+      .book-author {
+        color: #666;
+      }
+
+      .book-cover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+    }
+
+    @media (max-width: 500px) {
+      .books-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 0.75rem;
+      }
+
+      .book-title {
+        font-size: 0.75rem;
+      }
+
+      .book-author {
+        font-size: 0.7rem;
+      }
+    }
+  `;B([ae({type:String})],A.prototype,"userId",2);B([ae({type:String})],A.prototype,"shelf",2);B([ae({type:Number})],A.prototype,"limit",2);B([p()],A.prototype,"books",2);B([p()],A.prototype,"loading",2);B([p()],A.prototype,"error",2);A=B([T("goodreads-shelf")],A);var kt=Object.getOwnPropertyDescriptor,$t=(t,e,o,r)=>{for(var s=r>1?void 0:r?kt(e,o):e,i=t.length-1,a;i>=0;i--)(a=t[i])&&(s=a(s)||s);return s};let le=class extends b{constructor(){super(...arguments),this.selectedPost=null,this.blogPosts=rt,this.currentView="home",this.games=[{id:"snake",name:"Snake",description:"Classic snake game. Eat food, grow longer, avoid walls!",icon:"🐍",color:"#00ADD8"},{id:"solitaire",name:"Solitaire",description:"Classic Klondike solitaire card game.",icon:"🃏",color:"#e74c3c"},{id:"tictactoe",name:"Tic Tac Toe",description:"Challenge an AI opponent!",icon:"⭕",color:"#9b59b6"},{id:"checkers",name:"Checkers",description:"Classic checkers against an AI opponent!",icon:"🔴",color:"#e67e22"},{id:"connectfour",name:"Connect Four",description:"Drop pieces and connect 4 to win!",icon:"🔵",color:"#3498db"},{id:"flappybird",name:"Flappy Bird",description:"Tap to flap and dodge the pipes!",icon:"🐤",color:"#f1c40f"}],this._handleHashChange=()=>{this._checkUrlHash()},this.repos=[{name:"warp-prometheus",url:"https://github.com/calvinbrown085/warp-prometheus",description:"Prometheus metrics extension for Rust's Warp library",language:"Rust",languageColor:"#dea584"},{name:"us-state-info-rs",url:"https://github.com/calvinbrown085/us-state-info-rs",description:"Rust library for getting information about the states of the United States",language:"Rust",languageColor:"#dea584"}]}connectedCallback(){super.connectedCallback(),this._checkUrlHash(),window.addEventListener("hashchange",this._handleHashChange)}disconnectedCallback(){super.disconnectedCallback(),window.removeEventListener("hashchange",this._handleHashChange)}_checkUrlHash(){const t=window.location.hash.slice(1);if(t==="games/snake"){this.currentView="game-snake",this.selectedPost=null,this.requestUpdate(),window.scrollTo({top:0,behavior:"smooth"});return}if(t==="games/solitaire"){this.currentView="game-solitaire",this.selectedPost=null,this.requestUpdate(),window.scrollTo({top:0,behavior:"smooth"});return}if(t==="games/tictactoe"){this.currentView="game-tictactoe",this.selectedPost=null,this.requestUpdate(),window.scrollTo({top:0,behavior:"smooth"});return}if(t==="games/checkers"){this.currentView="game-checkers",this.selectedPost=null,this.requestUpdate(),window.scrollTo({top:0,behavior:"smooth"});return}if(t==="games/connectfour"){this.currentView="game-connectfour",this.selectedPost=null,this.requestUpdate(),window.scrollTo({top:0,behavior:"smooth"});return}if(t==="games/flappybird"){this.currentView="game-flappybird",this.selectedPost=null,this.requestUpdate(),window.scrollTo({top:0,behavior:"smooth"});return}if(t==="now"){this.currentView="now",this.selectedPost=null,this.requestUpdate(),window.scrollTo({top:0,behavior:"smooth"});return}if(t==="games"){this.currentView="games",this.selectedPost=null,this.requestUpdate(),window.scrollTo({top:0,behavior:"smooth"});return}if(t){const e=this.blogPosts.find(o=>o.id===t);if(e){this.currentView="home",this.selectedPost=e,this.requestUpdate(),this.updateComplete.then(()=>{this.shadowRoot?.querySelector(".blog")?.scrollIntoView({behavior:"smooth"})});return}}this.currentView="home",this.selectedPost=null,this.requestUpdate()}_navigateTo(t){if(t==="home")window.history.pushState(null,"",window.location.pathname),this.currentView="home";else if(t==="games")window.history.pushState(null,"","#games"),this.currentView="games";else if(t==="now")window.history.pushState(null,"","#now"),this.currentView="now";else if(t.startsWith("game-")){const e=t.replace("game-","");window.history.pushState(null,"",`#games/${e}`),this.currentView=t}this.selectedPost=null,this.requestUpdate(),window.scrollTo({top:0,behavior:"smooth"})}render(){switch(this.currentView){case"games":return this._renderGamesHub();case"now":return this._renderNowPage();case"game-snake":return this._renderGamePage("snake");case"game-solitaire":return this._renderGamePage("solitaire");case"game-tictactoe":return this._renderGamePage("tictactoe");case"game-checkers":return this._renderGamePage("checkers");case"game-connectfour":return this._renderGamePage("connectfour");case"game-flappybird":return this._renderGamePage("flappybird");default:return this._renderHomePage()}}_renderGamesHub(){return l`
       <div class="container games-page">
         <header class="page-header">
           <button class="back-link" @click=${()=>this._navigateTo("home")}>
@@ -2244,7 +2380,37 @@ logger.Info("hello, world")</code></pre>
           `)}
         </section>
       </div>
-    `}_renderGamePage(t){const e=this.games.find(r=>r.id===t);return e?l`
+    `}_renderNowPage(){return l`
+      <div class="container now-page">
+        <header class="page-header">
+          <button class="back-link" @click=${()=>this._navigateTo("home")}>
+            ← Back to Home
+          </button>
+          <h1>
+            <span class="now-icon">📍</span>
+            Now
+          </h1>
+          <p class="page-subtitle">What I'm currently up to</p>
+          <p class="now-updated">Last updated: January 2026</p>
+        </header>
+
+        <div class="now-content">
+          <section class="now-section">
+            <h2>📚 Currently Reading</h2>
+            <goodreads-shelf shelf="currently-reading" limit="6"></goodreads-shelf>
+          </section>
+
+          <section class="now-section">
+            <h2>✅ Recently Read</h2>
+            <goodreads-shelf shelf="read" limit="6"></goodreads-shelf>
+          </section>
+        </div>
+
+        <div class="now-footer">
+          <p>This is a <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer">/now page</a>. You should make one too!</p>
+        </div>
+      </div>
+    `}_renderGamePage(t){const e=this.games.find(o=>o.id===t);return e?l`
       <div class="container game-page">
         <header class="page-header">
           <button class="back-link" @click=${()=>this._navigateTo("games")}>
@@ -2270,7 +2436,7 @@ logger.Info("hello, world")</code></pre>
         <!-- Hero Section -->
         <section class="hero">
           <div class="profile-picture">
-            <img src=${et} alt="Calvin Brown" class="avatar-image" />
+            <img src=${ot} alt="Calvin Brown" class="avatar-image" />
           </div>
           
           <h1>Calvin Brown</h1>
@@ -2344,19 +2510,30 @@ logger.Info("hello, world")</code></pre>
           ${this.selectedPost?this._renderFullPost():this._renderPostList()}
         </section>
 
-        <!-- Games Link -->
-        <section class="games-link-section">
-          <div class="games-link-card" @click=${()=>this._navigateTo("games")}>
-            <div class="games-link-icon">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
-              </svg>
+        <!-- Quick Links -->
+        <section class="quick-links-section">
+          <div class="quick-links-grid">
+            <div class="quick-link-card now-link" @click=${()=>this._navigateTo("now")}>
+              <div class="quick-link-icon">
+                <span>📍</span>
+              </div>
+              <div class="quick-link-content">
+                <h3>Now</h3>
+                <p>What I'm currently up to</p>
+              </div>
+              <div class="quick-link-arrow">→</div>
             </div>
-            <div class="games-link-content">
-              <h3>Break from Coding</h3>
-              <p>Need a break? Play some games!</p>
+
+            <div class="quick-link-card games-link" @click=${()=>this._navigateTo("games")}>
+              <div class="quick-link-icon">
+                <span>🎮</span>
+              </div>
+              <div class="quick-link-content">
+                <h3>Games</h3>
+                <p>Take a break and play!</p>
+              </div>
+              <div class="quick-link-arrow">→</div>
             </div>
-            <div class="games-link-arrow">→</div>
           </div>
         </section>
 
@@ -2405,7 +2582,7 @@ logger.Info("hello, world")</code></pre>
           <div .innerHTML=${t.content}></div>
         </article>
       </div>
-    `}_openPost(t){this.selectedPost=t,window.history.pushState(null,"",`#${t.id}`),this.requestUpdate(),this.shadowRoot?.querySelector(".blog")?.scrollIntoView({behavior:"smooth"})}_closePost(){this.selectedPost=null,window.history.pushState(null,"",window.location.pathname),this.requestUpdate()}_formatDate(t){return new Date(t).toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"})}};ie.styles=G`
+    `}_openPost(t){this.selectedPost=t,window.history.pushState(null,"",`#${t.id}`),this.requestUpdate(),this.shadowRoot?.querySelector(".blog")?.scrollIntoView({behavior:"smooth"})}_closePost(){this.selectedPost=null,window.history.pushState(null,"",window.location.pathname),this.requestUpdate()}_formatDate(t){return new Date(t).toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"})}};le.styles=M`
     :host {
       display: block;
       max-width: 900px;
@@ -2782,69 +2959,100 @@ logger.Info("hello, world")</code></pre>
       color: #e0e0e0;
     }
 
-    /* Games Link Section */
-    .games-link-section {
+    /* Quick Links Section */
+    .quick-links-section {
       margin: 1rem 0;
     }
 
-    .games-link-card {
+    .quick-links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .quick-link-card {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
-      padding: 1.5rem;
-      background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 142, 83, 0.1) 100%);
-      border: 1px solid rgba(255, 107, 107, 0.3);
+      gap: 1rem;
+      padding: 1.25rem;
       border-radius: 12px;
       cursor: pointer;
       transition: all 0.2s ease;
     }
 
-    .games-link-card:hover {
+    .quick-link-card.now-link {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+      border: 1px solid rgba(102, 126, 234, 0.3);
+    }
+
+    .quick-link-card.now-link:hover {
+      border-color: #667eea;
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+    }
+
+    .quick-link-card.games-link {
+      background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 142, 83, 0.1) 100%);
+      border: 1px solid rgba(255, 107, 107, 0.3);
+    }
+
+    .quick-link-card.games-link:hover {
       border-color: #ff6b6b;
       transform: translateY(-4px);
       box-shadow: 0 10px 30px rgba(255, 107, 107, 0.2);
     }
 
-    .games-link-icon {
-      width: 60px;
-      height: 60px;
-      background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
-      border-radius: 12px;
+    .quick-link-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 1.5rem;
       flex-shrink: 0;
     }
 
-    .games-link-icon svg {
-      width: 32px;
-      height: 32px;
-      color: white;
+    .now-link .quick-link-icon {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
 
-    .games-link-content {
+    .games-link .quick-link-icon {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+    }
+
+    .quick-link-content {
       flex-grow: 1;
     }
 
-    .games-link-content h3 {
+    .quick-link-content h3 {
       margin: 0 0 0.25rem 0;
-      font-size: 1.25rem;
+      font-size: 1.1rem;
+    }
+
+    .now-link .quick-link-content h3 {
+      color: #667eea;
+    }
+
+    .games-link .quick-link-content h3 {
       color: #ff6b6b;
     }
 
-    .games-link-content p {
+    .quick-link-content p {
       margin: 0;
       color: #888;
+      font-size: 0.9rem;
     }
 
-    .games-link-arrow {
-      font-size: 1.5rem;
-      color: #ff6b6b;
+    .quick-link-arrow {
+      font-size: 1.25rem;
+      color: #888;
       transition: transform 0.2s ease;
     }
 
-    .games-link-card:hover .games-link-arrow {
+    .quick-link-card:hover .quick-link-arrow {
       transform: translateX(4px);
+      color: #fff;
     }
 
     /* Games Page */
@@ -2974,6 +3182,86 @@ logger.Info("hello, world")</code></pre>
       margin-right: 0.25rem;
     }
 
+    /* Now Page */
+    .now-page .page-header h1 {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .now-icon {
+      font-size: 2rem;
+      margin-right: 0.25rem;
+      -webkit-text-fill-color: initial;
+    }
+
+    .now-updated {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 0.5rem;
+    }
+
+    .now-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .now-section {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .now-section h2 {
+      margin: 0 0 1rem 0;
+      font-size: 1.25rem;
+      color: #667eea;
+    }
+
+    .now-section ul {
+      margin: 0;
+      padding-left: 1.5rem;
+    }
+
+    .now-section li {
+      margin-bottom: 0.5rem;
+      color: #aaa;
+      line-height: 1.6;
+    }
+
+    .now-section li:last-child {
+      margin-bottom: 0;
+    }
+
+    .now-section em {
+      color: #bbb;
+    }
+
+    .now-footer {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+    }
+
+    .now-footer p {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .now-footer a {
+      color: #667eea;
+      text-decoration: none;
+    }
+
+    .now-footer a:hover {
+      text-decoration: underline;
+    }
+
     .game-container {
       display: flex;
       justify-content: center;
@@ -3066,18 +3354,6 @@ logger.Info("hello, world")</code></pre>
         color: #888;
       }
 
-      .games-link-card {
-        background: linear-gradient(135deg, rgba(255, 107, 107, 0.08) 0%, rgba(255, 142, 83, 0.08) 100%);
-      }
-
-      .games-link-content h3 {
-        color: #e55555;
-      }
-
-      .games-link-content p {
-        color: #666;
-      }
-
       .game-card {
         background: rgba(0, 0, 0, 0.03);
         border-color: rgba(0, 0, 0, 0.1);
@@ -3103,6 +3379,31 @@ logger.Info("hello, world")</code></pre>
       .game-page .page-header h1 {
         color: #213547;
       }
+
+      .now-section {
+        background: rgba(0, 0, 0, 0.03);
+        border-color: rgba(0, 0, 0, 0.1);
+      }
+
+      .now-section li {
+        color: #555;
+      }
+
+      .now-section em {
+        color: #444;
+      }
+
+      .now-footer {
+        border-color: rgba(0, 0, 0, 0.1);
+      }
+
+      .now-footer p {
+        color: #888;
+      }
+
+      .quick-link-content p {
+        color: #666;
+      }
     }
 
     /* Responsive */
@@ -3126,4 +3427,4 @@ logger.Info("hello, world")</code></pre>
         height: 60px;
       }
     }
-  `;ie=yt([U("my-element")],ie);
+  `;le=$t([T("my-element")],le);

@@ -8,6 +8,7 @@ import './tic-tac-toe-game'
 import './checkers-game'
 import './connect-four-game'
 import './flappy-bird-game'
+import './goodreads-shelf'
 
 interface GitHubRepo {
   name: string
@@ -17,7 +18,7 @@ interface GitHubRepo {
   languageColor: string
 }
 
-type ViewType = 'home' | 'games' | 'game-snake' | 'game-solitaire' | 'game-tictactoe' | 'game-checkers' | 'game-connectfour' | 'game-flappybird'
+type ViewType = 'home' | 'games' | 'now' | 'game-snake' | 'game-solitaire' | 'game-tictactoe' | 'game-checkers' | 'game-connectfour' | 'game-flappybird'
 
 interface GameInfo {
   id: string
@@ -147,6 +148,15 @@ export class MyElement extends LitElement {
       return
     }
 
+    // Check for now page
+    if (hash === 'now') {
+      this.currentView = 'now'
+      this.selectedPost = null
+      this.requestUpdate()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+
     // Check for games hub page
     if (hash === 'games') {
       this.currentView = 'games'
@@ -184,6 +194,9 @@ export class MyElement extends LitElement {
     } else if (view === 'games') {
       window.history.pushState(null, '', '#games')
       this.currentView = 'games'
+    } else if (view === 'now') {
+      window.history.pushState(null, '', '#now')
+      this.currentView = 'now'
     } else if (view.startsWith('game-')) {
       const gameId = view.replace('game-', '')
       window.history.pushState(null, '', `#games/${gameId}`)
@@ -215,6 +228,8 @@ export class MyElement extends LitElement {
     switch (this.currentView) {
       case 'games':
         return this._renderGamesHub()
+      case 'now':
+        return this._renderNowPage()
       case 'game-snake':
         return this._renderGamePage('snake')
       case 'game-solitaire':
@@ -262,6 +277,40 @@ export class MyElement extends LitElement {
             </div>
           `)}
         </section>
+      </div>
+    `
+  }
+
+  private _renderNowPage() {
+    return html`
+      <div class="container now-page">
+        <header class="page-header">
+          <button class="back-link" @click=${() => this._navigateTo('home')}>
+            ← Back to Home
+          </button>
+          <h1>
+            <span class="now-icon">📍</span>
+            Now
+          </h1>
+          <p class="page-subtitle">What I'm currently up to</p>
+          <p class="now-updated">Last updated: January 2026</p>
+        </header>
+
+        <div class="now-content">
+          <section class="now-section">
+            <h2>📚 Currently Reading</h2>
+            <goodreads-shelf shelf="currently-reading" limit="6"></goodreads-shelf>
+          </section>
+
+          <section class="now-section">
+            <h2>✅ Recently Read</h2>
+            <goodreads-shelf shelf="read" limit="6"></goodreads-shelf>
+          </section>
+        </div>
+
+        <div class="now-footer">
+          <p>This is a <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer">/now page</a>. You should make one too!</p>
+        </div>
       </div>
     `
   }
@@ -374,19 +423,30 @@ export class MyElement extends LitElement {
           ${this.selectedPost ? this._renderFullPost() : this._renderPostList()}
         </section>
 
-        <!-- Games Link -->
-        <section class="games-link-section">
-          <div class="games-link-card" @click=${() => this._navigateTo('games')}>
-            <div class="games-link-icon">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
-              </svg>
+        <!-- Quick Links -->
+        <section class="quick-links-section">
+          <div class="quick-links-grid">
+            <div class="quick-link-card now-link" @click=${() => this._navigateTo('now')}>
+              <div class="quick-link-icon">
+                <span>📍</span>
+              </div>
+              <div class="quick-link-content">
+                <h3>Now</h3>
+                <p>What I'm currently up to</p>
+              </div>
+              <div class="quick-link-arrow">→</div>
             </div>
-            <div class="games-link-content">
-              <h3>Break from Coding</h3>
-              <p>Need a break? Play some games!</p>
+
+            <div class="quick-link-card games-link" @click=${() => this._navigateTo('games')}>
+              <div class="quick-link-icon">
+                <span>🎮</span>
+              </div>
+              <div class="quick-link-content">
+                <h3>Games</h3>
+                <p>Take a break and play!</p>
+              </div>
+              <div class="quick-link-arrow">→</div>
             </div>
-            <div class="games-link-arrow">→</div>
           </div>
         </section>
 
@@ -849,69 +909,100 @@ export class MyElement extends LitElement {
       color: #e0e0e0;
     }
 
-    /* Games Link Section */
-    .games-link-section {
+    /* Quick Links Section */
+    .quick-links-section {
       margin: 1rem 0;
     }
 
-    .games-link-card {
+    .quick-links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .quick-link-card {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
-      padding: 1.5rem;
-      background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 142, 83, 0.1) 100%);
-      border: 1px solid rgba(255, 107, 107, 0.3);
+      gap: 1rem;
+      padding: 1.25rem;
       border-radius: 12px;
       cursor: pointer;
       transition: all 0.2s ease;
     }
 
-    .games-link-card:hover {
+    .quick-link-card.now-link {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+      border: 1px solid rgba(102, 126, 234, 0.3);
+    }
+
+    .quick-link-card.now-link:hover {
+      border-color: #667eea;
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+    }
+
+    .quick-link-card.games-link {
+      background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 142, 83, 0.1) 100%);
+      border: 1px solid rgba(255, 107, 107, 0.3);
+    }
+
+    .quick-link-card.games-link:hover {
       border-color: #ff6b6b;
       transform: translateY(-4px);
       box-shadow: 0 10px 30px rgba(255, 107, 107, 0.2);
     }
 
-    .games-link-icon {
-      width: 60px;
-      height: 60px;
-      background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
-      border-radius: 12px;
+    .quick-link-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 1.5rem;
       flex-shrink: 0;
     }
 
-    .games-link-icon svg {
-      width: 32px;
-      height: 32px;
-      color: white;
+    .now-link .quick-link-icon {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
 
-    .games-link-content {
+    .games-link .quick-link-icon {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+    }
+
+    .quick-link-content {
       flex-grow: 1;
     }
 
-    .games-link-content h3 {
+    .quick-link-content h3 {
       margin: 0 0 0.25rem 0;
-      font-size: 1.25rem;
+      font-size: 1.1rem;
+    }
+
+    .now-link .quick-link-content h3 {
+      color: #667eea;
+    }
+
+    .games-link .quick-link-content h3 {
       color: #ff6b6b;
     }
 
-    .games-link-content p {
+    .quick-link-content p {
       margin: 0;
       color: #888;
+      font-size: 0.9rem;
     }
 
-    .games-link-arrow {
-      font-size: 1.5rem;
-      color: #ff6b6b;
+    .quick-link-arrow {
+      font-size: 1.25rem;
+      color: #888;
       transition: transform 0.2s ease;
     }
 
-    .games-link-card:hover .games-link-arrow {
+    .quick-link-card:hover .quick-link-arrow {
       transform: translateX(4px);
+      color: #fff;
     }
 
     /* Games Page */
@@ -1041,6 +1132,86 @@ export class MyElement extends LitElement {
       margin-right: 0.25rem;
     }
 
+    /* Now Page */
+    .now-page .page-header h1 {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .now-icon {
+      font-size: 2rem;
+      margin-right: 0.25rem;
+      -webkit-text-fill-color: initial;
+    }
+
+    .now-updated {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 0.5rem;
+    }
+
+    .now-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .now-section {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .now-section h2 {
+      margin: 0 0 1rem 0;
+      font-size: 1.25rem;
+      color: #667eea;
+    }
+
+    .now-section ul {
+      margin: 0;
+      padding-left: 1.5rem;
+    }
+
+    .now-section li {
+      margin-bottom: 0.5rem;
+      color: #aaa;
+      line-height: 1.6;
+    }
+
+    .now-section li:last-child {
+      margin-bottom: 0;
+    }
+
+    .now-section em {
+      color: #bbb;
+    }
+
+    .now-footer {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+    }
+
+    .now-footer p {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .now-footer a {
+      color: #667eea;
+      text-decoration: none;
+    }
+
+    .now-footer a:hover {
+      text-decoration: underline;
+    }
+
     .game-container {
       display: flex;
       justify-content: center;
@@ -1133,18 +1304,6 @@ export class MyElement extends LitElement {
         color: #888;
       }
 
-      .games-link-card {
-        background: linear-gradient(135deg, rgba(255, 107, 107, 0.08) 0%, rgba(255, 142, 83, 0.08) 100%);
-      }
-
-      .games-link-content h3 {
-        color: #e55555;
-      }
-
-      .games-link-content p {
-        color: #666;
-      }
-
       .game-card {
         background: rgba(0, 0, 0, 0.03);
         border-color: rgba(0, 0, 0, 0.1);
@@ -1169,6 +1328,31 @@ export class MyElement extends LitElement {
 
       .game-page .page-header h1 {
         color: #213547;
+      }
+
+      .now-section {
+        background: rgba(0, 0, 0, 0.03);
+        border-color: rgba(0, 0, 0, 0.1);
+      }
+
+      .now-section li {
+        color: #555;
+      }
+
+      .now-section em {
+        color: #444;
+      }
+
+      .now-footer {
+        border-color: rgba(0, 0, 0, 0.1);
+      }
+
+      .now-footer p {
+        color: #888;
+      }
+
+      .quick-link-content p {
+        color: #666;
       }
     }
 
