@@ -6,6 +6,8 @@ import './snake-game'
 import './solitaire-game'
 import './tic-tac-toe-game'
 import './checkers-game'
+import './connect-four-game'
+import './flappy-bird-game'
 
 interface GitHubRepo {
   name: string
@@ -15,7 +17,7 @@ interface GitHubRepo {
   languageColor: string
 }
 
-type ViewType = 'home' | 'games' | 'game-snake' | 'game-solitaire' | 'game-tictactoe' | 'game-checkers'
+type ViewType = 'home' | 'games' | 'game-snake' | 'game-solitaire' | 'game-tictactoe' | 'game-checkers' | 'game-connectfour' | 'game-flappybird'
 
 interface GameInfo {
   id: string
@@ -59,6 +61,20 @@ export class MyElement extends LitElement {
       description: 'Classic checkers against an AI opponent!',
       icon: '🔴',
       color: '#e67e22'
+    },
+    {
+      id: 'connectfour',
+      name: 'Connect Four',
+      description: 'Drop pieces and connect 4 to win!',
+      icon: '🔵',
+      color: '#3498db'
+    },
+    {
+      id: 'flappybird',
+      name: 'Flappy Bird',
+      description: 'Tap to flap and dodge the pipes!',
+      icon: '🐤',
+      color: '#f1c40f'
     }
   ]
 
@@ -109,6 +125,22 @@ export class MyElement extends LitElement {
 
     if (hash === 'games/checkers') {
       this.currentView = 'game-checkers'
+      this.selectedPost = null
+      this.requestUpdate()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+
+    if (hash === 'games/connectfour') {
+      this.currentView = 'game-connectfour'
+      this.selectedPost = null
+      this.requestUpdate()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+
+    if (hash === 'games/flappybird') {
+      this.currentView = 'game-flappybird'
       this.selectedPost = null
       this.requestUpdate()
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -191,6 +223,10 @@ export class MyElement extends LitElement {
         return this._renderGamePage('tictactoe')
       case 'game-checkers':
         return this._renderGamePage('checkers')
+      case 'game-connectfour':
+        return this._renderGamePage('connectfour')
+      case 'game-flappybird':
+        return this._renderGamePage('flappybird')
       default:
         return this._renderHomePage()
     }
@@ -251,6 +287,8 @@ export class MyElement extends LitElement {
           ${gameId === 'solitaire' ? html`<solitaire-game></solitaire-game>` : ''}
           ${gameId === 'tictactoe' ? html`<tic-tac-toe-game></tic-tac-toe-game>` : ''}
           ${gameId === 'checkers' ? html`<checkers-game></checkers-game>` : ''}
+          ${gameId === 'connectfour' ? html`<connect-four-game></connect-four-game>` : ''}
+          ${gameId === 'flappybird' ? html`<flappy-bird-game></flappy-bird-game>` : ''}
         </section>
       </div>
     `
