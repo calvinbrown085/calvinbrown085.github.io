@@ -4,6 +4,8 @@ import headshotImage from './calvin-headshot.jpg'
 import { blogPosts, type BlogPost } from './blog-posts'
 import './snake-game'
 import './solitaire-game'
+import './tic-tac-toe-game'
+import './checkers-game'
 
 interface GitHubRepo {
   name: string
@@ -13,7 +15,7 @@ interface GitHubRepo {
   languageColor: string
 }
 
-type ViewType = 'home' | 'games' | 'game-snake' | 'game-solitaire'
+type ViewType = 'home' | 'games' | 'game-snake' | 'game-solitaire' | 'game-tictactoe' | 'game-checkers'
 
 interface GameInfo {
   id: string
@@ -43,6 +45,20 @@ export class MyElement extends LitElement {
       description: 'Classic Klondike solitaire card game.',
       icon: '🃏',
       color: '#e74c3c'
+    },
+    {
+      id: 'tictactoe',
+      name: 'Tic Tac Toe',
+      description: 'Challenge an AI opponent!',
+      icon: '⭕',
+      color: '#9b59b6'
+    },
+    {
+      id: 'checkers',
+      name: 'Checkers',
+      description: 'Classic checkers against an AI opponent!',
+      icon: '🔴',
+      color: '#e67e22'
     }
   ]
 
@@ -82,7 +98,23 @@ export class MyElement extends LitElement {
       window.scrollTo({ top: 0, behavior: 'smooth' })
       return
     }
-    
+
+    if (hash === 'games/tictactoe') {
+      this.currentView = 'game-tictactoe'
+      this.selectedPost = null
+      this.requestUpdate()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+
+    if (hash === 'games/checkers') {
+      this.currentView = 'game-checkers'
+      this.selectedPost = null
+      this.requestUpdate()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+
     // Check for games hub page
     if (hash === 'games') {
       this.currentView = 'games'
@@ -155,6 +187,10 @@ export class MyElement extends LitElement {
         return this._renderGamePage('snake')
       case 'game-solitaire':
         return this._renderGamePage('solitaire')
+      case 'game-tictactoe':
+        return this._renderGamePage('tictactoe')
+      case 'game-checkers':
+        return this._renderGamePage('checkers')
       default:
         return this._renderHomePage()
     }
@@ -213,6 +249,8 @@ export class MyElement extends LitElement {
         <section class="game-container">
           ${gameId === 'snake' ? html`<snake-game></snake-game>` : ''}
           ${gameId === 'solitaire' ? html`<solitaire-game></solitaire-game>` : ''}
+          ${gameId === 'tictactoe' ? html`<tic-tac-toe-game></tic-tac-toe-game>` : ''}
+          ${gameId === 'checkers' ? html`<checkers-game></checkers-game>` : ''}
         </section>
       </div>
     `

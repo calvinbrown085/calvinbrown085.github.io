@@ -208,8 +208,8 @@ export class SolitaireGame extends LitElement {
   private _handleDrop(e: MouseEvent) {
     if (!this.dragState) return
 
-    // Find what we're dropping on
-    const elementsAtPoint = document.elementsFromPoint(e.clientX, e.clientY)
+    // Find what we're dropping on (use shadowRoot for Shadow DOM elements)
+    const elementsAtPoint = this.shadowRoot?.elementsFromPoint(e.clientX, e.clientY) || []
     
     for (const el of elementsAtPoint) {
       // Check for tableau pile
