@@ -1,120 +1,381 @@
 import { LitElement, css, html } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
-import litLogo from './assets/lit.svg'
-import viteLogo from '/vite.svg'
+import { customElement } from 'lit/decorators.js'
+import headshotImage from './calvin-headshot.jpg'
 
-/**
- * An example element.
- *
- * @slot - This element has a slot
- * @csspart button - The button
- */
+interface GitHubRepo {
+  name: string
+  url: string
+  description: string
+  language: string
+  languageColor: string
+}
+
 @customElement('my-element')
 export class MyElement extends LitElement {
-  /**
-   * Copy for the read the docs hint.
-   */
-  @property()
-  docsHint = 'Click on the Vite and Lit logos to learn more'
-
-  /**
-   * The number of times the button has been clicked.
-   */
-  @property({ type: Number })
-  count = 0
+  private repos: GitHubRepo[] = [
+    {
+      name: 'warp-prometheus',
+      url: 'https://github.com/calvinbrown085/warp-prometheus',
+      description: 'Prometheus metrics extension for Rust\'s Warp library',
+      language: 'Rust',
+      languageColor: '#dea584'
+    },
+    {
+      name : 'us-state-info-rs',
+      url: 'https://github.com/calvinbrown085/us-state-info-rs',
+      description: 'Rust library for getting information about the states of the United States',
+      language: 'Rust',
+      languageColor: '#dea584'
+    }
+  ]
 
   render() {
     return html`
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src=${viteLogo} class="logo" alt="Vite logo" />
-        </a>
-        <a href="https://lit.dev" target="_blank">
-          <img src=${litLogo} class="logo lit" alt="Lit logo" />
-        </a>
-      </div>
-      <slot></slot>
-      <div class="card">
-        <button @click=${this._onClick} part="button">
-          count is ${this.count}
-        </button>
-      </div>
-      <p class="read-the-docs">${this.docsHint}</p>
-    `
-  }
+      <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+          <div class="profile-picture">
+            <img src=${headshotImage} alt="Calvin Brown" class="avatar-image" />
+          </div>
+          
+          <h1>Calvin Brown</h1>
+          <p class="tagline">Software Engineer</p>
+          
+          <div class="social-links">
+            <a href="https://github.com/calvinbrown085" target="_blank" rel="noopener noreferrer" class="social-link">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+              </svg>
+              GitHub
+            </a>
+          </div>
+        </section>
 
-  private _onClick() {
-    this.count++
+        <!-- About Section -->
+        <section class="about">
+          <h2>About Me</h2>
+          <p>
+            Welcome to my personal site! I'm a software engineer passionate about building 
+            robust and scalable systems. I enjoy working with technologies like Rust, Go, 
+            and TypeScript to create tools that make developers' lives easier.
+          </p>
+          <p>
+            <!-- Add more about yourself here -->
+            Feel free to explore my projects below and reach out if you'd like to collaborate!
+          </p>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="projects">
+          <h2>Featured Projects</h2>
+          <div class="repo-grid">
+            ${this.repos.map(repo => html`
+              <a href=${repo.url} target="_blank" rel="noopener noreferrer" class="repo-card">
+                <div class="repo-header">
+                  <svg viewBox="0 0 16 16" fill="currentColor" class="repo-icon">
+                    <path d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z"/>
+                  </svg>
+                  <span class="repo-name">${repo.name}</span>
+                </div>
+                <p class="repo-description">${repo.description}</p>
+                <div class="repo-footer">
+                  <span class="language">
+                    <span class="language-dot" style="background-color: ${repo.languageColor}"></span>
+                    ${repo.language}
+                  </span>
+                </div>
+              </a>
+            `)}
+            
+            <!-- Add more repo placeholder -->
+            <div class="repo-card add-more">
+              <p>More projects coming soon...</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+          
+          <p>
+            <a href="https://github.com/calvinbrown085" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <p><a href="https://www.linkedin.com/in/calvin-brown-6ab208aa" target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
+            <p><a href="mailto:calvin.brown@jackhenry.com">me@calvinbrown.dev</a></p> 
+            
+          </p>
+          <p>&copy; ${new Date().getFullYear()} Calvin Brown. Built with Lit + Vite.</p>
+        </footer>
+      </div>
+    `
   }
 
   static styles = css`
     :host {
-      max-width: 1280px;
+      display: block;
+      max-width: 900px;
       margin: 0 auto;
       padding: 2rem;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+
+    /* Hero Section */
+    .hero {
       text-align: center;
+      padding: 2rem 0;
     }
 
-    .logo {
-      height: 6em;
-      padding: 1.5em;
-      will-change: filter;
-      transition: filter 300ms;
-    }
-    .logo:hover {
-      filter: drop-shadow(0 0 2em #646cffaa);
-    }
-    .logo.lit:hover {
-      filter: drop-shadow(0 0 2em #325cffaa);
+    .profile-picture {
+      margin-bottom: 1.5rem;
     }
 
-    .card {
-      padding: 2em;
+    .placeholder-avatar {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
     }
 
-    .read-the-docs {
+    .placeholder-avatar svg {
+      width: 80px;
+      height: 80px;
+      color: white;
+      opacity: 0.9;
+    }
+
+    .avatar-image {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin: 0 0 0.5rem 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .tagline {
+      font-size: 1.25rem;
+      color: #888;
+      margin: 0 0 1.5rem 0;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      background: #1a1a1a;
+      color: white;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .social-link:hover {
+      background: #333;
+      transform: translateY(-2px);
+    }
+
+    .social-link svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* About Section */
+    .about {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .about h2 {
+      margin-top: 0;
+      font-size: 1.5rem;
+    }
+
+    .about p {
+      color: #aaa;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .about p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Projects Section */
+    .projects h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .repo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .repo-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .repo-card:hover {
+      border-color: #667eea;
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+    }
+
+    .repo-card.add-more {
+      border-style: dashed;
+      justify-content: center;
+      align-items: center;
+      color: #666;
+    }
+
+    .repo-card.add-more:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .repo-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .repo-icon {
+      width: 16px;
+      height: 16px;
       color: #888;
     }
 
-    ::slotted(h1) {
-      font-size: 3.2em;
-      line-height: 1.1;
+    .repo-name {
+      font-weight: 600;
+      color: #667eea;
     }
 
-    a {
-      font-weight: 500;
-      color: #646cff;
-      text-decoration: inherit;
-    }
-    a:hover {
-      color: #535bf2;
-    }
-
-    button {
-      border-radius: 8px;
-      border: 1px solid transparent;
-      padding: 0.6em 1.2em;
-      font-size: 1em;
-      font-weight: 500;
-      font-family: inherit;
-      background-color: #1a1a1a;
-      cursor: pointer;
-      transition: border-color 0.25s;
-    }
-    button:hover {
-      border-color: #646cff;
-    }
-    button:focus,
-    button:focus-visible {
-      outline: 4px auto -webkit-focus-ring-color;
+    .repo-description {
+      color: #aaa;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      flex-grow: 1;
+      margin: 0 0 1rem 0;
     }
 
+    .repo-footer {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .language {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: #888;
+    }
+
+    .language-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem 0;
+      color: #666;
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Light mode adjustments */
     @media (prefers-color-scheme: light) {
-      a:hover {
-        color: #747bff;
+      .social-link {
+        background: #f0f0f0;
+        color: #333;
       }
-      button {
-        background-color: #f9f9f9;
+
+      .social-link:hover {
+        background: #e0e0e0;
+      }
+
+      .about {
+        background: rgba(0, 0, 0, 0.03);
+        border-color: rgba(0, 0, 0, 0.1);
+      }
+
+      .about p {
+        color: #555;
+      }
+
+      .repo-card {
+        background: rgba(0, 0, 0, 0.03);
+        border-color: rgba(0, 0, 0, 0.1);
+      }
+
+      .repo-description {
+        color: #555;
+      }
+
+      footer {
+        border-color: rgba(0, 0, 0, 0.1);
+        color: #888;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      :host {
+        padding: 1rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .placeholder-avatar,
+      .avatar-image {
+        width: 120px;
+        height: 120px;
+      }
+
+      .placeholder-avatar svg {
+        width: 60px;
+        height: 60px;
       }
     }
   `
