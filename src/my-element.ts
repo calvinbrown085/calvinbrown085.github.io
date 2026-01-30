@@ -1,6 +1,7 @@
 import { LitElement, css, html } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import headshotImage from './calvin-headshot.jpg'
+import { blogPosts, type BlogPost } from './blog-posts'
 
 interface GitHubRepo {
   name: string
@@ -12,6 +13,9 @@ interface GitHubRepo {
 
 @customElement('my-element')
 export class MyElement extends LitElement {
+  private selectedPost: BlogPost | null = null
+  private blogPosts = blogPosts
+
   private repos: GitHubRepo[] = [
     {
       name: 'warp-prometheus',
@@ -94,6 +98,18 @@ export class MyElement extends LitElement {
           </div>
         </section>
 
+        <!-- Blog Section -->
+        <section class="blog">
+          <h2>
+            <svg viewBox="0 0 24 24" fill="currentColor" class="section-icon">
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+            </svg>
+            Golang Blog
+          </h2>
+          
+          ${this.selectedPost ? this._renderFullPost() : this._renderPostList()}
+        </section>
+
         <!-- Footer -->
         <footer>
           
@@ -107,6 +123,71 @@ export class MyElement extends LitElement {
         </footer>
       </div>
     `
+  }
+
+  private _renderPostList() {
+    return html`
+      <div class="blog-grid">
+        ${this.blogPosts.map(post => html`
+          <article class="blog-card" @click=${() => this._openPost(post)}>
+            <div class="blog-header">
+              <span class="blog-date">${this._formatDate(post.date)}</span>
+              <div class="blog-tags">
+                ${post.tags.map(tag => html`<span class="tag">${tag}</span>`)}
+              </div>
+            </div>
+            <h3 class="blog-title">${post.title}</h3>
+            <p class="blog-summary">${post.summary}</p>
+            <span class="read-more">Read more →</span>
+          </article>
+        `)}
+        
+        <article class="blog-card add-more">
+          <p>More posts coming soon...</p>
+        </article>
+      </div>
+    `
+  }
+
+  private _renderFullPost() {
+    const post = this.selectedPost!
+    return html`
+      <div class="full-post">
+        <button class="back-button" @click=${this._closePost}>
+          ← Back to all posts
+        </button>
+        <article class="post-content">
+          <div class="post-meta">
+            <span class="blog-date">${this._formatDate(post.date)}</span>
+            <div class="blog-tags">
+              ${post.tags.map(tag => html`<span class="tag">${tag}</span>`)}
+            </div>
+          </div>
+          <div .innerHTML=${post.content}></div>
+        </article>
+      </div>
+    `
+  }
+
+  private _openPost(post: BlogPost) {
+    this.selectedPost = post
+    this.requestUpdate()
+    // Scroll to top of blog section
+    this.shadowRoot?.querySelector('.blog')?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  private _closePost() {
+    this.selectedPost = null
+    this.requestUpdate()
+  }
+
+  private _formatDate(dateStr: string): string {
+    const date = new Date(dateStr)
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    })
   }
 
   static styles = css`
@@ -313,6 +394,175 @@ export class MyElement extends LitElement {
       border-radius: 50%;
     }
 
+    /* Blog Section */
+    .blog h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-icon {
+      width: 24px;
+      height: 24px;
+      color: #00ADD8;
+    }
+
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .blog-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .blog-card:hover {
+      border-color: #00ADD8;
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0, 173, 216, 0.2);
+    }
+
+    .blog-card.add-more {
+      border-style: dashed;
+      justify-content: center;
+      align-items: center;
+      color: #666;
+      cursor: default;
+    }
+
+    .blog-card.add-more:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .blog-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .blog-date {
+      font-size: 0.85rem;
+      color: #888;
+    }
+
+    .blog-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      background: rgba(0, 173, 216, 0.2);
+      color: #00ADD8;
+      border-radius: 4px;
+    }
+
+    .blog-title {
+      font-size: 1.25rem;
+      margin: 0 0 0.75rem 0;
+      color: #fff;
+    }
+
+    .blog-summary {
+      color: #aaa;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      flex-grow: 1;
+      margin: 0 0 1rem 0;
+    }
+
+    .read-more {
+      color: #00ADD8;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    /* Full Post View */
+    .full-post {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 2rem;
+    }
+
+    .back-button {
+      background: none;
+      border: none;
+      color: #00ADD8;
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 0;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .back-button:hover {
+      text-decoration: underline;
+    }
+
+    .post-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .post-content {
+      line-height: 1.8;
+    }
+
+    .post-content h3 {
+      font-size: 1.75rem;
+      margin: 0 0 1rem 0;
+    }
+
+    .post-content h4 {
+      font-size: 1.25rem;
+      margin: 1.5rem 0 0.75rem 0;
+      color: #00ADD8;
+    }
+
+    .post-content p {
+      color: #bbb;
+      margin-bottom: 1rem;
+    }
+
+    .post-content pre {
+      background: #1a1a1a;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+
+    .post-content code {
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', monospace;
+      font-size: 0.9rem;
+      color: #e0e0e0;
+    }
+
     /* Footer */
     footer {
       text-align: center;
@@ -349,6 +599,45 @@ export class MyElement extends LitElement {
 
       .repo-description {
         color: #555;
+      }
+
+      .blog-card {
+        background: rgba(0, 0, 0, 0.03);
+        border-color: rgba(0, 0, 0, 0.1);
+      }
+
+      .blog-card:hover {
+        border-color: #00ADD8;
+      }
+
+      .blog-card.add-more:hover {
+        border-color: rgba(0, 0, 0, 0.1);
+      }
+
+      .blog-title {
+        color: #213547;
+      }
+
+      .blog-summary {
+        color: #555;
+      }
+
+      .full-post {
+        background: rgba(0, 0, 0, 0.03);
+        border-color: rgba(0, 0, 0, 0.1);
+      }
+
+      .post-content p {
+        color: #555;
+      }
+
+      .post-content pre {
+        background: #f5f5f5;
+        border-color: rgba(0, 0, 0, 0.1);
+      }
+
+      .post-content code {
+        color: #333;
       }
 
       footer {
