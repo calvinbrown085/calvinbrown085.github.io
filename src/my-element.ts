@@ -2,6 +2,7 @@ import { LitElement, css, html } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import headshotImage from './calvin-headshot.jpg'
 import { blogPosts, type BlogPost } from './blog-posts'
+import './snake-game'
 
 interface GitHubRepo {
   name: string
@@ -11,14 +12,17 @@ interface GitHubRepo {
   languageColor: string
 }
 
+type ViewType = 'home' | 'games'
+
 @customElement('my-element')
 export class MyElement extends LitElement {
   private selectedPost: BlogPost | null = null
   private blogPosts = blogPosts
+  private currentView: ViewType = 'home'
 
   connectedCallback() {
     super.connectedCallback()
-    // Check for post ID in URL hash on load
+    // Check for hash on load
     this._checkUrlHash()
     // Listen for hash changes (browser back/forward)
     window.addEventListener('hashchange', this._handleHashChange)
@@ -35,17 +39,47 @@ export class MyElement extends LitElement {
 
   private _checkUrlHash() {
     const hash = window.location.hash.slice(1) // Remove the #
+    
+    // Check for games page
+    if (hash === 'games') {
+      this.currentView = 'games'
+      this.selectedPost = null
+      this.requestUpdate()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+    
+    // Check for blog post
     if (hash) {
       const post = this.blogPosts.find(p => p.id === hash)
       if (post) {
+        this.currentView = 'home'
         this.selectedPost = post
         this.requestUpdate()
         // Wait for render, then scroll to blog section
         this.updateComplete.then(() => {
           this.shadowRoot?.querySelector('.blog')?.scrollIntoView({ behavior: 'smooth' })
         })
+        return
       }
     }
+    
+    // Default to home
+    this.currentView = 'home'
+    this.selectedPost = null
+    this.requestUpdate()
+  }
+
+  private _navigateTo(view: ViewType) {
+    if (view === 'home') {
+      window.history.pushState(null, '', window.location.pathname)
+    } else {
+      window.history.pushState(null, '', `#${view}`)
+    }
+    this.currentView = view
+    this.selectedPost = null
+    this.requestUpdate()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   private repos: GitHubRepo[] = [
@@ -66,6 +100,42 @@ export class MyElement extends LitElement {
   ]
 
   render() {
+    if (this.currentView === 'games') {
+      return this._renderGamesPage()
+    }
+    return this._renderHomePage()
+  }
+
+  private _renderGamesPage() {
+    return html`
+      <div class="container games-page">
+        <header class="page-header">
+          <button class="back-link" @click=${() => this._navigateTo('home')}>
+            ← Back to Home
+          </button>
+          <h1>
+            <svg viewBox="0 0 24 24" fill="currentColor" class="header-icon">
+              <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+            </svg>
+            Break from Coding
+          </h1>
+          <p class="page-subtitle">Take a break and play some games!</p>
+        </header>
+
+        <section class="game-section">
+          <h2>Snake</h2>
+          <p>Classic snake game. Eat the food, grow longer, don't hit the walls or yourself!</p>
+          <snake-game></snake-game>
+        </section>
+
+        <section class="more-games">
+          <p>More games coming soon...</p>
+        </section>
+      </div>
+    `
+  }
+
+  private _renderHomePage() {
     return html`
       <div class="container">
         <!-- Hero Section -->
@@ -140,6 +210,22 @@ export class MyElement extends LitElement {
           </h2>
           
           ${this.selectedPost ? this._renderFullPost() : this._renderPostList()}
+        </section>
+
+        <!-- Games Link -->
+        <section class="games-link-section">
+          <div class="games-link-card" @click=${() => this._navigateTo('games')}>
+            <div class="games-link-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+              </svg>
+            </div>
+            <div class="games-link-content">
+              <h3>Break from Coding</h3>
+              <p>Need a break? Play some games!</p>
+            </div>
+            <div class="games-link-arrow">→</div>
+          </div>
         </section>
 
         <!-- Footer -->
@@ -599,6 +685,152 @@ export class MyElement extends LitElement {
       color: #e0e0e0;
     }
 
+    /* Games Link Section */
+    .games-link-section {
+      margin: 1rem 0;
+    }
+
+    .games-link-card {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 142, 83, 0.1) 100%);
+      border: 1px solid rgba(255, 107, 107, 0.3);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .games-link-card:hover {
+      border-color: #ff6b6b;
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(255, 107, 107, 0.2);
+    }
+
+    .games-link-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .games-link-icon svg {
+      width: 32px;
+      height: 32px;
+      color: white;
+    }
+
+    .games-link-content {
+      flex-grow: 1;
+    }
+
+    .games-link-content h3 {
+      margin: 0 0 0.25rem 0;
+      font-size: 1.25rem;
+      color: #ff6b6b;
+    }
+
+    .games-link-content p {
+      margin: 0;
+      color: #888;
+    }
+
+    .games-link-arrow {
+      font-size: 1.5rem;
+      color: #ff6b6b;
+      transition: transform 0.2s ease;
+    }
+
+    .games-link-card:hover .games-link-arrow {
+      transform: translateX(4px);
+    }
+
+    /* Games Page */
+    .games-page {
+      min-height: 100vh;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .back-link {
+      background: none;
+      border: none;
+      color: #667eea;
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 0.5rem 0;
+      margin-bottom: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    .page-header h1 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 2rem;
+      margin: 0 0 0.5rem 0;
+      background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header-icon {
+      width: 32px;
+      height: 32px;
+      color: #ff6b6b;
+      /* Reset the gradient text for the icon */
+      -webkit-text-fill-color: initial;
+    }
+
+    .page-subtitle {
+      color: #888;
+      margin: 0;
+    }
+
+    .game-section {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .game-section h2 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.5rem;
+      text-align: center;
+    }
+
+    .game-section > p {
+      color: #888;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .more-games {
+      text-align: center;
+      padding: 2rem;
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      color: #666;
+    }
+
     /* Footer */
     footer {
       text-align: center;
@@ -679,6 +911,27 @@ export class MyElement extends LitElement {
       footer {
         border-color: rgba(0, 0, 0, 0.1);
         color: #888;
+      }
+
+      .games-link-card {
+        background: linear-gradient(135deg, rgba(255, 107, 107, 0.08) 0%, rgba(255, 142, 83, 0.08) 100%);
+      }
+
+      .games-link-content h3 {
+        color: #e55555;
+      }
+
+      .games-link-content p {
+        color: #666;
+      }
+
+      .game-section {
+        background: rgba(0, 0, 0, 0.03);
+        border-color: rgba(0, 0, 0, 0.1);
+      }
+
+      .more-games {
+        border-color: rgba(0, 0, 0, 0.2);
       }
     }
 
