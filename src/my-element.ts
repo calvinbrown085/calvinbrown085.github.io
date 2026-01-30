@@ -289,11 +289,10 @@ export class MyElement extends LitElement {
             ← Back to Home
           </button>
           <h1>
-            <span class="now-icon">📍</span>
-            Now
+            <span class="now-icon">📚</span>
+            Reading
           </h1>
-          <p class="page-subtitle">What I'm currently up to</p>
-          <p class="now-updated">Last updated: January 2026</p>
+          <p class="page-subtitle">What I'm currently reading</p>
         </header>
 
         <div class="now-content">
@@ -308,9 +307,6 @@ export class MyElement extends LitElement {
           </section>
         </div>
 
-        <div class="now-footer">
-          <p>This is a <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer">/now page</a>. You should make one too!</p>
-        </div>
       </div>
     `
   }
@@ -428,11 +424,11 @@ export class MyElement extends LitElement {
           <div class="quick-links-grid">
             <div class="quick-link-card now-link" @click=${() => this._navigateTo('now')}>
               <div class="quick-link-icon">
-                <span>📍</span>
+                <span>📚</span>
               </div>
               <div class="quick-link-content">
-                <h3>Now</h3>
-                <p>What I'm currently up to</p>
+                <h3>Reading</h3>
+                <p>What I'm currently reading</p>
               </div>
               <div class="quick-link-arrow">→</div>
             </div>
