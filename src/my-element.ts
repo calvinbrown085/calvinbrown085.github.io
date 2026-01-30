@@ -3,6 +3,7 @@ import { customElement } from 'lit/decorators.js'
 import headshotImage from './calvin-headshot.jpg'
 import { blogPosts, type BlogPost } from './blog-posts'
 import './snake-game'
+import './solitaire-game'
 
 interface GitHubRepo {
   name: string
@@ -12,13 +13,38 @@ interface GitHubRepo {
   languageColor: string
 }
 
-type ViewType = 'home' | 'games'
+type ViewType = 'home' | 'games' | 'game-snake' | 'game-solitaire'
+
+interface GameInfo {
+  id: string
+  name: string
+  description: string
+  icon: string
+  color: string
+}
 
 @customElement('my-element')
 export class MyElement extends LitElement {
   private selectedPost: BlogPost | null = null
   private blogPosts = blogPosts
   private currentView: ViewType = 'home'
+
+  private games: GameInfo[] = [
+    {
+      id: 'snake',
+      name: 'Snake',
+      description: 'Classic snake game. Eat food, grow longer, avoid walls!',
+      icon: '🐍',
+      color: '#00ADD8'
+    },
+    {
+      id: 'solitaire',
+      name: 'Solitaire',
+      description: 'Classic Klondike solitaire card game.',
+      icon: '🃏',
+      color: '#e74c3c'
+    }
+  ]
 
   connectedCallback() {
     super.connectedCallback()
@@ -40,7 +66,24 @@ export class MyElement extends LitElement {
   private _checkUrlHash() {
     const hash = window.location.hash.slice(1) // Remove the #
     
-    // Check for games page
+    // Check for individual game pages
+    if (hash === 'games/snake') {
+      this.currentView = 'game-snake'
+      this.selectedPost = null
+      this.requestUpdate()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+    
+    if (hash === 'games/solitaire') {
+      this.currentView = 'game-solitaire'
+      this.selectedPost = null
+      this.requestUpdate()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+    
+    // Check for games hub page
     if (hash === 'games') {
       this.currentView = 'games'
       this.selectedPost = null
@@ -70,13 +113,18 @@ export class MyElement extends LitElement {
     this.requestUpdate()
   }
 
-  private _navigateTo(view: ViewType) {
+  private _navigateTo(view: ViewType | string) {
     if (view === 'home') {
       window.history.pushState(null, '', window.location.pathname)
-    } else {
-      window.history.pushState(null, '', `#${view}`)
+      this.currentView = 'home'
+    } else if (view === 'games') {
+      window.history.pushState(null, '', '#games')
+      this.currentView = 'games'
+    } else if (view.startsWith('game-')) {
+      const gameId = view.replace('game-', '')
+      window.history.pushState(null, '', `#games/${gameId}`)
+      this.currentView = view as ViewType
     }
-    this.currentView = view
     this.selectedPost = null
     this.requestUpdate()
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -100,13 +148,19 @@ export class MyElement extends LitElement {
   ]
 
   render() {
-    if (this.currentView === 'games') {
-      return this._renderGamesPage()
+    switch (this.currentView) {
+      case 'games':
+        return this._renderGamesHub()
+      case 'game-snake':
+        return this._renderGamePage('snake')
+      case 'game-solitaire':
+        return this._renderGamePage('solitaire')
+      default:
+        return this._renderHomePage()
     }
-    return this._renderHomePage()
   }
 
-  private _renderGamesPage() {
+  private _renderGamesHub() {
     return html`
       <div class="container games-page">
         <header class="page-header">
@@ -122,14 +176,43 @@ export class MyElement extends LitElement {
           <p class="page-subtitle">Take a break and play some games!</p>
         </header>
 
-        <section class="game-section">
-          <h2>Snake</h2>
-          <p>Classic snake game. Eat the food, grow longer, don't hit the walls or yourself!</p>
-          <snake-game></snake-game>
+        <section class="games-grid">
+          ${this.games.map(game => html`
+            <div class="game-card" @click=${() => this._navigateTo(`game-${game.id}`)}>
+              <div class="game-card-icon" style="background: ${game.color}">
+                <span>${game.icon}</span>
+              </div>
+              <div class="game-card-content">
+                <h3>${game.name}</h3>
+                <p>${game.description}</p>
+              </div>
+              <div class="game-card-arrow">→</div>
+            </div>
+          `)}
         </section>
+      </div>
+    `
+  }
 
-        <section class="more-games">
-          <p>More games coming soon...</p>
+  private _renderGamePage(gameId: string) {
+    const game = this.games.find(g => g.id === gameId)
+    if (!game) return html`<p>Game not found</p>`
+
+    return html`
+      <div class="container game-page">
+        <header class="page-header">
+          <button class="back-link" @click=${() => this._navigateTo('games')}>
+            ← Back to Games
+          </button>
+          <h1>
+            <span class="game-emoji">${game.icon}</span>
+            ${game.name}
+          </h1>
+        </header>
+
+        <section class="game-container">
+          ${gameId === 'snake' ? html`<snake-game></snake-game>` : ''}
+          ${gameId === 'solitaire' ? html`<solitaire-game></solitaire-game>` : ''}
         </section>
       </div>
     `
@@ -153,6 +236,12 @@ export class MyElement extends LitElement {
                 <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
               </svg>
               GitHub
+            </a>
+            <a href="https://www.linkedin.com/in/calvin-brown-6ab208aa" target="_blank" rel="noopener noreferrer" class="social-link linkedin">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+              LinkedIn
             </a>
           </div>
         </section>
@@ -193,10 +282,7 @@ export class MyElement extends LitElement {
               </a>
             `)}
             
-            <!-- Add more repo placeholder -->
-            <div class="repo-card add-more">
-              <p>More projects coming soon...</p>
-            </div>
+          
           </div>
         </section>
 
@@ -232,8 +318,6 @@ export class MyElement extends LitElement {
         <footer>
           
           <p>
-            <a href="https://github.com/calvinbrown085" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <p><a href="https://www.linkedin.com/in/calvin-brown-6ab208aa" target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
             <p><a href="mailto:calvin.brown@jackhenry.com">me@calvinbrown.dev</a></p> 
             
           </p>
@@ -399,6 +483,10 @@ export class MyElement extends LitElement {
     .social-link:hover {
       background: #333;
       transform: translateY(-2px);
+    }
+
+    .social-link.linkedin:hover {
+      background: #0077b5;
     }
 
     .social-link svg {
@@ -803,32 +891,83 @@ export class MyElement extends LitElement {
       margin: 0;
     }
 
-    .game-section {
+    /* Games Grid */
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .game-card {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 1.5rem;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    .game-section h2 {
-      margin: 0 0 0.5rem 0;
-      font-size: 1.5rem;
-      text-align: center;
-    }
-
-    .game-section > p {
-      color: #888;
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .more-games {
-      text-align: center;
-      padding: 2rem;
-      border: 1px dashed rgba(255, 255, 255, 0.2);
       border-radius: 12px;
-      color: #666;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .game-card:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .game-card-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 2rem;
+    }
+
+    .game-card-content {
+      flex-grow: 1;
+    }
+
+    .game-card-content h3 {
+      margin: 0 0 0.25rem 0;
+      font-size: 1.25rem;
+    }
+
+    .game-card-content p {
+      margin: 0;
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    .game-card-arrow {
+      font-size: 1.5rem;
+      color: #888;
+      transition: transform 0.2s ease;
+    }
+
+    .game-card:hover .game-card-arrow {
+      transform: translateX(4px);
+      color: #fff;
+    }
+
+    /* Individual Game Page */
+    .game-page .page-header h1 {
+      background: none;
+      -webkit-text-fill-color: initial;
+      color: #fff;
+    }
+
+    .game-emoji {
+      font-size: 2rem;
+      margin-right: 0.25rem;
+    }
+
+    .game-container {
+      display: flex;
+      justify-content: center;
     }
 
     /* Footer */
@@ -849,6 +988,11 @@ export class MyElement extends LitElement {
 
       .social-link:hover {
         background: #e0e0e0;
+      }
+
+      .social-link.linkedin:hover {
+        background: #0077b5;
+        color: white;
       }
 
       .about {
@@ -925,13 +1069,30 @@ export class MyElement extends LitElement {
         color: #666;
       }
 
-      .game-section {
+      .game-card {
         background: rgba(0, 0, 0, 0.03);
         border-color: rgba(0, 0, 0, 0.1);
       }
 
-      .more-games {
-        border-color: rgba(0, 0, 0, 0.2);
+      .game-card:hover {
+        border-color: rgba(0, 0, 0, 0.3);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .game-card-content p {
+        color: #666;
+      }
+
+      .game-card-arrow {
+        color: #999;
+      }
+
+      .game-card:hover .game-card-arrow {
+        color: #333;
+      }
+
+      .game-page .page-header h1 {
+        color: #213547;
       }
     }
 
