@@ -1,0 +1,80 @@
+name: Update CLAUDE.md
+
+on:
+  push:
+    branches: ["master"]
+    paths-ignore:
+      - "CLAUDE.md"
+      - "dist/**"
+
+permissions:
+  contents: write
+
+jobs:
+  update-claude-md:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Get diff of merged changes
+        id: diff
+        run: |
+          # Exclude build artifacts, lock files, and CLAUDE.md itself
+          DIFF=$(git diff HEAD~1..HEAD \
+            -- ':!dist/' ':!pnpm-lock.yaml' ':!*.jpg' ':!*.png' ':!*.svg' ':!CLAUDE.md' \
+            | head -c 20000)
+          if [ -z "$DIFF" ]; then
+            echo "empty=true" >> $GITHUB_OUTPUT
+          else
+            echo "empty=false" >> $GITHUB_OUTPUT
+            # Write diff to a file to avoid quoting issues
+            echo "$DIFF" > /tmp/changes.diff
+          fi
+
+      - name: Update CLAUDE.md via Claude Code
+        if: steps.diff.outputs.empty == 'false'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          DIFF=$(cat /tmp/changes.diff)
+          claude -p "You are maintaining the CLAUDE.md developer guide for this repository.
+
+          The following changes were just merged to the master branch. Review CLAUDE.md and update it if—and only if—the changes introduce something genuinely worth documenting for future developers:
+          - New or changed development commands / workflow steps
+          - New architectural patterns or conventions adopted by the codebase
+          - New routing entries (e.g. a new game page was added)
+          - Non-obvious constraints or gotchas introduced
+
+          Do NOT add:
+          - Implementation details easily discovered by reading the code
+          - Descriptions of every new file or component
+          - Generic best practices
+
+          If nothing in the diff warrants a CLAUDE.md update, make no changes.
+
+          Git diff of merged changes:
+
+          $DIFF" \
+            --allowedTools "Read,Edit,Glob,Grep" \
+            --max-turns 10
+
+      - name: Commit if CLAUDE.md changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add CLAUDE.md
+          if git diff --staged --quiet; then
+            echo "CLAUDE.md unchanged — no commit needed"
+          else
+            git commit -m "docs: auto-update CLAUDE.md [skip ci]"
+            git push
+          fi
