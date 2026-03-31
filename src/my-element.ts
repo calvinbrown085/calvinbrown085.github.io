@@ -344,10 +344,25 @@ export class MyElement extends LitElement {
       <div class="container">
         <!-- Hero Section -->
         <section class="hero">
-          <div class="profile-picture">
-            <img src=${headshotImage} alt="Calvin Brown" class="avatar-image" />
+          <div class="hero-bg" aria-hidden="true">
+            <span class="bubble b1"></span>
+            <span class="bubble b2"></span>
+            <span class="bubble b3"></span>
+            <span class="bubble b4"></span>
+            <span class="bubble b5"></span>
+            <span class="bubble b6"></span>
+            <span class="bubble b7"></span>
+            <span class="bubble b8"></span>
+            <span class="bubble b9"></span>
+            <span class="bubble b10"></span>
           </div>
-          
+          <div class="avatar-wrapper">
+            <div class="avatar-ring"></div>
+            <div class="profile-picture">
+              <img src=${headshotImage} alt="Calvin Brown" class="avatar-image" />
+            </div>
+          </div>
+
           <h1>Calvin Brown</h1>
           <p class="tagline">Software Engineer</p>
           
@@ -368,7 +383,7 @@ export class MyElement extends LitElement {
         </section>
 
         <!-- About Section -->
-        <section class="about">
+        <section class="about reveal-section">
           <h2>About Me</h2>
           <p>
             Welcome to my personal site! I'm a software engineer passionate about building 
@@ -381,8 +396,27 @@ export class MyElement extends LitElement {
           </p>
         </section>
 
+        <!-- Skills Section -->
+        <section class="skills reveal-section">
+          <h2>Technologies</h2>
+          <div class="skills-cloud">
+            <span class="skill-badge rust">Rust</span>
+            <span class="skill-badge go">Go</span>
+            <span class="skill-badge ts">TypeScript</span>
+            <span class="skill-badge">Scala</span>
+            <span class="skill-badge">Kafka</span>
+            <span class="skill-badge">PostgreSQL</span>
+            <span class="skill-badge">Docker</span>
+            <span class="skill-badge">Kubernetes</span>
+            <span class="skill-badge">AWS</span>
+            <span class="skill-badge">Lit</span>
+            <span class="skill-badge">gRPC</span>
+            <span class="skill-badge">GraphQL</span>
+          </div>
+        </section>
+
         <!-- Projects Section -->
-        <section class="projects">
+        <section class="projects reveal-section">
           <h2>Featured Projects</h2>
           <div class="repo-grid">
             ${this.repos.map(repo => html`
@@ -408,7 +442,7 @@ export class MyElement extends LitElement {
         </section>
 
         <!-- Blog Section -->
-        <section class="blog">
+        <section class="blog reveal-section">
           <h2>
             <svg viewBox="0 0 24 24" fill="currentColor" class="section-icon">
               <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
@@ -521,11 +555,26 @@ export class MyElement extends LitElement {
 
   private _formatDate(dateStr: string): string {
     const date = new Date(dateStr)
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
     })
+  }
+
+  protected firstUpdated() {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed')
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      { threshold: 0.1 }
+    )
+    this.shadowRoot?.querySelectorAll('.reveal-section').forEach(el => observer.observe(el))
   }
 
   static styles = css`
@@ -1220,6 +1269,186 @@ export class MyElement extends LitElement {
       color: #666;
       font-size: 0.9rem;
       border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* ── Floating bubbles ── */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 3rem 0 2rem;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero > *:not(.hero-bg) {
+      position: relative;
+      z-index: 1;
+    }
+
+    .bubble {
+      position: absolute;
+      bottom: -120px;
+      border-radius: 50%;
+      opacity: 0;
+      animation: bubble-rise linear infinite;
+    }
+
+    @keyframes bubble-rise {
+      0%   { transform: translateY(0) scale(1);   opacity: 0;   }
+      10%  { opacity: 1; }
+      90%  { opacity: 0.5; }
+      100% { transform: translateY(-420px) scale(0.7); opacity: 0; }
+    }
+
+    .b1  { width: 60px;  height: 60px;  left: 8%;   animation-duration: 9s;  animation-delay: 0s;    background: radial-gradient(circle at 35% 35%, rgba(102,126,234,0.55), rgba(102,126,234,0.05)); }
+    .b2  { width: 90px;  height: 90px;  left: 18%;  animation-duration: 13s; animation-delay: 1.5s;  background: radial-gradient(circle at 35% 35%, rgba(118,75,162,0.45), rgba(118,75,162,0.05)); }
+    .b3  { width: 40px;  height: 40px;  left: 30%;  animation-duration: 8s;  animation-delay: 3s;    background: radial-gradient(circle at 35% 35%, rgba(0,173,216,0.5),  rgba(0,173,216,0.05));  }
+    .b4  { width: 110px; height: 110px; left: 45%;  animation-duration: 15s; animation-delay: 0.5s;  background: radial-gradient(circle at 35% 35%, rgba(102,126,234,0.35), rgba(102,126,234,0.02)); }
+    .b5  { width: 55px;  height: 55px;  left: 58%;  animation-duration: 10s; animation-delay: 2s;    background: radial-gradient(circle at 35% 35%, rgba(0,173,216,0.4),  rgba(0,173,216,0.05));  }
+    .b6  { width: 75px;  height: 75px;  left: 70%;  animation-duration: 12s; animation-delay: 4s;    background: radial-gradient(circle at 35% 35%, rgba(118,75,162,0.5),  rgba(118,75,162,0.05)); }
+    .b7  { width: 45px;  height: 45px;  left: 80%;  animation-duration: 7s;  animation-delay: 1s;    background: radial-gradient(circle at 35% 35%, rgba(102,126,234,0.6), rgba(102,126,234,0.05)); }
+    .b8  { width: 85px;  height: 85px;  left: 90%;  animation-duration: 11s; animation-delay: 3.5s;  background: radial-gradient(circle at 35% 35%, rgba(0,173,216,0.35), rgba(0,173,216,0.02));  }
+    .b9  { width: 50px;  height: 50px;  left: 25%;  animation-duration: 14s; animation-delay: 5s;    background: radial-gradient(circle at 35% 35%, rgba(118,75,162,0.4),  rgba(118,75,162,0.05)); }
+    .b10 { width: 70px;  height: 70px;  left: 55%;  animation-duration: 16s; animation-delay: 6s;    background: radial-gradient(circle at 35% 35%, rgba(102,126,234,0.45), rgba(102,126,234,0.05)); }
+
+    /* ── Animated avatar ring ── */
+    .avatar-wrapper {
+      position: relative;
+      width: 158px;
+      height: 158px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .avatar-ring {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, #667eea, #764ba2, #00ADD8, #667eea);
+      animation: spin-ring 4s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes spin-ring {
+      to { transform: rotate(360deg); }
+    }
+
+    .avatar-wrapper .profile-picture {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      padding: 3px;
+      background: #1a1a1a;
+      border-radius: 50%;
+      width: 150px;
+      height: 150px;
+      box-sizing: border-box;
+    }
+
+    .avatar-wrapper .avatar-image {
+      width: 144px;
+      height: 144px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── Skills section ── */
+    .skills h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .skills-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .skill-badge {
+      display: inline-block;
+      padding: 0.45rem 1rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #ccc;
+      transition: all 0.2s ease;
+      cursor: default;
+      backdrop-filter: blur(4px);
+    }
+
+    .skill-badge:hover {
+      transform: translateY(-3px);
+      border-color: rgba(102, 126, 234, 0.5);
+      background: rgba(102, 126, 234, 0.12);
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.25);
+    }
+
+    .skill-badge.rust {
+      border-color: rgba(222, 165, 132, 0.4);
+      color: #dea584;
+    }
+
+    .skill-badge.rust:hover {
+      background: rgba(222, 165, 132, 0.12);
+      box-shadow: 0 6px 20px rgba(222, 165, 132, 0.2);
+    }
+
+    .skill-badge.go {
+      border-color: rgba(0, 173, 216, 0.4);
+      color: #00ADD8;
+    }
+
+    .skill-badge.go:hover {
+      background: rgba(0, 173, 216, 0.12);
+      box-shadow: 0 6px 20px rgba(0, 173, 216, 0.2);
+    }
+
+    .skill-badge.ts {
+      border-color: rgba(49, 120, 198, 0.4);
+      color: #4d9de0;
+    }
+
+    .skill-badge.ts:hover {
+      background: rgba(49, 120, 198, 0.12);
+      box-shadow: 0 6px 20px rgba(49, 120, 198, 0.2);
+    }
+
+    /* ── Enhanced glassmorphism cards ── */
+    .about {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .repo-card {
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .blog-card {
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    /* ── Scroll reveal animations ── */
+    .reveal-section {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal-section.revealed {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     /* Light mode adjustments */
