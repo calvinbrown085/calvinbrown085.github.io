@@ -33,6 +33,8 @@ export class MyElement extends LitElement {
   private selectedPost: BlogPost | null = null
   private blogPosts = blogPosts
   private currentView: ViewType = 'home'
+  private _activeTag: string | null = null
+  private _revealObserver: IntersectionObserver | null = null
 
   private games: GameInfo[] = [
     {
@@ -225,6 +227,13 @@ export class MyElement extends LitElement {
   ]
 
   render() {
+    return html`
+      ${this._renderNav()}
+      ${this._renderCurrentView()}
+    `
+  }
+
+  private _renderCurrentView() {
     switch (this.currentView) {
       case 'games':
         return this._renderGamesHub()
@@ -245,6 +254,22 @@ export class MyElement extends LitElement {
       default:
         return this._renderHomePage()
     }
+  }
+
+  private _renderNav() {
+    const isHome = this.currentView === 'home'
+    const isGames = this.currentView === 'games' || this.currentView.startsWith('game-')
+    const isNow = this.currentView === 'now'
+    return html`
+      <nav class="site-nav">
+        <button class="nav-brand" @click=${() => this._navigateTo('home')}>Calvin Brown</button>
+        <div class="nav-links">
+          <button class="nav-link ${isHome ? 'active' : ''}" @click=${() => this._navigateTo('home')}>Home</button>
+          <button class="nav-link ${isGames ? 'active' : ''}" @click=${() => this._navigateTo('games')}>Games</button>
+          <button class="nav-link ${isNow ? 'active' : ''}" @click=${() => this._navigateTo('now')}>Reading</button>
+        </div>
+      </nav>
+    `
   }
 
   private _renderGamesHub() {
@@ -482,11 +507,7 @@ export class MyElement extends LitElement {
 
         <!-- Footer -->
         <footer>
-          
-          <p>
-            <p><a href="mailto:calvin.brown@jackhenry.com">me@calvinbrown.dev</a></p> 
-            
-          </p>
+          <p><a href="mailto:me@calvinbrown.dev">me@calvinbrown.dev</a></p>
           <p>&copy; ${new Date().getFullYear()} Calvin Brown. Built with Lit + Vite.</p>
         </footer>
       </div>
@@ -494,9 +515,27 @@ export class MyElement extends LitElement {
   }
 
   private _renderPostList() {
+    const allTags = [...new Set(this.blogPosts.flatMap(p => p.tags))]
+    const filtered = this._activeTag
+      ? this.blogPosts.filter(p => p.tags.includes(this._activeTag!))
+      : this.blogPosts
     return html`
+      <div class="blog-filter-bar">
+        <button
+          class="tag-filter-btn ${!this._activeTag ? 'active' : ''}"
+          @click=${() => { this._activeTag = null; this.requestUpdate() }}>
+          All
+        </button>
+        ${allTags.map(tag => html`
+          <button
+            class="tag-filter-btn ${this._activeTag === tag ? 'active' : ''}"
+            @click=${(e: Event) => { e.stopPropagation(); this._activeTag = tag; this.requestUpdate() }}>
+            ${tag}
+          </button>
+        `)}
+      </div>
       <div class="blog-grid">
-        ${this.blogPosts.map(post => html`
+        ${filtered.map(post => html`
           <article class="blog-card" @click=${() => this._openPost(post)}>
             <div class="blog-header">
               <span class="blog-date">${this._formatDate(post.date)}</span>
@@ -506,13 +545,21 @@ export class MyElement extends LitElement {
             </div>
             <h3 class="blog-title">${post.title}</h3>
             <p class="blog-summary">${post.summary}</p>
-            <span class="read-more">Read more →</span>
+            <div class="blog-card-footer">
+              <span class="read-more">Read more →</span>
+              <span class="reading-time">${this._readingTime(post.content)} min read</span>
+            </div>
           </article>
         `)}
-        
-        <article class="blog-card add-more">
-          <p>More posts coming soon...</p>
-        </article>
+        ${filtered.length === 0 ? html`
+          <article class="blog-card add-more">
+            <p>No posts with this tag yet.</p>
+          </article>
+        ` : html`
+          <article class="blog-card add-more">
+            <p>More posts coming soon...</p>
+          </article>
+        `}
       </div>
     `
   }
@@ -553,6 +600,12 @@ export class MyElement extends LitElement {
     this.requestUpdate()
   }
 
+  private _readingTime(content: string): number {
+    const text = content.replace(/<[^>]*>/g, ' ')
+    const words = text.trim().split(/\s+/).filter(w => w.length > 0).length
+    return Math.max(1, Math.ceil(words / 200))
+  }
+
   private _formatDate(dateStr: string): string {
     const date = new Date(dateStr)
     return date.toLocaleDateString('en-US', {
@@ -563,18 +616,28 @@ export class MyElement extends LitElement {
   }
 
   protected firstUpdated() {
-    const observer = new IntersectionObserver(
+    this._revealObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('revealed')
-            observer.unobserve(entry.target)
+            this._revealObserver?.unobserve(entry.target)
           }
         })
       },
       { threshold: 0.1 }
     )
-    this.shadowRoot?.querySelectorAll('.reveal-section').forEach(el => observer.observe(el))
+    this._observeRevealSections()
+  }
+
+  protected updated() {
+    this._observeRevealSections()
+  }
+
+  private _observeRevealSections() {
+    this.shadowRoot?.querySelectorAll('.reveal-section:not(.revealed)').forEach(el => {
+      this._revealObserver?.observe(el)
+    })
   }
 
   static styles = css`
@@ -1439,6 +1502,100 @@ export class MyElement extends LitElement {
       -webkit-backdrop-filter: blur(8px);
     }
 
+    /* ── Site navigation ── */
+    .site-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      margin-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-brand {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #667eea;
+      padding: 0;
+      letter-spacing: -0.02em;
+      transition: color 0.15s ease;
+    }
+
+    .nav-brand:hover {
+      color: #764ba2;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    .nav-link {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.875rem;
+      color: #888;
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .nav-link:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #ddd;
+    }
+
+    .nav-link.active {
+      color: #fff;
+      background: rgba(102, 126, 234, 0.18);
+    }
+
+    /* ── Blog tag filter ── */
+    .blog-filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tag-filter-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      color: #aaa;
+      cursor: pointer;
+      font-size: 0.8rem;
+      padding: 0.3rem 0.75rem;
+      transition: all 0.15s ease;
+    }
+
+    .tag-filter-btn:hover {
+      border-color: #00ADD8;
+      color: #00ADD8;
+    }
+
+    .tag-filter-btn.active {
+      background: rgba(0, 173, 216, 0.15);
+      border-color: #00ADD8;
+      color: #00ADD8;
+    }
+
+    /* ── Blog card footer (read more + reading time) ── */
+    .blog-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .reading-time {
+      font-size: 0.8rem;
+      color: #666;
+    }
+
     /* ── Scroll reveal animations ── */
     .reveal-section {
       opacity: 0;
@@ -1453,6 +1610,45 @@ export class MyElement extends LitElement {
 
     /* Light mode adjustments */
     @media (prefers-color-scheme: light) {
+      .site-nav {
+        border-bottom-color: rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-link:hover {
+        background: rgba(0, 0, 0, 0.05);
+        color: #213547;
+      }
+
+      .nav-link.active {
+        color: #213547;
+        background: rgba(102, 126, 234, 0.1);
+      }
+
+      .tagline {
+        color: #555;
+      }
+
+      .tag-filter-btn {
+        background: rgba(0, 0, 0, 0.03);
+        border-color: rgba(0, 0, 0, 0.12);
+        color: #555;
+      }
+
+      .tag-filter-btn:hover {
+        color: #00ADD8;
+        border-color: #00ADD8;
+      }
+
+      .tag-filter-btn.active {
+        background: rgba(0, 173, 216, 0.08);
+        color: #00ADD8;
+        border-color: #00ADD8;
+      }
+
+      .reading-time {
+        color: #999;
+      }
+
       .social-link {
         background: #f0f0f0;
         color: #333;
@@ -1600,6 +1796,24 @@ export class MyElement extends LitElement {
       .placeholder-avatar svg {
         width: 60px;
         height: 60px;
+      }
+
+      .nav-brand {
+        font-size: 0.9rem;
+      }
+
+      .nav-link {
+        font-size: 0.8rem;
+        padding: 0.35rem 0.5rem;
+      }
+
+      .blog-filter-bar {
+        gap: 0.4rem;
+      }
+
+      .tag-filter-btn {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.6rem;
       }
     }
   `
