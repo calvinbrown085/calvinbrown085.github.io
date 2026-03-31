@@ -34,6 +34,7 @@ export class MyElement extends LitElement {
   private blogPosts = blogPosts
   private currentView: ViewType = 'home'
   private _activeTag: string | null = null
+  private _revealObserver: IntersectionObserver | null = null
 
   private games: GameInfo[] = [
     {
@@ -615,18 +616,28 @@ export class MyElement extends LitElement {
   }
 
   protected firstUpdated() {
-    const observer = new IntersectionObserver(
+    this._revealObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('revealed')
-            observer.unobserve(entry.target)
+            this._revealObserver?.unobserve(entry.target)
           }
         })
       },
       { threshold: 0.1 }
     )
-    this.shadowRoot?.querySelectorAll('.reveal-section').forEach(el => observer.observe(el))
+    this._observeRevealSections()
+  }
+
+  protected updated() {
+    this._observeRevealSections()
+  }
+
+  private _observeRevealSections() {
+    this.shadowRoot?.querySelectorAll('.reveal-section:not(.revealed)').forEach(el => {
+      this._revealObserver?.observe(el)
+    })
   }
 
   static styles = css`
