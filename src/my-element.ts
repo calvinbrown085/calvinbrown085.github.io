@@ -18,7 +18,7 @@ interface GitHubRepo {
   languageColor: string
 }
 
-type ViewType = 'home' | 'games' | 'now' | 'game-snake' | 'game-solitaire' | 'game-tictactoe' | 'game-checkers' | 'game-connectfour' | 'game-flappybird'
+type ViewType = 'home' | 'games' | 'now' | 'blog' | 'blog-post' | 'game-snake' | 'game-solitaire' | 'game-tictactoe' | 'game-checkers' | 'game-connectfour' | 'game-flappybird'
 
 interface GameInfo {
   id: string
@@ -168,21 +168,41 @@ export class MyElement extends LitElement {
       return
     }
     
-    // Check for blog post
-    if (hash) {
-      const post = this.blogPosts.find(p => p.id === hash)
+    // Check for blog list page
+    if (hash === 'blog') {
+      this.currentView = 'blog'
+      this.selectedPost = null
+      this.requestUpdate()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+
+    // Check for blog post (new URL format: #blog/post-id)
+    if (hash.startsWith('blog/')) {
+      const postId = hash.slice(5)
+      const post = this.blogPosts.find(p => p.id === postId)
       if (post) {
-        this.currentView = 'home'
+        this.currentView = 'blog-post'
         this.selectedPost = post
         this.requestUpdate()
-        // Wait for render, then scroll to blog section
-        this.updateComplete.then(() => {
-          this.shadowRoot?.querySelector('.blog')?.scrollIntoView({ behavior: 'smooth' })
-        })
+        window.scrollTo({ top: 0, behavior: 'smooth' })
         return
       }
     }
-    
+
+    // Backward compat: old #post-id links redirect to #blog/post-id
+    if (hash) {
+      const post = this.blogPosts.find(p => p.id === hash)
+      if (post) {
+        window.history.replaceState(null, '', `#blog/${post.id}`)
+        this.currentView = 'blog-post'
+        this.selectedPost = post
+        this.requestUpdate()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        return
+      }
+    }
+
     // Default to home
     this.currentView = 'home'
     this.selectedPost = null
@@ -199,6 +219,9 @@ export class MyElement extends LitElement {
     } else if (view === 'now') {
       window.history.pushState(null, '', '#now')
       this.currentView = 'now'
+    } else if (view === 'blog') {
+      window.history.pushState(null, '', '#blog')
+      this.currentView = 'blog'
     } else if (view.startsWith('game-')) {
       const gameId = view.replace('game-', '')
       window.history.pushState(null, '', `#games/${gameId}`)
@@ -235,6 +258,10 @@ export class MyElement extends LitElement {
 
   private _renderCurrentView() {
     switch (this.currentView) {
+      case 'blog':
+        return this._renderBlogPage()
+      case 'blog-post':
+        return this._renderBlogPostPage()
       case 'games':
         return this._renderGamesHub()
       case 'now':
@@ -260,16 +287,135 @@ export class MyElement extends LitElement {
     const isHome = this.currentView === 'home'
     const isGames = this.currentView === 'games' || this.currentView.startsWith('game-')
     const isNow = this.currentView === 'now'
+    const isBlog = this.currentView === 'blog' || this.currentView === 'blog-post'
     return html`
       <nav class="site-nav">
         <button class="nav-brand" @click=${() => this._navigateTo('home')}>Calvin Brown</button>
         <div class="nav-links">
           <button class="nav-link ${isHome ? 'active' : ''}" @click=${() => this._navigateTo('home')}>Home</button>
+          <button class="nav-link ${isBlog ? 'active' : ''}" @click=${() => this._navigateTo('blog')}>Blog</button>
           <button class="nav-link ${isGames ? 'active' : ''}" @click=${() => this._navigateTo('games')}>Games</button>
           <button class="nav-link ${isNow ? 'active' : ''}" @click=${() => this._navigateTo('now')}>Reading</button>
         </div>
       </nav>
     `
+  }
+
+  private _renderBlogPage() {
+    const allTags = [...new Set(this.blogPosts.flatMap(p => p.tags))]
+    const filtered = this._activeTag
+      ? this.blogPosts.filter(p => p.tags.includes(this._activeTag!))
+      : this.blogPosts
+    return html`
+      <div class="container blog-page">
+        <header class="page-header">
+          <button class="back-link" @click=${() => this._navigateTo('home')}>
+            ← Back to Home
+          </button>
+          <h1 class="blog-page-title">
+            <svg viewBox="0 0 24 24" fill="currentColor" class="header-icon blog-header-icon">
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+            </svg>
+            Blog
+          </h1>
+          <p class="page-subtitle">Thoughts on software engineering</p>
+        </header>
+
+        <div class="blog-filter-bar">
+          <button
+            class="tag-filter-btn ${!this._activeTag ? 'active' : ''}"
+            @click=${() => { this._activeTag = null; this.requestUpdate() }}>
+            All
+          </button>
+          ${allTags.map(tag => html`
+            <button
+              class="tag-filter-btn ${this._activeTag === tag ? 'active' : ''}"
+              @click=${(e: Event) => { e.stopPropagation(); this._activeTag = tag; this.requestUpdate() }}>
+              ${tag}
+            </button>
+          `)}
+        </div>
+
+        <div class="blog-grid">
+          ${filtered.map(post => html`
+            <article class="blog-card" @click=${() => this._openPost(post)}>
+              <div class="blog-header">
+                <span class="blog-date">${this._formatDate(post.date)}</span>
+                <div class="blog-tags">
+                  ${post.tags.map(tag => html`<span class="tag">${tag}</span>`)}
+                </div>
+              </div>
+              <h3 class="blog-title">${post.title}</h3>
+              <p class="blog-summary">${post.summary}</p>
+              <div class="blog-card-footer">
+                <span class="read-more">Read more →</span>
+                <span class="reading-time">${this._readingTime(post.content)} min read</span>
+              </div>
+            </article>
+          `)}
+          ${filtered.length === 0 ? html`
+            <article class="blog-card add-more">
+              <p>No posts with this tag yet.</p>
+            </article>
+          ` : ''}
+        </div>
+      </div>
+    `
+  }
+
+  private _renderBlogPostPage() {
+    const post = this.selectedPost!
+    const postUrl = `${window.location.origin}${window.location.pathname}#blog/${post.id}`
+    return html`
+      <div class="container blog-post-page">
+        <header class="blog-post-page-header">
+          <button class="back-link" @click=${() => this._navigateTo('blog')}>
+            ← Back to Blog
+          </button>
+          <button class="share-btn" @click=${() => this._copyPostLink(postUrl)} title="Copy link to share">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+              <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+            </svg>
+            Copy Link
+          </button>
+        </header>
+
+        <article class="post-content standalone-post">
+          <div class="post-meta">
+            <span class="blog-date">${this._formatDate(post.date)}</span>
+            <div class="blog-tags">
+              ${post.tags.map(tag => html`<span class="tag">${tag}</span>`)}
+            </div>
+          </div>
+          <div class="reading-time-banner">${this._readingTime(post.content)} min read</div>
+          <div .innerHTML=${post.content}></div>
+        </article>
+
+        <div class="post-footer-nav">
+          <button class="back-button" @click=${() => this._navigateTo('blog')}>
+            ← Back to all posts
+          </button>
+          <button class="share-btn" @click=${() => this._copyPostLink(postUrl)} title="Copy link to share">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+              <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+            </svg>
+            Copy Link
+          </button>
+        </div>
+      </div>
+    `
+  }
+
+  private _copyPostLink(url: string) {
+    navigator.clipboard.writeText(url).then(() => {
+      // Briefly show feedback by toggling a class on the button
+      const btn = this.shadowRoot?.querySelector('.share-btn') as HTMLElement | null
+      if (btn) {
+        const original = btn.textContent
+        btn.textContent = '✓ Copied!'
+        setTimeout(() => { btn.textContent = original }, 2000)
+      }
+    })
   }
 
   private _renderGamesHub() {
@@ -468,14 +614,16 @@ export class MyElement extends LitElement {
 
         <!-- Blog Section -->
         <section class="blog reveal-section">
-          <h2>
-            <svg viewBox="0 0 24 24" fill="currentColor" class="section-icon">
-              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-            </svg>
-            Blog Posts
-          </h2>
-          
-          ${this.selectedPost ? this._renderFullPost() : this._renderPostList()}
+          <div class="blog-section-header">
+            <h2>
+              <svg viewBox="0 0 24 24" fill="currentColor" class="section-icon">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+              </svg>
+              Recent Posts
+            </h2>
+            <button class="view-all-btn" @click=${() => this._navigateTo('blog')}>View all posts →</button>
+          </div>
+          ${this._renderRecentPosts()}
         </section>
 
         <!-- Quick Links -->
@@ -514,28 +662,11 @@ export class MyElement extends LitElement {
     `
   }
 
-  private _renderPostList() {
-    const allTags = [...new Set(this.blogPosts.flatMap(p => p.tags))]
-    const filtered = this._activeTag
-      ? this.blogPosts.filter(p => p.tags.includes(this._activeTag!))
-      : this.blogPosts
+  private _renderRecentPosts() {
+    const recent = this.blogPosts.slice(0, 3)
     return html`
-      <div class="blog-filter-bar">
-        <button
-          class="tag-filter-btn ${!this._activeTag ? 'active' : ''}"
-          @click=${() => { this._activeTag = null; this.requestUpdate() }}>
-          All
-        </button>
-        ${allTags.map(tag => html`
-          <button
-            class="tag-filter-btn ${this._activeTag === tag ? 'active' : ''}"
-            @click=${(e: Event) => { e.stopPropagation(); this._activeTag = tag; this.requestUpdate() }}>
-            ${tag}
-          </button>
-        `)}
-      </div>
       <div class="blog-grid">
-        ${filtered.map(post => html`
+        ${recent.map(post => html`
           <article class="blog-card" @click=${() => this._openPost(post)}>
             <div class="blog-header">
               <span class="blog-date">${this._formatDate(post.date)}</span>
@@ -551,53 +682,16 @@ export class MyElement extends LitElement {
             </div>
           </article>
         `)}
-        ${filtered.length === 0 ? html`
-          <article class="blog-card add-more">
-            <p>No posts with this tag yet.</p>
-          </article>
-        ` : html`
-          <article class="blog-card add-more">
-            <p>More posts coming soon...</p>
-          </article>
-        `}
-      </div>
-    `
-  }
-
-  private _renderFullPost() {
-    const post = this.selectedPost!
-    return html`
-      <div class="full-post">
-        <button class="back-button" @click=${this._closePost}>
-          ← Back to all posts
-        </button>
-        <article class="post-content">
-          <div class="post-meta">
-            <span class="blog-date">${this._formatDate(post.date)}</span>
-            <div class="blog-tags">
-              ${post.tags.map(tag => html`<span class="tag">${tag}</span>`)}
-            </div>
-          </div>
-          <div .innerHTML=${post.content}></div>
-        </article>
       </div>
     `
   }
 
   private _openPost(post: BlogPost) {
     this.selectedPost = post
-    // Update URL hash for direct linking
-    window.history.pushState(null, '', `#${post.id}`)
+    window.history.pushState(null, '', `#blog/${post.id}`)
+    this.currentView = 'blog-post'
     this.requestUpdate()
-    // Scroll to top of blog section
-    this.shadowRoot?.querySelector('.blog')?.scrollIntoView({ behavior: 'smooth' })
-  }
-
-  private _closePost() {
-    this.selectedPost = null
-    // Clear the URL hash
-    window.history.pushState(null, '', window.location.pathname)
-    this.requestUpdate()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   private _readingTime(content: string): number {
@@ -851,7 +945,7 @@ export class MyElement extends LitElement {
     /* Blog Section */
     .blog h2 {
       font-size: 1.5rem;
-      margin-bottom: 1.5rem;
+      margin: 0;
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -1608,6 +1702,118 @@ export class MyElement extends LitElement {
       transform: translateY(0);
     }
 
+    /* Blog section header (home page) */
+    .blog-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .blog-section-header h2 {
+      margin: 0;
+    }
+
+    .view-all-btn {
+      background: none;
+      border: 1px solid rgba(0, 173, 216, 0.4);
+      border-radius: 999px;
+      color: #00ADD8;
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 0.4rem 1rem;
+      transition: all 0.15s ease;
+    }
+
+    .view-all-btn:hover {
+      background: rgba(0, 173, 216, 0.1);
+      border-color: #00ADD8;
+    }
+
+    /* Blog list page */
+    .blog-page {
+      min-height: 100vh;
+    }
+
+    .blog-page-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, #00ADD8 0%, #667eea 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .blog-header-icon {
+      -webkit-text-fill-color: initial;
+      color: #00ADD8;
+    }
+
+    /* Blog post page */
+    .blog-post-page {
+      min-height: 100vh;
+    }
+
+    .blog-post-page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .standalone-post {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 2.5rem;
+      line-height: 1.8;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .reading-time-banner {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .post-footer-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* Share button */
+    .share-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: none;
+      border: 1px solid rgba(102, 126, 234, 0.4);
+      border-radius: 8px;
+      color: #667eea;
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 0.5rem 1rem;
+      transition: all 0.15s ease;
+    }
+
+    .share-btn:hover {
+      background: rgba(102, 126, 234, 0.1);
+      border-color: #667eea;
+    }
+
     /* Light mode adjustments */
     @media (prefers-color-scheme: light) {
       .site-nav {
@@ -1774,6 +1980,23 @@ export class MyElement extends LitElement {
 
       .quick-link-content p {
         color: #666;
+      }
+
+      .blog-post-page-header {
+        border-bottom-color: rgba(0, 0, 0, 0.1);
+      }
+
+      .standalone-post {
+        background: rgba(0, 0, 0, 0.03);
+        border-color: rgba(0, 0, 0, 0.1);
+      }
+
+      .reading-time-banner {
+        border-bottom-color: rgba(0, 0, 0, 0.1);
+      }
+
+      .post-footer-nav {
+        border-top-color: rgba(0, 0, 0, 0.1);
       }
     }
 
