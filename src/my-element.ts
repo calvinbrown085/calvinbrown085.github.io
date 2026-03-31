@@ -8,6 +8,7 @@ import './tic-tac-toe-game'
 import './checkers-game'
 import './connect-four-game'
 import './flappy-bird-game'
+import './tetris-game'
 import './goodreads-shelf'
 
 interface GitHubRepo {
@@ -18,7 +19,7 @@ interface GitHubRepo {
   languageColor: string
 }
 
-type ViewType = 'home' | 'games' | 'now' | 'blog' | 'blog-post' | 'game-snake' | 'game-solitaire' | 'game-tictactoe' | 'game-checkers' | 'game-connectfour' | 'game-flappybird'
+type ViewType = 'home' | 'games' | 'now' | 'blog' | 'blog-post' | 'game-snake' | 'game-solitaire' | 'game-tictactoe' | 'game-checkers' | 'game-connectfour' | 'game-flappybird' | 'game-tetris'
 
 interface GameInfo {
   id: string
@@ -78,6 +79,13 @@ export class MyElement extends LitElement {
       description: 'Tap to flap and dodge the pipes!',
       icon: '🐤',
       color: '#f1c40f'
+    },
+    {
+      id: 'tetris',
+      name: 'Tetris',
+      description: 'Stack tetrominoes, clear lines, beat your high score!',
+      icon: '🟦',
+      color: '#00f5ff'
     }
   ]
 
@@ -144,6 +152,14 @@ export class MyElement extends LitElement {
 
     if (hash === 'games/flappybird') {
       this.currentView = 'game-flappybird'
+      this.selectedPost = null
+      this.requestUpdate()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+
+    if (hash === 'games/tetris') {
+      this.currentView = 'game-tetris'
       this.selectedPost = null
       this.requestUpdate()
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -278,6 +294,8 @@ export class MyElement extends LitElement {
         return this._renderGamePage('connectfour')
       case 'game-flappybird':
         return this._renderGamePage('flappybird')
+      case 'game-tetris':
+        return this._renderGamePage('tetris')
       default:
         return this._renderHomePage()
     }
@@ -505,6 +523,7 @@ export class MyElement extends LitElement {
           ${gameId === 'checkers' ? html`<checkers-game></checkers-game>` : ''}
           ${gameId === 'connectfour' ? html`<connect-four-game></connect-four-game>` : ''}
           ${gameId === 'flappybird' ? html`<flappy-bird-game></flappy-bird-game>` : ''}
+          ${gameId === 'tetris' ? html`<tetris-game></tetris-game>` : ''}
         </section>
       </div>
     `
