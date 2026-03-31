@@ -1,140 +1,131 @@
 # CLAUDE.md
 
-This file provides context and conventions for AI assistants working on this codebase.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Overview
 
-This is a personal portfolio and interactive game site for Calvin Brown, deployed to `calvinbrown.dev` via GitHub Pages. It is a single-page application (SPA) built with Lit web components and TypeScript, bundled with Vite.
+Personal portfolio and interactive game site for Calvin Brown, deployed to `calvinbrown.dev` via GitHub Pages. Single-page application (SPA) built with Lit web components and TypeScript, bundled with Vite. No backend — fully static.
 
 ## Technology Stack
 
-- **Lit** (v3.x) — Web Components framework with reactive templating and decorators
-- **TypeScript** (~5.x, strict mode) — all source files are TypeScript
+- **Lit** (v3.x) — Web Components with reactive templating and decorators
+- **TypeScript** (~5.x, strict mode)
 - **Vite** — dev server and build tool
 - **pnpm** — package manager (use `pnpm`, not `npm` or `yarn`)
-- No backend; the site is fully static and hosted on GitHub Pages
+
+## Development Commands
+
+```bash
+pnpm dev        # Start dev server with HMR
+pnpm build      # Type-check + production build (tsc && vite build)
+pnpm preview    # Serve dist/ locally
+```
+
+There is no test framework — `tsc` is the primary correctness check.
+
+## Deployment
+
+- **Branch:** `master` triggers GitHub Actions deployment
+- **CI does NOT run `pnpm build`** — it uploads `dist/` directly
+- **You must run `pnpm build` and commit `dist/`** before pushing to `master` for changes to go live
 
 ## Project Structure
 
 ```
 src/
-  my-element.ts        # Main SPA component: layout, routing, hero, blog
-  blog-posts.ts        # Blog post data (add new posts here)
-  snake-game.ts        # Snake game component
-  solitaire-game.ts    # Solitaire card game component
-  tic-tac-toe-game.ts  # Tic Tac Toe with AI opponent
-  checkers-game.ts     # Checkers with AI opponent
-  connect-four-game.ts # Connect Four with AI opponent
-  flappy-bird-game.ts  # Flappy Bird game component
-  goodreads-shelf.ts   # Goodreads reading list integration
-  index.css            # Global styles (minimal; most styles are scoped)
-  calvin-headshot.jpg  # Profile photo
-index.html             # Entry point HTML
-public/                # Static assets (copied as-is to dist/)
-dist/                  # Build output — committed to repo (CI does NOT rebuild)
-.github/workflows/static.yml  # GitHub Pages deployment workflow
+  my-element.ts        # Main SPA: routing, layout, hero, blog, games hub
+  blog-posts.ts        # Blog post data
+  *-game.ts            # One file per game (snake, solitaire, tic-tac-toe,
+                       #   checkers, connect-four, flappy-bird, tetris)
+  goodreads-shelf.ts   # Goodreads reading list
+  index.css            # Minimal global styles (most CSS is component-scoped)
+index.html             # Entry point
+public/                # Static assets copied as-is to dist/
+dist/                  # Build output — committed to repo
+CNAME                  # calvinbrown.dev — do not modify
 ```
-
-## Development Commands
-
-```bash
-pnpm dev        # Start dev server with HMR (runs: vite)
-pnpm build      # Type-check + production build (runs: tsc && vite build)
-pnpm preview    # Serve the dist/ folder locally
-```
-
-## Deployment
-
-- **Branch:** `master` triggers GitHub Actions deployment
-- **CI step:** The workflow uploads `dist/` directly — it does **not** run `pnpm build`
-- **Consequence:** You must run `pnpm build` locally and **commit the `dist/` folder** before pushing to `master` for changes to appear on the live site
 
 ## Code Conventions
 
 ### Lit Components
 
-- One component per file, file name matches component purpose (`{feature}-game.ts`)
-- Register components with `@customElement('kebab-case-name')`
-- Use `@state()` for internal reactive state, `@property()` for inputs
-- Use `static styles = css\`...\`` for scoped component CSS
-- Lifecycle: `connectedCallback()` / `disconnectedCallback()` for setup/teardown
+- One component per file; file name matches purpose (`{feature}-game.ts`)
+- Register with `@customElement('kebab-case-name')`
+- `@state()` for internal reactive state; `@property()` for public inputs
+- `static styles = css\`...\`` for scoped CSS
+- `connectedCallback()` / `disconnectedCallback()` for setup/teardown (event listeners, timers, animation loops)
 
 ### Naming
 
-- Classes: `PascalCase` (e.g., `SnakeGame`, `MyElement`)
-- Methods and properties: `camelCase`
-- Private methods: prefixed with underscore (`_handleKeydown`)
-- Constants: `SCREAMING_SNAKE_CASE` (e.g., `GRID_SIZE`, `GAME_SPEED`)
+- Classes: `PascalCase` — Methods/props: `camelCase` — Private methods: `_prefixedWithUnderscore`
+- Constants: `SCREAMING_SNAKE_CASE`
 - Custom element tags: `kebab-case` matching the file name
 
 ### TypeScript
 
-- Strict mode is on: all types must be explicit, no unused locals/params
-- Interfaces for data shapes are defined per-file
-- `experimentalDecorators` is enabled (required for Lit decorators)
-- `noUnusedLocals` and `noUnusedParameters` are enforced — remove unused code
+- Strict mode + `noUnusedLocals` + `noUnusedParameters` — remove unused code rather than suppressing
+- `experimentalDecorators` enabled (required for Lit)
+- Define interfaces per-file for data shapes
+
+### Canvas-based Games
+
+Games that need smooth animation (e.g. Tetris, Flappy Bird) use a Canvas element rendered via `requestAnimationFrame`. The pattern is:
+- Non-reactive private fields for game state (`_board`, `_activePiece`, etc.)
+- `@state()` only for values that need to update the DOM panel (score, level, gameState)
+- Resolve canvas refs via `this.renderRoot.querySelector(...)` in `updated()` or lazily in the rAF loop
+- Stop rAF and intervals in `disconnectedCallback()`
 
 ### Routing
 
-Navigation is hash-based (no server-side routing required):
+Hash-based navigation — all logic in `src/my-element.ts`:
 
 | Hash | View |
 |------|------|
 | `#` | Home |
 | `#games` | Games hub |
-| `#games/snake` | Snake game |
+| `#games/snake` | Snake |
 | `#games/solitaire` | Solitaire |
 | `#games/tictactoe` | Tic Tac Toe |
 | `#games/checkers` | Checkers |
 | `#games/connectfour` | Connect Four |
 | `#games/flappybird` | Flappy Bird |
+| `#games/tetris` | Tetris |
 | `#now` | Reading / Now page |
-| `#{postId}` | Individual blog post |
-
-Routing logic lives in `src/my-element.ts`.
+| `#blog` | Blog list |
+| `#blog/{postId}` | Blog post |
 
 ### State Management
 
-- Component-local state via Lit `@state()` — no global store
-- `localStorage` for persistence across sessions (high scores, game state)
+- Component-local state via `@state()` — no global store
+- `localStorage` for cross-session persistence (high scores)
 - URL hash for navigation state
 
 ### Styling
 
-- Most CSS is scoped inside each component via `static styles = css\`...\``
-- Global styles in `src/index.css` are minimal
-- Use CSS custom properties for theming
-- Dark mode via `prefers-color-scheme` media query
-- Responsive layouts use CSS Grid
+- Component CSS via `static styles = css\`...\``
+- Dark mode via `prefers-color-scheme` media query in each component
+- Responsive layouts with CSS Grid/Flexbox
 
-## Adding Content
+## Adding a New Game
 
-### New Blog Post
+1. Create `src/{name}-game.ts` extending `LitElement`, register with `@customElement('{name}-game')`
+2. Import it in `src/my-element.ts`
+3. Add `'game-{name}'` to the `ViewType` union
+4. Add a hash check block in `_checkUrlHash()` for `games/{name}`
+5. Add a `case 'game-{name}'` in the `render()` switch
+6. Add the element render inside `_renderGamePage()` (`${gameId === '{name}' ? html\`<{name}-game>\` : ''}`)
+7. Add an entry to the `games` array for the hub card
 
-Edit `src/blog-posts.ts` and add an entry to the array:
+## Adding a New Blog Post
+
+Edit `src/blog-posts.ts`:
 
 ```ts
 {
-  id: 'unique-post-id',          // Used as URL hash
+  id: 'unique-post-id',     // becomes URL hash #blog/unique-post-id
   title: 'Post Title',
   date: 'Month DD, YYYY',
-  summary: 'One-line summary for the card view',
-  content: html`<p>Full HTML content here...</p>`,
+  summary: 'One-line summary shown on the card',
+  content: html`<p>Full HTML content...</p>`,
 }
 ```
-
-### New Game
-
-1. Create `src/{game-name}-game.ts` extending `LitElement`
-2. Register with `@customElement('{game-name}-game')`
-3. Add a route hash in the routing logic in `my-element.ts`
-4. Add an entry card in the games hub view in `my-element.ts`
-5. Import the new file in `index.html` or the main component
-
-## Testing
-
-There is currently no test framework. Manual testing via `pnpm dev` is the workflow. The TypeScript compiler (`tsc`) serves as the primary correctness check.
-
-## Custom Domain
-
-`CNAME` contains `calvinbrown.dev` — do not delete or modify this file.
